@@ -1,0 +1,12 @@
+{
+  "recurse": true,
+  "checkCss": true,
+  "verbosity": "error",
+  "skip": [
+    "^https?://(www\\.)?instagram\\.com",
+    "^https://gufapp\\.vercel\\.app",
+    "^https?://localhost:4321",
+    "^https?://[^/]*\\.(guf|gufapp)\\.[a-z.]+",
+    "^guf: "
+  ]
+}
