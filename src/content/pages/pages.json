@@ -1,0 +1,21 @@
+[
+  {
+    "id": "home",
+    "sections": [
+      "hero",
+      "benefits",
+      "problem",
+      "logging",
+      "records",
+      "evolution",
+      "competition",
+      "gufai",
+      "organization",
+      "privacy",
+      "plans",
+      "install",
+      "faq",
+      "final-cta"
+    ]
+  }
+]

@@ -1,0 +1,33 @@
+{
+  "type": "hero",
+  "badge": "App de treino de musculação",
+  "title": "Seu treino agora é uma ==competição.==",
+  "lead": "Registre cargas em segundos, veja sua evolução e dispute o ranking com seus amigos.",
+  "primaryCta": { "label": "Começar grátis", "appRoute": "signup" },
+  "secondaryCta": { "label": "Ver como funciona", "anchor": "#como-funciona" },
+  "checks": ["Plano gratuito", "Funciona no celular, sem loja", "iPhone e Android"],
+  "ranking": {
+    "ariaLabel": "Tela de ranking do guf: as posições trocam conforme os pontos sobem",
+    "title": "Competição",
+    "periodLabel": "Este mês",
+    "tabs": ["Pontos", "Volume", "Treinos", "Recordes"],
+    "listTitle": "Ranking",
+    "countLabel": "3 amizades",
+    "workoutsLabel": "treinos",
+    "streakLabel": "sem.",
+    "pointsLabel": "pts",
+    "people": [
+      { "id": "ana", "name": "Ana", "initial": "A", "workouts": 14, "streakWeeks": 6 },
+      { "id": "me", "name": "Você", "initial": "V", "workouts": 13, "streakWeeks": 9, "isMe": true },
+      { "id": "bruno", "name": "Bruno", "initial": "B", "workouts": 13, "streakWeeks": 4 },
+      { "id": "carla", "name": "Carla", "initial": "C", "workouts": 10, "streakWeeks": 2 }
+    ],
+    "frames": [
+      { "ana": 312, "me": 298, "bruno": 286, "carla": 241 },
+      { "ana": 312, "me": 316, "bruno": 286, "carla": 241 },
+      { "ana": 312, "me": 316, "bruno": 319, "carla": 241 },
+      { "ana": 327, "me": 334, "bruno": 319, "carla": 256 }
+    ],
+    "toast": { "title": "Bruno te ultrapassou", "meta": "Temporada deste mês · agora", "frame": 2 }
+  }
+}

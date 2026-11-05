@@ -1,0 +1,20 @@
+{
+  "type": "records",
+  "eyebrow": "Recordes pessoais",
+  "title": "Bateu recorde? O troféu acende sozinho.",
+  "body": "Ao concluir a série, o guf calcula o 1RM estimado (fórmula de Epley) e compara com todos os seus treinos anteriores daquele exercício. Subiu a carga ou fez mais repetições com a mesma carga: é recorde.",
+  "note": "A primeira vez de um exercício não conta como recorde, e série de aquecimento nunca entra na conta.",
+  "demo": {
+    "ariaLabel": "Série de {afterLoad} kg por {afterReps} repetições concluída: o botão vira um troféu dourado de recorde",
+    "columns": { "set": "Série", "previous": "Anterior", "load": "kg", "reps": "Reps" },
+    "set": 3,
+    "badge": "PR",
+    "before": { "load": 80, "reps": 6 },
+    "after": { "load": 80, "reps": 8 },
+    "beforeLabel": "Melhor antes · {beforeLoad} kg × {beforeReps}",
+    "afterLabel": "Hoje · {afterLoad} kg × {afterReps}",
+    "caption": "1RM estimado",
+    "recordCaption": "1RM estimado · recorde",
+    "unit": "kg"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "privacy",
+  "eyebrow": "Privacidade",
+  "title": "Seus dados, suas regras.",
+  "cards": [
+    {
+      "icon": "lock",
+      "title": "Privado ou aberto",
+      "text": "Toda conta começa com perfil privado. Você decide quem pode ver seus treinos."
+    },
+    {
+      "icon": "eyeOff",
+      "title": "Medidas só para você",
+      "text": "Medidas corporais não aparecem para seguidores, na competição nem no GUF AI."
+    },
+    { "icon": "download", "title": "Exporte seus dados", "text": "Baixe tudo em um arquivo, quando quiser." },
+    { "icon": "trash", "title": "Exclua a conta", "text": "Pelo próprio app, a qualquer momento." }
+  ]
+}

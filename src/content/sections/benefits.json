@@ -1,0 +1,36 @@
+{
+  "type": "benefits",
+  "ariaLabel": "Benefícios",
+  "items": [
+    {
+      "icon": "zap",
+      "tone": "accent",
+      "title": "Registro rápido",
+      "text": "Atalhos de carga e repetições e a série anterior sempre à vista."
+    },
+    {
+      "icon": "trophy",
+      "tone": "pr",
+      "title": "Recordes automáticos",
+      "text": "O app reconhece sozinho quando você bate um recorde."
+    },
+    {
+      "icon": "trendingUp",
+      "tone": "accent",
+      "title": "Evolução em gráficos",
+      "text": "Carga, 1RM estimado e volume de cada exercício."
+    },
+    {
+      "icon": "crown",
+      "tone": "accent",
+      "title": "Competição mensal",
+      "text": "Temporada nova todo mês com quem você segue."
+    },
+    {
+      "icon": "smartphone",
+      "tone": "accent",
+      "title": "App no celular",
+      "text": "Instala direto do navegador, sem loja."
+    }
+  ]
+}

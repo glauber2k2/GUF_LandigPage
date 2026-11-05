@@ -1,0 +1,56 @@
+[
+  {
+    "id": "gratis",
+    "order": 1,
+    "question": "O guf é grátis?",
+    "answer": "Sim, o guf tem um plano gratuito sem prazo para acabar. O {free.name} já traz treinos, calendário, resumos, recordes e evolução completos, além da competição do mês atual. O {pro.name}, assinado pelo próprio app, tira os limites de projetos, rotinas, perguntas ao GUF AI, gráficos e períodos da competição."
+  },
+  {
+    "id": "loja",
+    "order": 2,
+    "question": "Preciso baixar numa loja de apps?",
+    "answer": "Não, o guf não precisa de loja de aplicativos. Ele funciona pelo navegador do celular e pode ser adicionado à tela de início: depois disso, abre em tela cheia, com ícone próprio, como qualquer app. Você cria a conta, adiciona o ícone e já pode registrar o primeiro treino."
+  },
+  {
+    "id": "iphone",
+    "order": 3,
+    "question": "Funciona no iPhone?",
+    "answer": "Sim, o guf funciona no iPhone e no Android. No iPhone, abra o guf pelo Safari, toque em Compartilhar e escolha \"Adicionar à Tela de Início\"; só o Safari instala o app no iPhone. No Android, o Chrome mostra o convite para instalar ou a opção Instalar app no menu."
+  },
+  {
+    "id": "offline",
+    "order": 4,
+    "question": "E se a internet cair no meio do treino?",
+    "answer": "O treino continua normalmente se a internet cair. Cada série fica salva no próprio aparelho e é enviada sozinha quando a conexão volta, sem duplicar nada. A internet só é necessária para iniciar um treino e para criar ou editar projetos e rotinas, então dá para treinar tranquilo em academia com sinal ruim."
+  },
+  {
+    "id": "competicao",
+    "order": 5,
+    "question": "Como funciona a competição?",
+    "answer": "A competição do guf é um ranking mensal entre pessoas que se seguem mutuamente. Cada semana soma pontos de constância ({constancyPointsPerDay} por dia com treino válido), sequência (até {bonusMax}), recordes ({recordPoints} cada) e volume (até {volumeMax}, comparado à sua própria média). A temporada recomeça todo mês, e também dá para disputar um duelo com uma pessoa."
+  },
+  {
+    "id": "treino-valido",
+    "order": 6,
+    "question": "O que conta como treino válido?",
+    "answer": "Treino válido é um treino concluído com {minValidMinutes} minutos ou mais de tempo efetivo, sem contar as pausas, medido pelo próprio app. Vale no máximo um por dia: se você treinar duas vezes, conta o de maior volume. Só treinos válidos somam pontos de constância e contam para a semana cumprida."
+  },
+  {
+    "id": "privacidade",
+    "order": 7,
+    "question": "Meus dados são privados?",
+    "answer": "Sim, todo perfil no guf começa privado e você escolhe quem vê seus treinos. Medidas corporais ficam só para você e nunca aparecem para seguidores, na competição ou no GUF AI. Você pode exportar todos os seus dados em um arquivo e excluir a conta pelo próprio app, a qualquer momento."
+  },
+  {
+    "id": "guf-ai",
+    "order": 8,
+    "question": "O GUF AI substitui um profissional?",
+    "answer": "Não, o GUF AI não substitui um profissional. Ele responde sobre os seus treinos, cargas e evolução, explica a competição e monta rotinas a partir da sua ficha para você revisar antes de salvar. Ele não dá orientação médica: em caso de dor ou lesão, procure um profissional de saúde."
+  },
+  {
+    "id": "idade",
+    "order": 9,
+    "question": "Quem pode criar conta?",
+    "answer": "Podem criar conta no guf pessoas com 18 anos ou mais. No cadastro, você confirma a idade e aceita os Termos de Uso e a Política de Privacidade, em caixas que vêm desmarcadas. Dá para entrar com e-mail e senha ou com a sua conta Google, e o plano gratuito começa na hora."
+  }
+]

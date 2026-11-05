@@ -1,0 +1,28 @@
+{
+  "type": "gufai",
+  "eyebrow": "GUF AI",
+  "title": "Pergunte sobre os seus treinos.",
+  "bullets": [
+    "Responde sobre as suas cargas, descanso, evolução e rotinas.",
+    "Explica a competição e de onde vieram os seus pontos.",
+    "Cole sua ficha de treino em texto e receba projeto e rotinas prontos. Nada é criado sem a sua revisão."
+  ],
+  "note": "O GUF AI não dá orientação médica: dor ou lesão é assunto para um profissional de saúde. Ele não altera nada no app por conta própria. No {free.name} são {free.guf_ai_daily_messages} perguntas por dia; no {pro.name}, {pro.guf_ai_daily_messages}.",
+  "chat": {
+    "ariaLabel": "Exemplo de conversa com o GUF AI sobre evolução no supino e importação de uma ficha",
+    "title": "GUF AI",
+    "messages": [
+      { "from": "user", "text": "Quanto meu supino evoluiu nos últimos 3 meses?" },
+      {
+        "from": "assistant",
+        "text": "Seu 1RM estimado no supino reto foi de {start} kg para {end} kg. O recorde veio no último treino, com {afterLoad} kg × {afterReps}."
+      },
+      { "from": "user", "text": "Treino A\nsupino reto 4x8-12\ncrucifixo 3x12\ntríceps corda 3x15" },
+      {
+        "from": "assistant",
+        "text": "Montei o rascunho. Revise séries e repetições antes de salvar.",
+        "card": { "title": "Treino A", "meta": "3 exercícios", "action": "Revisar" }
+      }
+    ]
+  }
+}

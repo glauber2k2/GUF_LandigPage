@@ -1,0 +1,28 @@
+{
+  "type": "install",
+  "eyebrow": "Instalação",
+  "title": "Funciona como app, sem loja.",
+  "lead": "Crie a conta pelo navegador e adicione o guf à tela de início. Ele abre em tela cheia, como qualquer app.",
+  "platforms": [
+    {
+      "title": "iPhone",
+      "browser": "Safari",
+      "steps": [
+        { "text": "Abra o guf no Safari." },
+        { "text": "Toque em Compartilhar", "icon": "share" },
+        { "text": "Escolha **Adicionar à Tela de Início**." }
+      ],
+      "note": "No iPhone, só o Safari instala o app."
+    },
+    {
+      "title": "Android",
+      "browser": "Chrome",
+      "steps": [
+        { "text": "Abra o guf no Chrome." },
+        { "text": "Toque em **Instalar** quando o convite aparecer." },
+        { "text": "Sem convite? Menu › **Instalar app**.", "icon": "moreVertical" }
+      ],
+      "note": "O app também mostra esses passos em Configurações."
+    }
+  ]
+}

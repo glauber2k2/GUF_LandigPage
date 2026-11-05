@@ -1,0 +1,34 @@
+{
+  "type": "plans",
+  "anchor": "planos",
+  "eyebrow": "Planos",
+  "title": "Comece grátis. De verdade.",
+  "lead": "Treinos, calendário, resumos, recordes e evolução são completos em qualquer plano.",
+  "free": {
+    "tagline": "Grátis, sem prazo para acabar.",
+    "features": [
+      "Treinos, calendário, resumos, recordes e evolução completos",
+      "Competição na temporada do mês atual",
+      "Projeto Favoritos com até {free.routines_per_project} rotinas",
+      "GUF AI: {free.guf_ai_daily_messages} perguntas por dia",
+      "Gráficos com o mês atual e o anterior"
+    ],
+    "cta": { "label": "Começar grátis", "appRoute": "signup" }
+  },
+  "pro": {
+    "tagline": "Tudo do {free.name}, sem os limites.",
+    "features": [
+      "Competição em 3 meses, 6 meses, 1 ano e período personalizado",
+      "Projetos e rotinas sem limite",
+      "GUF AI: {pro.guf_ai_daily_messages} perguntas por dia",
+      "Gráficos com todo o seu período"
+    ],
+    "cta": { "label": "Assinar pelo app", "appRoute": "plans" },
+    "guarantees": [
+      { "icon": "shieldCheck", "text": "Cancele quando quiser, no app, sem multa" },
+      { "icon": "undo", "text": "Desistiu em até 7 dias? Devolvemos o valor inteiro" },
+      { "icon": "lock", "text": "Pagamento seguro na página do Stripe" }
+    ],
+    "unavailable": "A assinatura chega em breve no app"
+  }
+}

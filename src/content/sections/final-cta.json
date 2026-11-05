@@ -1,0 +1,7 @@
+{
+  "type": "finalCta",
+  "title": "A temporada deste mês já começou.",
+  "lead": "Crie sua conta, chame seus amigos e veja quem evolui mais.",
+  "cta": { "label": "Começar grátis", "appRoute": "signup" },
+  "instagramLabel": "Siga {instagram} no Instagram"
+}

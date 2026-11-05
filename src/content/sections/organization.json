@@ -1,0 +1,39 @@
+{
+  "type": "organization",
+  "eyebrow": "Organização",
+  "title": "Abriu o app, o treino de hoje já está lá.",
+  "items": [
+    {
+      "title": "Rotinas e projetos",
+      "text": "Monte rotinas com séries, repetições alvo e descanso, agrupadas em projetos."
+    },
+    {
+      "title": "Treino do dia pela semana",
+      "text": "Marque os dias de cada rotina e o app mostra o treino de hoje. Dia sem treino? Aparece o descanso e o próximo treino."
+    },
+    {
+      "title": "Carga e repetições automáticas",
+      "text": "Ao iniciar, cada série já vem com o que você fez da última vez."
+    },
+    {
+      "title": "A rotina acompanha você",
+      "text": "Ao finalizar, o app pergunta se a rotina deve ficar igual ao treino que você acabou de fazer."
+    }
+  ],
+  "today": {
+    "ariaLabel": "Card Treino de hoje com a rotina marcada para segunda, quarta e sexta",
+    "label": "Treino de hoje",
+    "title": "Treino A · Peito e tríceps",
+    "meta": "6 exercícios · cerca de 55 min",
+    "days": [
+      { "letter": "D", "state": "off" },
+      { "letter": "S", "state": "today" },
+      { "letter": "T", "state": "off" },
+      { "letter": "Q", "state": "planned" },
+      { "letter": "Q", "state": "off" },
+      { "letter": "S", "state": "planned" },
+      { "letter": "S", "state": "off" }
+    ],
+    "action": "Treinar"
+  }
+}

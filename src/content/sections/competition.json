@@ -1,0 +1,97 @@
+{
+  "type": "competition",
+  "anchor": "competicao",
+  "eyebrow": "Competição",
+  "title": "Seus amigos viram adversários. Todo mês.",
+  "lead": "Cada treino vale pontos. Quem treina com constância sobe no ranking, e a temporada recomeça no dia 1.",
+  "cards": [
+    { "icon": "users", "title": "Quem compete", "text": "Você disputa com quem você segue e te segue de volta." },
+    {
+      "icon": "calendar",
+      "title": "Temporada mensal",
+      "text": "Ranking novo todo mês. Também dá para ver 3 meses, 6 meses, 1 ano ou um período personalizado."
+    },
+    {
+      "icon": "barChart",
+      "title": "Quatro métricas",
+      "text": "Pontos, Volume, Treinos e Recordes. Escolha a disputa que quiser ver."
+    },
+    { "icon": "swords", "title": "Duelo", "text": "Você contra uma pessoa, métrica por métrica." }
+  ],
+  "scoring": {
+    "title": "Como ganhar pontos",
+    "items": [
+      {
+        "value": "{constancyPointsPerDay}",
+        "tone": "accent",
+        "title": "Constância",
+        "text": "Por dia com treino válido na semana, sem limite de dias."
+      },
+      {
+        "value": "+{bonusPerWeek}",
+        "tone": "accent",
+        "title": "Sequência",
+        "text": "Por semana cumprida seguida ({daysForFulfilledWeek} dias ou mais), até {bonusMax} por semana. Continua de uma temporada para a outra."
+      },
+      {
+        "value": "{recordPoints}",
+        "tone": "pr",
+        "title": "Recordes",
+        "text": "Por recorde batido na semana, {recordsLimit}."
+      },
+      {
+        "value": "{volumeMax}",
+        "tone": "data",
+        "title": "Volume · até",
+        "text": "Comparando o volume da semana com a sua média das últimas {volumeWindowWeeks} semanas. Você compete com você mesmo: quem levanta menos não sai atrás."
+      }
+    ],
+    "validNote": "**Treino válido** tem {minValidMinutes} minutos ou mais de tempo efetivo, sem as pausas, medido pelo app. Vale no máximo 1 por dia."
+  },
+  "simulator": {
+    "title": "Quantos pontos você faria nesta semana?",
+    "subtitle": "Exemplo de semana com as regras atuais da competição.",
+    "daysLegend": "Dias com treino válido",
+    "recordsLabel": "Recordes batidos",
+    "recordsDecrease": "Menos um recorde",
+    "recordsIncrease": "Mais um recorde",
+    "recordsMax": 20,
+    "previousLabel": "Semanas cumpridas antes",
+    "previousOptions": [
+      { "value": 0, "label": "0", "noteLabel": "nenhuma semana cumprida" },
+      { "value": 1, "label": "1", "noteLabel": "1 semana cumprida" },
+      { "value": 2, "label": "2", "noteLabel": "2 semanas cumpridas" },
+      { "value": 3, "label": "3+", "noteLabel": "3 ou mais semanas cumpridas" }
+    ],
+    "volumeLabel": "Volume da semana comparado à sua média",
+    "volumeOptions": [
+      { "label": "Metade", "ratio": 0.5 },
+      { "label": "3/4 da média", "ratio": 0.75 },
+      { "label": "Média ou mais", "ratio": 1 }
+    ],
+    "breakdown": { "constancy": "Constância", "streak": "Sequência", "records": "Recordes", "volume": "Volume" },
+    "totalCaption": "pontos na semana",
+    "fulfilledNote": "Semana cumprida: com {previous} antes, a sequência chega a {streak} e vale {bonus} pontos (máximo {bonusMax}).",
+    "notFulfilledNote": "Com menos de {daysForFulfilledWeek} dias, a semana não é cumprida: sem bônus de sequência, e a sequência volta a zero.",
+    "defaults": { "days": 3, "records": 1, "previous": 2, "volumeOption": 2 }
+  },
+  "podium": {
+    "title": "Pódio do campeão",
+    "text": "Nos {podiumDays} primeiros dias de cada temporada, o pódio mostra o top 3 do mês que acabou.",
+    "ariaLabel": "Pódio com 1º, 2º e 3º lugares",
+    "places": [
+      { "place": 2, "name": "Ana", "initial": "A", "points": 341 },
+      { "place": 1, "name": "Você", "initial": "V", "points": 356, "isMe": true },
+      { "place": 3, "name": "Bruno", "initial": "B", "points": 327 }
+    ]
+  },
+  "alerts": {
+    "title": "Avisos no celular",
+    "text": "Saiba quando alguém está a menos de {alertGap} pontos de você ou acabou de te ultrapassar. Vem desligado: você liga se quiser.",
+    "items": [
+      { "title": "Ana está chegando", "text": "A 12 pontos de você nesta temporada" },
+      { "title": "Bruno te ultrapassou", "text": "Hora de treinar" }
+    ]
+  },
+  "cta": { "label": "Começar grátis e chamar os amigos", "appRoute": "signup" }
+}
