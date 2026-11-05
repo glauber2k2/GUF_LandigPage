@@ -1,0 +1,22 @@
+# build
+dist/
+.astro/
+
+# dependências
+node_modules/
+
+# variáveis de ambiente (a chave pública do Supabase fica só no .env local e no CI)
+.env
+.env.*
+!.env.example
+
+# testes e relatórios
+playwright-report/
+test-results/
+.lighthouseci/
+coverage/
+
+# sistema
+.DS_Store
+Thumbs.db
+npm-debug.log*

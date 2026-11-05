@@ -1,0 +1,9 @@
+dist/
+.astro/
+node_modules/
+package-lock.json
+playwright-report/
+test-results/
+.lighthouseci/
+public/_headers
+src/content/plans/catalog.json

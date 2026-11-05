@@ -1,0 +1,53 @@
+{
+  "name": "guf-landing",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Landing page oficial do guf: app de treino de musculação com competição entre amigos.",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "sync:data": "node scripts/sync-app-data.ts",
+    "dev": "astro dev",
+    "prebuild": "npm run sync:data",
+    "build": "astro build",
+    "postbuild": "node scripts/check-build.mjs",
+    "preview": "astro preview",
+    "check": "astro check",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "links": "linkinator ./dist --config linkinator.config.json",
+    "lhci": "node scripts/lhci.mjs",
+    "lhci:desktop": "node scripts/lhci.mjs desktop",
+    "icons": "node scripts/generate-icons.mjs",
+    "verify": "npm run lint && npm run check && npm test && npm run build && npm run links && npm run test:e2e"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.4",
+    "@tailwindcss/vite": "4.3.4",
+    "astro": "7.4.6",
+    "tailwindcss": "4.3.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@axe-core/playwright": "4.14.0",
+    "@eslint/js": "10.0.1",
+    "@lhci/cli": "0.16.0",
+    "@playwright/test": "1.64.1",
+    "@types/node": "24.19.2",
+    "eslint": "10.14.0",
+    "eslint-plugin-astro": "3.2.1",
+    "linkinator": "8.1.0",
+    "prettier": "3.9.10",
+    "prettier-plugin-astro": "1.1.2",
+    "prettier-plugin-tailwindcss": "0.8.1",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1",
+    "vitest": "5.1.0"
+  }
+}
