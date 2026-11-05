@@ -106,6 +106,6 @@ Nada disso aparece como texto provisório na página. São configurações ou de
 3. **IDs de analytics (opcionais):** `PUBLIC_META_PIXEL_ID` e `PUBLIC_GA_ID`. Sem eles, nada é rastreado e o aviso de cookies não aparece.
 4. **⚠️ Risco jurídico (LGPD):** a Política de Privacidade linkada é a do app. Antes de ligar o Pixel ou o GA, valide com o jurídico se ela cobre os cookies de medição da landing e o compartilhamento com Meta e Google. Talvez seja preciso uma seção nova ou uma política de cookies própria.
 5. **Search Console:** código da verificação em `PUBLIC_GSC_VERIFICATION`. Também a verificação de domínio na Meta, se for usar o Pixel.
-6. **Repositório remoto:** o projeto tem git local com 10 commits. Crie o repositório no GitHub, faça o push e cadastre as Variables do CI (`PUBLIC_SITE_URL`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`).
+6. **Repositório remoto:** o projeto tem git local, com um commit por etapa. Crie o repositório no GitHub, faça o push e cadastre as Variables do CI (`PUBLIC_SITE_URL`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`).
 7. **E-mail de contato:** não está na página. O app usa um e-mail pessoal (`PRIVACY_CONTACT_EMAIL`). Se quiser um e-mail no rodapé, defina um endereço do domínio.
 8. **HSTS `preload`:** só manter no `public/_headers` se todos os subdomínios do domínio final forem HTTPS.
