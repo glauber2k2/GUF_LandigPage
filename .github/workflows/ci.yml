@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualidade:
+    name: Lint, tipos, testes, build e Lighthouse
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # Variáveis do repositório (Settings › Secrets and variables › Actions › Variables).
+      # Sem SUPABASE_*, o build usa o snapshot versionado dos planos.
+      PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+      PUBLIC_APP_URL: ${{ vars.PUBLIC_APP_URL }}
+      SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+      SUPABASE_PUBLISHABLE_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint e formatação
+        run: |
+          npm run lint
+          npm run format:check
+
+      - name: Tipos (astro check, TypeScript strict)
+        run: npm run check
+
+      - name: Testes unitários (Vitest)
+        run: npm test
+
+      - name: Build (inclui orçamento de JS e checagem de conteúdo)
+        run: npm run build
+
+      - name: Links quebrados
+        run: npm run links
+
+      - name: Navegador do Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Testes de ponta a ponta + acessibilidade (Playwright + axe)
+        run: npm run test:e2e
+
+      - name: Lighthouse CI · celular (orçamento obrigatório)
+        run: npm run lhci
+
+      - name: Lighthouse CI · desktop
+        run: npm run lhci:desktop
+
+      - name: Relatórios
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorios
+          path: |
+            playwright-report/
+            .lighthouseci/
+          retention-days: 14
