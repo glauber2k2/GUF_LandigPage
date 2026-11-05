@@ -1,0 +1,17 @@
+---
+interface Props {
+  text: string;
+  tone?: "accent" | "pr";
+}
+
+const { text, tone = "accent" } = Astro.props;
+---
+
+<p
+  class:list={[
+    "m-0 text-xs font-bold tracking-[0.08em] uppercase",
+    tone === "pr" ? "text-pr-text" : "text-accent-text",
+  ]}
+>
+  {text}
+</p>

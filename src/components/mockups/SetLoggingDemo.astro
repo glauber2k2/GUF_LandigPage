@@ -1,0 +1,172 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import Icon from "../ui/Icon.astro";
+import SetRowGrid from "./SetRowGrid.astro";
+
+/**
+ * Registro de uma série no app: o atalho +5 sobe a carga, as repetições mudam para 8, a série é
+ * concluída e o descanso começa. Script em scripts/mockups/set-logging.ts.
+ */
+interface Props {
+  data: SectionOf<"logging">["demo"];
+}
+
+const { data } = Astro.props;
+const [done, live, pending] = data.sets;
+const restClock = `${Math.floor(data.rest.seconds / 60)}:${String(data.rest.seconds % 60).padStart(2, "0")}`;
+const config = JSON.stringify({
+  ...data.animation,
+  initialLoad: live?.load,
+  initialReps: live?.reps,
+  restSeconds: data.rest.seconds,
+});
+const valueCell = "relative grid h-12 place-items-center rounded-[10px] bg-s3 font-display text-[22px] font-semibold";
+---
+
+<div role="img" aria-label={data.ariaLabel} class="flex w-[min(100%,400px)] flex-col gap-3" data-set-logging={config}>
+  <div class="overflow-hidden rounded-xl border border-line bg-elevated">
+    <div class="flex items-center gap-3 px-4 pt-4 pb-3">
+      <span class="grid size-11 flex-none place-items-center rounded-lg bg-s3 font-display font-bold text-fg-2">
+        {data.exercise.initials}
+      </span>
+      <span class="flex flex-1 flex-col gap-1.5">
+        <span class="text-[17px] font-semibold">{data.exercise.name}</span>
+        <span class="flex gap-1.5">
+          {data.exercise.tags.map((tag) => (
+            <span class="flex h-6 items-center rounded-sm bg-s3 px-2 text-xs font-medium text-fg-2">{tag}</span>
+          ))}
+        </span>
+      </span>
+    </div>
+
+    <SetRowGrid header class="pb-1.5">
+      <span class="text-center">{data.columns.set}</span>
+      <span>{data.columns.previous}</span>
+      <span class="text-center">{data.columns.load}</span>
+      <span class="text-center">{data.columns.reps}</span>
+      <span></span>
+    </SetRowGrid>
+
+    {done && (
+      <SetRowGrid class="bg-accent-soft py-1">
+        <span class="text-center font-display text-xl font-bold">{done.set}</span>
+        <span class="text-sm text-fg-2">{done.previous}</span>
+        <span class={valueCell}>{done.load}</span>
+        <span class={valueCell}>{done.reps}</span>
+        <span class="grid h-12 place-items-center rounded-lg bg-accent text-accent-fg">
+          <Icon name="check" size={22} strokeWidth={2.4} />
+        </span>
+      </SetRowGrid>
+    )}
+
+    {live && (
+      <SetRowGrid class="py-1">
+        <span data-fx="row-done" class="fx-fade absolute inset-0 bg-accent-soft opacity-0" aria-hidden="true" />
+        <span class="relative text-center font-display text-xl font-bold">{live.set}</span>
+        <span class="relative text-sm text-fg-2">{live.previous}</span>
+        <span class={valueCell}>
+          <span data-fx="load-ring" class="fx-fade absolute inset-0 rounded-[10px] ring-[1.5px] ring-focus opacity-0" />
+          <span data-value="load" class="relative">
+            {live.load}
+          </span>
+        </span>
+        <span class={valueCell}>
+          <span data-fx="reps-ring" class="fx-fade absolute inset-0 rounded-[10px] ring-[1.5px] ring-focus opacity-0" />
+          <span data-value="reps" class="relative">
+            {live.reps}
+          </span>
+        </span>
+        <span class="relative grid h-12 place-items-center overflow-hidden rounded-lg bg-s3 text-fg-muted">
+          <span
+            data-fx="check-on"
+            class="fx-fade absolute inset-0 grid place-items-center bg-accent text-accent-fg opacity-0"
+          >
+            <Icon name="check" size={22} strokeWidth={2.4} />
+          </span>
+          <Icon name="check" size={22} strokeWidth={2.4} />
+        </span>
+      </SetRowGrid>
+    )}
+
+    {pending && (
+      <SetRowGrid class="pt-1 pb-3.5">
+        <span class="text-center font-display text-xl font-bold">{pending.set}</span>
+        <span class="text-sm text-fg-muted">{pending.previous}</span>
+        <span class={valueCell}>
+          <span data-value="load">{pending.load}</span>
+        </span>
+        <span class={valueCell}>
+          <span data-value="reps">{pending.reps}</span>
+        </span>
+        <span class="grid h-12 place-items-center rounded-lg bg-s3 text-fg-muted">
+          <Icon name="check" size={22} strokeWidth={2.4} />
+        </span>
+      </SetRowGrid>
+    )}
+  </div>
+
+  <div class="flex flex-col gap-2.5 rounded-xl border border-line bg-elevated p-3.5">
+    <span class="text-[11px] font-semibold tracking-[0.08em] text-fg-muted uppercase">{data.loadLabel}</span>
+    <div class="grid grid-cols-4 gap-2">
+      {data.loadChips.map((chip, index) => (
+        <span data-chip="load" data-index={index} class="chip">
+          {chip}
+        </span>
+      ))}
+    </div>
+    <span class="text-[11px] font-semibold tracking-[0.08em] text-fg-muted uppercase">{data.repsLabel}</span>
+    <div class="grid grid-cols-5 gap-2">
+      {data.repsChips.map((chip, index) => (
+        <span data-chip="reps" data-index={index} class="chip">
+          {chip}
+        </span>
+      ))}
+    </div>
+  </div>
+
+  <div
+    data-fx="rest"
+    class="fx-pop relative flex h-16 translate-y-1.5 items-center gap-3 overflow-hidden rounded-xl border border-line bg-elevated px-3.5"
+  >
+    <!-- Descanso ainda não começou: um véu esmaece o cartão (o texto não perde contraste no DOM). -->
+    <span data-fx="rest-dim" class="fx-fade absolute inset-0 z-10 bg-bg opacity-65" aria-hidden="true"></span>
+    <Icon name="timer" size={20} class="text-accent-text" />
+    <span data-rest-clock class="font-display text-[28px] font-semibold">
+      {restClock}
+    </span>
+    <span class="flex-1 truncate text-[13px] text-fg-muted">
+      {data.rest.nextLabel} {data.exercise.name} · <span data-value="load">{live?.load}</span> ×{" "}
+      <span data-value="reps">{live?.reps}</span>
+    </span>
+    <span class="grid size-10 place-items-center rounded-[10px] bg-s3" title={data.rest.pauseLabel}>
+      <Icon name="pause" size={18} />
+    </span>
+    <span data-rest-bar class="absolute bottom-0 left-0 h-[3px] w-full origin-left bg-accent"></span>
+  </div>
+</div>
+
+<style>
+  .chip {
+    display: grid;
+    height: 44px;
+    place-items: center;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    font-family: var(--font-barlow);
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .chip.is-active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+  [data-rest-bar] {
+    transition: transform 1s linear;
+  }
+</style>
+
+<script>
+  import { initSetLogging } from "../../scripts/mockups/set-logging";
+  document.querySelectorAll<HTMLElement>("[data-set-logging]").forEach(initSetLogging);
+</script>

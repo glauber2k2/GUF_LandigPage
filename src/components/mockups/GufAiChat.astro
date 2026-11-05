@@ -1,0 +1,50 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import Icon from "../ui/Icon.astro";
+
+/** Conversa de exemplo com o GUF AI (evolução no supino e importação de ficha). */
+interface Props {
+  data: SectionOf<"gufai">["chat"];
+}
+
+const { data } = Astro.props;
+---
+
+<div
+  role="img"
+  aria-label={data.ariaLabel}
+  class="flex w-[min(100%,400px)] flex-col gap-3 rounded-2xl border border-line bg-bg p-[18px]"
+>
+  <div class="flex items-center gap-2 border-b border-line pb-2.5">
+    <Icon name="sparkles" size={20} class="text-accent-text" />
+    <strong class="text-[15px]">{data.title}</strong>
+  </div>
+  {data.messages.map((message) =>
+    message.from === "user" ? (
+      <p
+        data-reveal
+        class="m-0 max-w-[85%] self-end rounded-[16px_16px_4px_16px] bg-accent px-3.5 py-2.5 text-sm leading-[1.45] whitespace-pre-line text-accent-fg"
+      >
+        {message.text}
+      </p>
+    ) : (
+      <div
+        data-reveal
+        class="flex max-w-[90%] flex-col gap-2.5 self-start rounded-[16px_16px_16px_4px] bg-s3 px-3.5 py-2.5 text-sm leading-normal"
+      >
+        <span>{message.text}</span>
+        {message.card && (
+          <span class="flex items-center justify-between gap-2.5 rounded-lg border border-line bg-surface px-3 py-2.5">
+            <span class="flex flex-col">
+              <strong class="text-sm">{message.card.title}</strong>
+              <span class="text-xs text-fg-muted">{message.card.meta}</span>
+            </span>
+            <span class="flex h-8 items-center rounded-[10px] bg-accent px-3 text-[13px] font-bold text-accent-fg">
+              {message.card.action}
+            </span>
+          </span>
+        )}
+      </div>
+    ),
+  )}
+</div>

@@ -1,0 +1,96 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import { formatKg, formatKgDelta } from "../../lib/domain/epley";
+import { fillTemplate } from "../../lib/text/template";
+
+/**
+ * Gráfico de evolução do exercício (1RM estimado). O traço se desenha uma vez, revelado por uma
+ * máscara que cresce com transform (sem animar o próprio traço). Script em scripts/mockups/evolution.ts.
+ */
+interface Props {
+  data: SectionOf<"evolution">["chart"];
+  /** 1RM do recorde (fim do período), vindo da seção de recordes. */
+  endValue: number;
+}
+
+const { data, endValue } = Astro.props;
+const path = data.points.map(([x, y], i) => `${i === 0 ? "M" : "L"}${x} ${y}`).join(" ");
+const last = data.points[data.points.length - 1] ?? [320, 44];
+const ariaLabel = fillTemplate(data.ariaLabel, { start: formatKg(data.startValue), end: formatKg(endValue) });
+---
+
+<div class="flex flex-col gap-4">
+  <div class="flex items-start justify-between gap-3">
+    <span class="flex flex-col gap-1">
+      <span class="text-[13px] text-fg-muted">{data.title}</span>
+      <span class="font-display text-4xl leading-none font-semibold">
+        {formatKg(endValue)} <span class="text-lg text-fg-muted">{data.unit}</span>
+      </span>
+    </span>
+    <span class="flex h-7 items-center rounded-full bg-accent-soft px-2.5 text-[13px] font-bold text-accent-text">
+      {formatKgDelta(endValue - data.startValue)} {data.unit}
+    </span>
+  </div>
+
+  <svg
+    viewBox="0 0 320 150"
+    role="img"
+    aria-label={ariaLabel}
+    class="h-auto w-full overflow-visible"
+    data-evolution-chart
+  >
+    <defs>
+      <mask id="evo-reveal" maskUnits="userSpaceOnUse" x="-10" y="-10" width="340" height="170">
+        <rect data-fx="reveal" x="-10" y="-10" width="340" height="170" fill="white" class="evo-reveal"></rect>
+      </mask>
+    </defs>
+    <line x1="0" x2="320" y1="40" y2="40" class="stroke-line" stroke-dasharray="3 5"></line>
+    <line x1="0" x2="320" y1="90" y2="90" class="stroke-line" stroke-dasharray="3 5"></line>
+    <line x1="0" x2="320" y1="140" y2="140" class="stroke-line"></line>
+    <path
+      d={path}
+      fill="none"
+      class="stroke-data"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      mask="url(#evo-reveal)"
+    ></path>
+    <circle data-fx="dot" cx={last[0]} cy={last[1]} r="6" class="evo-dot fill-pr"></circle>
+  </svg>
+
+  <div class="grid grid-cols-4 gap-1 rounded-full bg-s3 p-1">
+    {data.periods.map((period, index) => (
+      <span
+        class:list={[
+          "grid h-[30px] place-items-center rounded-full text-xs",
+          index === data.activePeriod ? "bg-surface font-bold" : "font-semibold text-fg-2",
+        ]}
+      >
+        {period}
+      </span>
+    ))}
+  </div>
+</div>
+
+<style>
+  /* Sem JS o gráfico aparece completo; o script põe .is-armed (escondido) e depois .is-drawn. */
+  .evo-reveal {
+    transform-box: fill-box;
+    transform-origin: left center;
+  }
+  :global([data-evolution-chart].is-armed) .evo-reveal {
+    transform: scaleX(0);
+  }
+  :global([data-evolution-chart].is-armed) .evo-dot {
+    opacity: 0;
+  }
+  :global([data-evolution-chart].is-drawn) .evo-reveal {
+    transform: scaleX(1);
+    transition: transform 1.8s var(--ease-draw);
+  }
+  :global([data-evolution-chart].is-drawn) .evo-dot {
+    opacity: 1;
+    transition: opacity 0.4s ease 1.6s;
+  }
+</style>

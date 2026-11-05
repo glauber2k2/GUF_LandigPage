@@ -1,0 +1,139 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import { MOVEMENT_GLYPH, ranksOf } from "../../lib/domain/ranking";
+import Icon from "../ui/Icon.astro";
+import Logo from "../ui/Logo.astro";
+import PhoneMockup from "../ui/PhoneMockup.astro";
+
+/** Tela de competição do app: as posições trocam conforme os pontos sobem (script em scripts/mockups/ranking.ts). */
+interface Props {
+  data: SectionOf<"hero">["ranking"];
+}
+
+const { data } = Astro.props;
+const order = data.people.map((p) => p.id);
+const firstFrame = data.frames[0] ?? {};
+const ranks = ranksOf(firstFrame, order);
+const ROW_STEP = 76;
+const config = JSON.stringify({ order, frames: data.frames, toastFrame: data.toast.frame, rowStep: ROW_STEP });
+---
+
+<PhoneMockup ariaLabel={data.ariaLabel}>
+  <div data-ranking={config}>
+    <div
+      data-ranking-toast
+      class="fx-pop absolute inset-x-3 top-12 z-[3] flex -translate-y-3 items-center gap-2.5 rounded-xl border border-line bg-elevated p-3 opacity-0 shadow-toast"
+    >
+      <span class="grid size-9 flex-none place-items-center rounded-[10px] bg-ink">
+        <Logo variant="mark" height={24} />
+      </span>
+      <span class="flex min-w-0 flex-col gap-0.5">
+        <span class="text-[13px] font-bold">{data.toast.title}</span>
+        <span class="text-xs text-fg-muted">{data.toast.meta}</span>
+      </span>
+    </div>
+
+    <div class="flex items-center justify-between px-1 pb-3">
+      <span class="text-[22px] font-bold tracking-[-0.02em]">{data.title}</span>
+      <span class="flex h-[30px] items-center gap-1 rounded-full bg-s3 px-3 text-xs font-semibold">
+        {data.periodLabel}
+        <Icon name="chevronDown" size={14} />
+      </span>
+    </div>
+
+    <div class="mb-4 grid grid-cols-4 gap-1 rounded-full bg-s3 p-1">
+      {data.tabs.map((tab, index) => (
+        <span
+          class:list={[
+            "grid h-[30px] place-items-center rounded-full text-xs",
+            index === 0 ? "bg-accent font-bold text-accent-fg" : "font-semibold text-fg-2",
+          ]}
+        >
+          {tab}
+        </span>
+      ))}
+    </div>
+
+    <div class="flex items-baseline justify-between px-1 pb-2">
+      <span class="text-lg font-semibold tracking-[-0.015em]">{data.listTitle}</span>
+      <span class="text-[13px] text-fg-muted">{data.countLabel}</span>
+    </div>
+
+    <ol class="relative m-0 h-[296px] list-none p-0">
+      {data.people.map((person) => {
+        const rank = ranks[person.id] ?? 1;
+        return (
+          <li
+            data-person={person.id}
+            class:list={[
+              "fx-move absolute inset-x-0 top-0 flex min-h-16 items-center gap-2.5 rounded-xl py-2 pr-3.5 pl-2.5",
+              person.isMe ? "border-[1.5px] border-accent-text bg-accent-soft" : "border border-line bg-surface",
+              `ranking-row-${rank}`,
+            ]}
+          >
+            <span class="flex w-[26px] flex-none flex-col items-center">
+              <span data-rank class="font-display text-xl leading-[22px] font-bold">
+                {rank}
+              </span>
+              <span data-move class="text-[10px] leading-3 text-fg-muted">
+                {MOVEMENT_GLYPH.same}
+              </span>
+            </span>
+            <span
+              class:list={[
+                "grid size-10 flex-none place-items-center rounded-full text-[15px] font-bold",
+                person.isMe ? "bg-accent text-accent-fg" : "bg-s3 text-fg",
+              ]}
+            >
+              {person.initial}
+            </span>
+            <span class="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span class="text-[15px] leading-5 font-semibold">{person.name}</span>
+              <span class="flex items-center gap-1 text-xs leading-4 whitespace-nowrap text-fg-muted">
+                <span>
+                  {person.workouts} {data.workoutsLabel}
+                </span>
+                <span>·</span>
+                <Icon name="flame" size={12} strokeWidth={2.4} class="text-pr" />
+                {person.streakWeeks} {data.streakLabel}
+              </span>
+            </span>
+            <span class="flex flex-col items-end">
+              <span
+                data-points
+                class:list={[
+                  "font-display text-2xl leading-6 font-semibold",
+                  person.isMe ? "text-accent-text" : "text-fg",
+                ]}
+              >
+                {firstFrame[person.id] ?? 0}
+              </span>
+              <span class="text-[11px] text-fg-muted">{data.pointsLabel}</span>
+            </span>
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</PhoneMockup>
+
+<style>
+  /* Posição inicial de cada linha (antes do JS): só transform. Passo = 64 px de linha + 12 px de espaço. */
+  .ranking-row-1 {
+    transform: translateY(0);
+  }
+  .ranking-row-2 {
+    transform: translateY(76px);
+  }
+  .ranking-row-3 {
+    transform: translateY(152px);
+  }
+  .ranking-row-4 {
+    transform: translateY(228px);
+  }
+</style>
+
+<script>
+  import { initRanking } from "../../scripts/mockups/ranking";
+  document.querySelectorAll<HTMLElement>("[data-ranking]").forEach(initRanking);
+</script>

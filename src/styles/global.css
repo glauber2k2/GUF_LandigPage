@@ -1,0 +1,140 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/*
+ * Ponte tokens → Tailwind. As classes (bg-surface, text-fg-muted, rounded-xl…) leem as variáveis de
+ * tokens.css; trocar uma cor é mudar só o token.
+ */
+@theme inline {
+  --color-bg: var(--background);
+  --color-surface: var(--surface);
+  --color-elevated: var(--surface-elevated);
+  --color-s3: var(--surface-3);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-fg: var(--text-primary);
+  --color-fg-2: var(--text-secondary);
+  --color-fg-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-foreground);
+  --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+  --color-pr: var(--pr);
+  --color-pr-fg: var(--pr-foreground);
+  --color-pr-text: var(--pr-text);
+  --color-pr-soft: var(--pr-soft);
+  --color-data: var(--data);
+  --color-success: var(--success);
+  --color-focus: var(--focus);
+  --color-header: var(--header-bg);
+  --color-sticky: var(--sticky-bg);
+  --color-bezel: var(--phone-bezel);
+  --color-ink: var(--ink-950);
+  --color-band: var(--band-bg);
+  --color-band-fg: var(--band-fg);
+  --color-band-fg-soft: var(--band-fg-soft);
+  --color-band-button: var(--band-button-bg);
+  --color-band-button-fg: var(--band-button-fg);
+
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-barlow);
+
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+  --radius-2xl: var(--r-2xl);
+  --radius-phone: var(--r-phone);
+  --radius-phone-screen: var(--r-phone-screen);
+
+  --shadow-phone: var(--sh-phone);
+  --shadow-toast: var(--sh-toast);
+  --shadow-pr-glow: var(--sh-pr-glow);
+
+  --ease-standard: var(--ease-std);
+  --ease-enter: var(--ease-out-enter);
+
+  --container-page: var(--container);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-height) + 8px);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--background);
+    color: var(--text-primary);
+    font-family: var(--font-inter);
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a {
+    color: var(--accent-text);
+    text-decoration: none;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: var(--r-sm);
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Na faixa volt, o contorno de foco volt sumiria: usa tinta escura. */
+  .bg-band :focus-visible {
+    outline-color: var(--band-fg);
+  }
+
+  [id] {
+    scroll-margin-top: calc(var(--header-height) + 8px);
+  }
+}
+
+@layer components {
+  /* Utilitário único de entrada (lib/motion/reveal.ts troca as classes). */
+  .is-reveal-pending {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  [data-reveal] {
+    transition:
+      opacity var(--duration-reveal) ease var(--reveal-delay, 0ms),
+      transform var(--duration-reveal) var(--ease-out-enter) var(--reveal-delay, 0ms);
+  }
+
+  /* Transições dos mockups: só transform e opacity. */
+  .fx-fade {
+    transition: opacity var(--duration-screen) var(--ease-std);
+  }
+  .fx-move {
+    transition: transform 700ms var(--ease-out-enter);
+  }
+  .fx-pop {
+    transition:
+      opacity var(--duration-screen) var(--ease-std),
+      transform var(--duration-screen) var(--ease-std);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+    transition-delay: 0ms !important;
+  }
+}

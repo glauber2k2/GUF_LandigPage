@@ -1,0 +1,194 @@
+---
+import type { CompetitionRules } from "../../content/schemas/app-data";
+import type { SectionOf } from "../../content/schemas/sections";
+import { formatPoints, weekPoints } from "../../lib/domain/points";
+import { simulatorNote } from "../../lib/domain/simulator-note";
+import Heading from "../ui/Heading.astro";
+
+/**
+ * Simulador de pontos da semana. A conta é a mesma função pura (lib/domain/points.ts) no build e no
+ * navegador: o HTML já vem com o resultado do exemplo padrão e o script só recalcula ao tocar.
+ * Hidratação tardia: o script só é baixado quando o simulador chega perto da tela.
+ */
+interface Props {
+  data: SectionOf<"competition">["simulator"];
+  rules: CompetitionRules;
+}
+
+const { data, rules } = Astro.props;
+const { defaults } = data;
+const volume = data.volumeOptions[defaults.volumeOption] ?? data.volumeOptions[data.volumeOptions.length - 1];
+const result = weekPoints(
+  {
+    validDays: defaults.days,
+    records: defaults.records,
+    previousFulfilledWeeks: defaults.previous,
+    volumeRatio: volume?.ratio ?? 1,
+  },
+  rules,
+);
+const note = simulatorNote(data, rules, defaults.previous, result);
+const config = JSON.stringify({ rules, simulator: data });
+const days = [1, 2, 3, 4, 5, 6, 7];
+const segmentBase = "min-h-9 cursor-pointer rounded-[9px] border-0 px-1 font-bold transition-colors duration-150";
+---
+
+<points-simulator
+  data-config={config}
+  class="flex flex-col gap-5 rounded-2xl border-[1.5px] border-accent-text bg-surface p-6"
+>
+  <div class="flex flex-col gap-1.5">
+    <Heading level={3} size="sm" text={data.title} />
+    <p class="m-0 text-sm text-fg-muted">{data.subtitle}</p>
+  </div>
+
+  <fieldset class="m-0 flex flex-col gap-2 border-0 p-0">
+    <legend class="mb-2 p-0 text-sm font-semibold">{data.daysLegend}</legend>
+    <div class="grid grid-cols-7 gap-1.5">
+      {days.map((n) => (
+        <button
+          type="button"
+          data-days={n}
+          aria-pressed={n === defaults.days ? "true" : "false"}
+          class="sim-day h-11 cursor-pointer rounded-lg border font-display text-xl font-bold"
+        >
+          {n}
+        </button>
+      ))}
+    </div>
+  </fieldset>
+
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,180px),1fr))] gap-4">
+    <div class="flex flex-col gap-2">
+      <span id="sim-rec" class="text-sm font-semibold">
+        {data.recordsLabel}
+      </span>
+      <div
+        role="group"
+        aria-labelledby="sim-rec"
+        class="grid h-11 grid-cols-[44px_1fr_44px] items-center overflow-hidden rounded-lg bg-s3"
+      >
+        <button
+          type="button"
+          data-records-step="-1"
+          aria-label={data.recordsDecrease}
+          class="h-11 cursor-pointer border-0 bg-transparent text-[22px] text-fg"
+        >
+          −
+        </button>
+        <output data-records aria-live="polite" class="text-center font-display text-[22px] font-bold">
+          {defaults.records}
+        </output>
+        <button
+          type="button"
+          data-records-step="1"
+          aria-label={data.recordsIncrease}
+          class="h-11 cursor-pointer border-0 bg-transparent text-[22px] text-fg"
+        >
+          +
+        </button>
+      </div>
+    </div>
+    <div class="flex flex-col gap-2">
+      <span id="sim-prev" class="text-sm font-semibold">
+        {data.previousLabel}
+      </span>
+      <div role="group" aria-labelledby="sim-prev" class="grid grid-cols-4 gap-1 rounded-lg bg-s3 p-1">
+        {data.previousOptions.map((option) => (
+          <button
+            type="button"
+            data-previous={option.value}
+            aria-pressed={option.value === defaults.previous ? "true" : "false"}
+            class:list={["sim-seg text-sm", segmentBase]}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <span id="sim-vol" class="text-sm font-semibold">
+      {data.volumeLabel}
+    </span>
+    <div role="group" aria-labelledby="sim-vol" class="grid grid-cols-3 gap-1 rounded-lg bg-s3 p-1">
+      {data.volumeOptions.map((option, index) => (
+        <button
+          type="button"
+          data-volume={index}
+          aria-pressed={index === defaults.volumeOption ? "true" : "false"}
+          class:list={["sim-seg text-[13px]", segmentBase]}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,180px),1fr))] items-end gap-4 border-t border-line pt-[18px]">
+    <dl class="m-0 grid grid-cols-[1fr_auto] gap-x-4 gap-y-1.5 text-sm text-fg-2">
+      <dt>{data.breakdown.constancy}</dt>
+      <dd data-part="constancy" class="m-0 font-bold text-fg">
+        {formatPoints(result.constancy)}
+      </dd>
+      <dt>{data.breakdown.streak}</dt>
+      <dd data-part="streakBonus" class="m-0 font-bold text-fg">
+        {formatPoints(result.streakBonus)}
+      </dd>
+      <dt>{data.breakdown.records}</dt>
+      <dd data-part="records" class="m-0 font-bold text-fg">
+        {formatPoints(result.records)}
+      </dd>
+      <dt>{data.breakdown.volume}</dt>
+      <dd data-part="volume" class="m-0 font-bold text-fg">
+        {formatPoints(result.volume)}
+      </dd>
+    </dl>
+    <div aria-live="polite" class="flex flex-col items-end gap-1">
+      <span data-total class="font-display text-[72px] leading-none font-bold text-accent-text">
+        {result.total}
+      </span>
+      <span class="text-sm text-fg-muted">{data.totalCaption}</span>
+    </div>
+  </div>
+  <p data-note class="m-0 text-[13px] leading-normal text-fg-muted">
+    {note}
+  </p>
+</points-simulator>
+
+<style>
+  .sim-day {
+    border-color: transparent;
+    background: var(--surface-3);
+    color: var(--text-primary);
+  }
+  .sim-day[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+  .sim-seg {
+    background: transparent;
+    color: var(--text-secondary);
+  }
+  .sim-seg[aria-pressed="true"] {
+    background: var(--surface);
+    color: var(--text-primary);
+  }
+</style>
+
+<script>
+  import { onceVisible } from "../../lib/motion/reveal";
+
+  // Hidratação tardia (equivalente a client:visible): o código do simulador só é baixado perto da tela.
+  document.querySelectorAll<HTMLElement>("points-simulator").forEach((el) => {
+    onceVisible(
+      el,
+      () => {
+        void import("../../scripts/islands/points-simulator").then(({ hydrateSimulator }) => hydrateSimulator(el));
+      },
+      0,
+    );
+  });
+</script>

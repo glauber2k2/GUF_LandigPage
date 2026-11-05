@@ -1,0 +1,64 @@
+---
+import type { Cta } from "../../content/schemas/sections";
+import { ctaTarget } from "../../lib/content/cta";
+import Icon from "./Icon.astro";
+
+/**
+ * Botão-link. Destino vem do conteúdo (rota do app ou âncora). Links do app ganham `data-app-link`
+ * (repasse de UTM) e `data-cta` com a seção de origem (evento de clique).
+ */
+interface Props {
+  cta: Cta;
+  /** Seção de origem para o evento (ex.: "hero"). */
+  source: string;
+  variant?: "primary" | "secondary" | "ghost" | "band";
+  size?: "sm" | "md" | "lg" | "xl";
+  arrow?: boolean;
+  block?: boolean;
+  class?: string;
+  tabindex?: number;
+}
+
+const {
+  cta,
+  source,
+  variant = "primary",
+  size = "md",
+  arrow = false,
+  block = false,
+  class: className,
+  tabindex,
+} = Astro.props;
+const { href, isApp } = ctaTarget(cta);
+
+const variants = {
+  primary: "bg-accent text-accent-fg font-bold hover:brightness-[1.06]",
+  secondary: "border border-line-strong text-fg font-semibold hover:bg-s3",
+  ghost: "text-fg font-semibold hover:bg-s3",
+  band: "bg-band-button text-band-button-fg font-bold hover:-translate-y-px",
+} as const;
+
+const sizes = {
+  sm: "h-11 px-3.5 text-[15px] rounded-lg",
+  md: "h-[52px] px-6 text-base rounded-lg",
+  lg: "h-14 px-7 text-[17px] rounded-lg",
+  xl: "h-[60px] px-8 text-lg rounded-lg",
+} as const;
+---
+
+<a
+  href={href}
+  data-app-link={isApp ? "" : undefined}
+  data-cta={source}
+  tabindex={tabindex}
+  class:list={[
+    "inline-flex items-center justify-center gap-2.5 whitespace-nowrap no-underline transition-[transform,filter,background-color] duration-150 active:scale-[0.97]",
+    variants[variant],
+    sizes[size],
+    block && "w-full",
+    className,
+  ]}
+>
+  {cta.label}
+  {arrow && <Icon name="arrowRight" size={20} strokeWidth={2.4} />}
+</a>

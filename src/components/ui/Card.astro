@@ -1,0 +1,46 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/** Superfície com borda. Variantes por prop, nunca por cópia. */
+interface Props {
+  tone?: "surface" | "bg" | "elevated";
+  radius?: "xl" | "2xl";
+  padding?: "md" | "lg" | "base" | "xl";
+  highlight?: "none" | "accent" | "pr";
+  as?: "div" | "li" | "article";
+  class?: string;
+  reveal?: boolean;
+  role?: HTMLAttributes<"div">["role"];
+  ariaLabel?: string;
+}
+
+const {
+  tone = "surface",
+  radius = "xl",
+  padding = "lg",
+  highlight = "none",
+  as: Tag = "div",
+  class: className,
+  reveal = false,
+  role,
+  ariaLabel,
+} = Astro.props;
+
+const tones = { surface: "bg-surface", bg: "bg-bg", elevated: "bg-elevated" } as const;
+const radii = { xl: "rounded-xl", "2xl": "rounded-2xl" } as const;
+const paddings = { md: "p-5", lg: "p-[22px]", base: "p-6", xl: "p-7" } as const;
+const borders = {
+  none: "border border-line",
+  accent: "border-[1.5px] border-accent-text",
+  pr: "border border-pr",
+} as const;
+---
+
+<Tag
+  data-reveal={reveal ? "" : undefined}
+  role={role}
+  aria-label={ariaLabel}
+  class:list={[tones[tone], radii[radius], paddings[padding], borders[highlight], className]}
+>
+  <slot />
+</Tag>

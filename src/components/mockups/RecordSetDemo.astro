@@ -1,0 +1,89 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import { estimate1RM, formatKg } from "../../lib/domain/epley";
+import { fillTemplate } from "../../lib/text/template";
+import Icon from "../ui/Icon.astro";
+import SetRowGrid from "./SetRowGrid.astro";
+
+/** Série concluída que vira recorde: o botão vira o troféu dourado do app (DS `SetRow`). */
+interface Props {
+  data: SectionOf<"records">["demo"];
+}
+
+const { data } = Astro.props;
+const lift = {
+  beforeLoad: data.before.load,
+  beforeReps: data.before.reps,
+  afterLoad: data.after.load,
+  afterReps: data.after.reps,
+};
+const before1rm = formatKg(estimate1RM(data.before.load, data.before.reps));
+const after1rm = formatKg(estimate1RM(data.after.load, data.after.reps));
+const valueCell = "grid h-12 place-items-center rounded-[10px] bg-s3 font-display text-[22px] font-semibold";
+---
+
+<div
+  role="img"
+  aria-label={fillTemplate(data.ariaLabel, lift)}
+  class="flex w-[min(100%,420px)] flex-col gap-4"
+  data-record-demo
+>
+  <div class="relative rounded-xl border border-line bg-elevated py-3.5">
+    <span
+      data-fx="glow"
+      class="fx-fade pointer-events-none absolute inset-0 rounded-xl opacity-0 shadow-pr-glow"
+    ></span>
+    <SetRowGrid header class="pb-2">
+      <span class="text-center">{data.columns.set}</span>
+      <span>{data.columns.previous}</span>
+      <span class="text-center">{data.columns.load}</span>
+      <span class="text-center">{data.columns.reps}</span>
+      <span></span>
+    </SetRowGrid>
+    <SetRowGrid class="py-1">
+      <span data-fx="row" class="fx-fade absolute inset-0 bg-pr-soft opacity-0" aria-hidden="true"></span>
+      <span class="relative text-center font-display text-xl font-bold">{data.set}</span>
+      <span class="relative flex min-w-0 items-center gap-1.5 text-sm whitespace-nowrap text-fg-2">
+        <span>
+          {data.before.load} × {data.before.reps}
+        </span>
+        <span
+          data-fx="badge"
+          class="fx-pop flex h-[22px] scale-60 items-center rounded-full bg-pr px-[7px] text-[11px] font-bold text-pr-fg opacity-0"
+        >
+          {data.badge}
+        </span>
+      </span>
+      <span class:list={[valueCell, "relative"]}>{data.after.load}</span>
+      <span class:list={[valueCell, "relative"]}>{data.after.reps}</span>
+      <span class="relative grid h-12 place-items-center overflow-hidden rounded-lg bg-s3 text-fg-muted">
+        <Icon name="check" size={22} strokeWidth={2.4} />
+        <span data-fx="trophy" class="fx-fade absolute inset-0 grid place-items-center bg-pr text-pr-fg opacity-0">
+          <Icon name="trophy" size={22} strokeWidth={2.2} />
+        </span>
+      </span>
+    </SetRowGrid>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3">
+    <div class="flex flex-col gap-1 rounded-xl border border-line bg-surface p-4">
+      <span class="text-[13px] text-fg-muted">{fillTemplate(data.beforeLabel, lift)}</span>
+      <span class="font-display text-[32px] font-semibold">
+        {before1rm} <span class="text-lg text-fg-muted">{data.unit}</span>
+      </span>
+      <span class="text-xs text-fg-muted">{data.caption}</span>
+    </div>
+    <div class="flex flex-col gap-1 rounded-xl border border-pr bg-pr-soft p-4">
+      <span class="text-[13px] text-fg-2">{fillTemplate(data.afterLabel, lift)}</span>
+      <span class="font-display text-[32px] font-semibold text-pr-text">
+        {after1rm} <span class="text-lg">{data.unit}</span>
+      </span>
+      <span class="text-xs text-fg-2">{data.recordCaption}</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { initRecordDemo } from "../../scripts/mockups/record";
+  document.querySelectorAll<HTMLElement>("[data-record-demo]").forEach(initRecordDemo);
+</script>

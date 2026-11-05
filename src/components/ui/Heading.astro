@@ -1,0 +1,28 @@
+---
+import InlineText from "./InlineText.astro";
+
+/** Títulos na fonte display (Barlow Condensed). O tamanho é visual; o nível (h1–h3) é semântico. */
+interface Props {
+  text: string;
+  level?: 1 | 2 | 3;
+  size?: "hero" | "band" | "xl" | "lg" | "md" | "sm";
+  id?: string;
+  class?: string;
+}
+
+const { text, level = 2, size = "lg", id, class: className } = Astro.props;
+const Tag = `h${level}` as "h1" | "h2" | "h3";
+
+const sizes = {
+  hero: "text-[clamp(52px,9vw,96px)] leading-[0.92]",
+  band: "text-[clamp(48px,8vw,88px)] leading-[0.92]",
+  xl: "text-[clamp(44px,7vw,80px)] leading-[0.92]",
+  lg: "text-[clamp(40px,6vw,64px)] leading-[0.95]",
+  md: "text-4xl leading-none",
+  sm: "text-[32px] leading-none",
+} as const;
+---
+
+<Tag id={id} class:list={["m-0 font-display font-bold tracking-[-0.01em] text-balance", sizes[size], className]}>
+  <InlineText text={text} />
+</Tag>

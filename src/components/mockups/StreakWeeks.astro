@@ -1,0 +1,58 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import Icon from "../ui/Icon.astro";
+
+/** Sequência de semanas do app (`get_streak`): número, faixa das últimas 12 semanas e meta da semana. */
+interface Props {
+  data: SectionOf<"evolution">["streak"];
+}
+
+const { data } = Astro.props;
+const lastIndex = data.pattern.length - 1;
+---
+
+<div class="flex h-full flex-col justify-between gap-[18px]" data-streak={data.weeks}>
+  <div class="flex items-center gap-3.5">
+    <Icon name="flame" size={44} class="text-pr" />
+    <span class="flex items-baseline gap-2.5">
+      <span data-streak-number class="font-display text-[64px] leading-[0.9] font-bold">
+        {data.weeks}
+      </span>
+      <span class="flex flex-col text-[15px] leading-[1.3]">
+        <strong>{data.word}</strong>
+        <span class="text-fg-2">{data.caption}</span>
+      </span>
+    </span>
+  </div>
+  <div class="flex flex-col gap-2">
+    <div class="grid grid-cols-12 gap-[5px]">
+      {data.pattern.map((filled, index) => (
+        <span
+          class:list={[
+            "relative aspect-[1/1.6] overflow-hidden rounded-md border-[1.5px] bg-s3",
+            index === lastIndex ? "border-fg" : "border-transparent",
+          ]}
+        >
+          {filled && <span data-week-fill class="streak-fill absolute inset-0 bg-accent" data-week-index={index} />}
+        </span>
+      ))}
+    </div>
+    <span class="text-xs text-fg-muted">{data.legend}</span>
+  </div>
+  <div class="flex items-center gap-2 text-sm text-fg-2">
+    <Icon name="check" size={18} strokeWidth={2.4} class="text-success" />
+    <span>
+      <strong class="text-fg">{data.securedTitle}</strong> · {data.securedText}
+    </span>
+  </div>
+</div>
+
+<style>
+  :global([data-streak].is-armed) .streak-fill {
+    opacity: 0;
+  }
+  :global([data-streak].is-drawn) .streak-fill {
+    opacity: 1;
+    transition: opacity 0.3s ease var(--fill-delay, 0ms);
+  }
+</style>

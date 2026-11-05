@@ -1,0 +1,30 @@
+---
+import type { IconName } from "../../lib/icons";
+import Icon from "./Icon.astro";
+import InlineText from "./InlineText.astro";
+
+/** Linha de lista com ícone (check, mais) à esquerda. */
+interface Props {
+  text: string;
+  icon?: IconName;
+  tone?: "accent" | "pr";
+  size?: "sm" | "md" | "lg";
+  class?: string;
+}
+
+const { text, icon = "check", tone = "accent", size = "md", class: className } = Astro.props;
+const iconSizes = { sm: 16, md: 18, lg: 20 } as const;
+const offsets = { sm: "mt-0", md: "mt-0.5", lg: "mt-[3px]" } as const;
+---
+
+<li class:list={["flex gap-2.5", size === "lg" && "gap-3", className]}>
+  <Icon
+    name={icon}
+    size={iconSizes[size]}
+    strokeWidth={icon === "check" ? 2.4 : 2}
+    class={`${offsets[size]} ${tone === "pr" ? "text-pr-text" : "text-accent-text"}`}
+  />
+  <span>
+    <InlineText text={text} />
+  </span>
+</li>

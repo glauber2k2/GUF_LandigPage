@@ -1,0 +1,20 @@
+---
+/** Grade da linha de série do app (Série · Anterior · kg · Reps · concluir), compartilhada pelos mockups. */
+interface Props {
+  as?: "div" | "li";
+  class?: string;
+  header?: boolean;
+}
+
+const { as: Tag = "div", class: className, header = false } = Astro.props;
+---
+
+<Tag
+  class:list={[
+    "relative grid grid-cols-[36px_minmax(0,1fr)_64px_64px_52px] items-center gap-2 px-3",
+    header && "text-[11px] font-semibold tracking-[0.08em] text-fg-muted uppercase",
+    className,
+  ]}
+>
+  <slot />
+</Tag>

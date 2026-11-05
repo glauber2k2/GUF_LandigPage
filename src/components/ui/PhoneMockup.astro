@@ -1,0 +1,20 @@
+---
+/** Moldura de celular para os mockups de tela (decorativa; o conteúdo leva o próprio rótulo). */
+interface Props {
+  ariaLabel: string;
+  class?: string;
+}
+
+const { ariaLabel, class: className } = Astro.props;
+---
+
+<div
+  role="img"
+  aria-label={ariaLabel}
+  class:list={["w-[min(100%,330px)] rounded-phone border border-line-strong bg-bezel p-2.5 shadow-phone", className]}
+>
+  <div class="relative min-h-[560px] overflow-hidden rounded-phone-screen bg-bg px-3.5 pt-4 pb-5">
+    <div class="mx-auto mb-3.5 h-[26px] w-24 rounded-full bg-bezel" aria-hidden="true"></div>
+    <slot />
+  </div>
+</div>

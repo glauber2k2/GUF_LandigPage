@@ -1,0 +1,23 @@
+---
+import { parseInline } from "../../lib/text/inline";
+
+/** Desenha **negrito** e ==destaque== dos textos do conteúdo (ver lib/text/inline.ts). */
+interface Props {
+  text: string;
+  /** Classe do negrito (ex.: cor de texto principal dentro de um parágrafo secundário). */
+  strongClass?: string;
+}
+
+const { text, strongClass = "font-semibold text-fg" } = Astro.props;
+const parts = parseInline(text);
+---
+
+{parts.map((part) =>
+  part.kind === "strong" ? (
+    <strong class={strongClass}>{part.value}</strong>
+  ) : part.kind === "accent" ? (
+    <span class="text-accent-text">{part.value}</span>
+  ) : (
+    <Fragment set:text={part.value} />
+  ),
+)}

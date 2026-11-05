@@ -1,0 +1,59 @@
+---
+/** Logo do guf (geometria do app: packages/ui/src/ds/brand-geometry.ts). */
+interface Props {
+  variant?: "full" | "mark";
+  height?: number;
+  label?: string;
+  class?: string;
+}
+
+const { variant = "full", height = 32, label = "guf", class: className } = Astro.props;
+---
+
+{variant === "full" ? (
+  <svg
+    role={label ? "img" : undefined}
+    aria-label={label || undefined}
+    aria-hidden={label ? undefined : "true"}
+    viewBox="-5.5 -14.05 141.5 76.65"
+    height={height}
+    width={Math.round((height * 141.5) / 76.65)}
+    class:list={["block overflow-visible", className]}
+  >
+    <circle
+      cx="24"
+      cy="24"
+      r="16"
+      stroke-width="7"
+      stroke-linecap="round"
+      stroke-dasharray="78.2 200"
+      transform="rotate(-20 24 24)"
+      fill="none"
+      class="stroke-accent-text"
+    />
+    <circle cx="32" cy="10.14" r="4.5" class="fill-accent-text" />
+    <g stroke-width="7" stroke-linejoin="round" transform="translate(54 -4.6) scale(1.1)" fill="none" class="stroke-fg">
+      <path d="M18.5 25A7.5 7.5 0 0 0 3.5 25V27A7.5 7.5 0 0 0 18.5 27" />
+      <path d="M18.5 14V41A7.5 7.5 0 0 1 11 48.5H4" />
+      <path d="M29.5 14V27A7.5 7.5 0 0 0 44.5 27" />
+      <path d="M44.5 14V38" />
+      <path d="M55.5 38V11A7 7 0 0 1 62.5 4H65.5" />
+      <path d="M49.5 17.5H65.5" />
+    </g>
+  </svg>
+) : (
+  <svg viewBox="0 0 48 48" width={height} height={height} aria-hidden="true" class:list={["block", className]}>
+    <circle
+      cx="24"
+      cy="24"
+      r="16"
+      stroke-width="7"
+      stroke-linecap="round"
+      stroke-dasharray="78.2 200"
+      transform="rotate(-20 24 24)"
+      fill="none"
+      class="stroke-accent"
+    />
+    <circle cx="32" cy="10.14" r="4.5" class="fill-accent" />
+  </svg>
+)}

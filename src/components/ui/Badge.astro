@@ -1,0 +1,20 @@
+---
+/** Selo em pílula (ex.: "App de treino de musculação"). */
+interface Props {
+  text: string;
+  dot?: boolean;
+  class?: string;
+}
+
+const { text, dot = false, class: className } = Astro.props;
+---
+
+<span
+  class:list={[
+    "inline-flex h-[30px] items-center gap-2 rounded-full border border-line-strong px-3 text-[13px] font-semibold text-fg-2",
+    className,
+  ]}
+>
+  {dot && <span class="size-2 rounded-full bg-accent" aria-hidden="true" />}
+  {text}
+</span>

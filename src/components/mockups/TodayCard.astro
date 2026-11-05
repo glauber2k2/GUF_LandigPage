@@ -1,0 +1,40 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import Icon from "../ui/Icon.astro";
+
+/** Card "Treino de hoje" da Início do app, com os dias da rotina (semana de domingo a sábado). */
+interface Props {
+  data: SectionOf<"organization">["today"];
+}
+
+const { data } = Astro.props;
+const dayStyles = {
+  off: "bg-s3 text-fg-muted",
+  today: "bg-accent text-accent-fg",
+  planned: "bg-accent-soft text-accent-text",
+} as const;
+---
+
+<div
+  data-reveal
+  role="img"
+  aria-label={data.ariaLabel}
+  class="flex w-[min(100%,400px)] flex-col gap-4 rounded-xl border border-line bg-surface p-5"
+>
+  <span class="text-[11px] font-semibold tracking-[0.08em] text-fg-muted uppercase">{data.label}</span>
+  <div class="flex flex-col gap-1">
+    <span class="text-[22px] font-bold tracking-[-0.02em]">{data.title}</span>
+    <span class="text-sm text-fg-muted">{data.meta}</span>
+  </div>
+  <div class="grid grid-cols-7 gap-1.5">
+    {data.days.map((day) => (
+      <span class:list={["grid h-9 place-items-center rounded-[10px] text-[13px] font-bold", dayStyles[day.state]]}>
+        {day.letter}
+      </span>
+    ))}
+  </div>
+  <span class="flex h-[52px] items-center justify-center gap-2 rounded-lg bg-accent text-base font-bold text-accent-fg">
+    <Icon name="play" size={18} />
+    {data.action}
+  </span>
+</div>

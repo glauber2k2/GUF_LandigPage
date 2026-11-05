@@ -1,0 +1,42 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import Icon from "../ui/Icon.astro";
+
+/** Pódio do campeão: só você ganha cor (como no app, `podiumTone`); a posição aparece pela altura. */
+interface Props {
+  data: SectionOf<"competition">["podium"];
+}
+
+const { data } = Astro.props;
+const stepHeights = { 1: "h-[100px]", 2: "h-[72px]", 3: "h-[52px]" } as const;
+---
+
+<div role="img" aria-label={data.ariaLabel} class="grid grid-cols-3 items-end gap-2">
+  {data.places.map((p) => (
+    <div class="flex flex-col items-center gap-2">
+      {p.place === 1 && <Icon name="crown" size={22} class="text-pr" />}
+      <span
+        class:list={[
+          "grid place-items-center rounded-full border-2 font-bold",
+          p.place === 1 ? "size-[52px]" : "size-11",
+          p.isMe ? "border-accent-text bg-accent-soft" : "border-line-strong bg-s3",
+        ]}
+      >
+        {p.initial}
+      </span>
+      <span class="text-[13px] font-semibold">{p.name}</span>
+      <span class:list={["font-display text-xl font-semibold", p.isMe ? "text-accent-text" : "text-fg-2"]}>
+        {p.points}
+      </span>
+      <span
+        class:list={[
+          "grid w-full justify-center rounded-t-lg pt-2 font-display text-[32px] font-bold",
+          stepHeights[p.place as 1 | 2 | 3],
+          p.isMe ? "bg-accent-soft" : "bg-s3",
+        ]}
+      >
+        {p.place}
+      </span>
+    </div>
+  ))}
+</div>

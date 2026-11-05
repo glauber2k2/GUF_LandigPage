@@ -1,0 +1,38 @@
+---
+/** Moldura de uma seção da home: fundo alternado, espaçamento vertical e rótulo acessível. */
+interface Props {
+  [attr: `data-${string}`]: string | boolean | undefined;
+  id?: string | undefined;
+  /** id do título que nomeia a seção (aria-labelledby). */
+  labelledBy?: string;
+  ariaLabel?: string;
+  tone?: "base" | "surface" | "band";
+  spacing?: "default" | "compact" | "hero" | "band";
+  class?: string;
+}
+
+const { id, labelledBy, ariaLabel, tone = "base", spacing = "default", class: className, ...data } = Astro.props;
+
+const tones = {
+  base: "",
+  surface: "bg-surface",
+  band: "bg-band text-band-fg",
+} as const;
+
+const spacings = {
+  default: "py-[clamp(72px,10vw,128px)]",
+  compact: "py-10",
+  hero: "pt-28 pb-[72px]",
+  band: "py-[clamp(72px,10vw,120px)]",
+} as const;
+---
+
+<section
+  id={id}
+  aria-labelledby={labelledBy}
+  aria-label={ariaLabel}
+  class:list={["relative px-5", tones[tone], spacings[spacing], className]}
+  {...data}
+>
+  <slot />
+</section>
