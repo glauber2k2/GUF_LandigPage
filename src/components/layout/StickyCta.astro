@@ -1,0 +1,40 @@
+---
+import type { UiContent } from "../../content/schemas/sections";
+import Button from "../ui/Button.astro";
+
+/**
+ * CTA fixo no rodapé, só no celular e só depois que o hero sai da tela. O rodapé da página ganha o
+ * mesmo espaço (--sticky-space) para a barra nunca cobrir conteúdo. Respeita a área segura do iPhone.
+ */
+interface Props {
+  ui: UiContent["sticky"];
+}
+
+const { ui } = Astro.props;
+---
+
+<div
+  data-sticky-cta
+  aria-hidden="true"
+  inert
+  class="sticky-cta fixed inset-x-0 bottom-0 z-40 translate-y-[110%] border-t border-line bg-sticky px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))] opacity-0 backdrop-blur-md md:hidden"
+>
+  <Button cta={ui.cta} source="fixo-mobile" size="md" block />
+</div>
+
+<style>
+  .sticky-cta {
+    transition:
+      transform var(--duration-screen) var(--ease-std),
+      opacity var(--duration-screen) var(--ease-std);
+  }
+  .sticky-cta.is-visible {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  @media (max-width: 767px) {
+    :global(:root) {
+      --sticky-space: calc(76px + env(safe-area-inset-bottom));
+    }
+  }
+</style>

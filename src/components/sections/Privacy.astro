@@ -1,0 +1,33 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import Card from "../ui/Card.astro";
+import Container from "../ui/Container.astro";
+import Eyebrow from "../ui/Eyebrow.astro";
+import Heading from "../ui/Heading.astro";
+import Icon from "../ui/Icon.astro";
+import Section from "../ui/Section.astro";
+
+interface Props {
+  data: SectionOf<"privacy">;
+}
+
+const { data } = Astro.props;
+---
+
+<Section labelledBy="priv-title" tone="surface">
+  <Container class="flex flex-col gap-10">
+    <div data-reveal class="flex max-w-[720px] flex-col gap-4">
+      {data.eyebrow && <Eyebrow text={data.eyebrow} />}
+      <Heading id="priv-title" text={data.title} />
+    </div>
+    <ul class="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-4 p-0">
+      {data.cards.map((card) => (
+        <Card as="li" tone="bg" reveal class="flex flex-col gap-2.5">
+          <Icon name={card.icon} size={24} class="text-accent-text" />
+          <h3 class="m-0 text-lg font-bold">{card.title}</h3>
+          <p class="m-0 text-[15px] leading-normal text-fg-2">{card.text}</p>
+        </Card>
+      ))}
+    </ul>
+  </Container>
+</Section>

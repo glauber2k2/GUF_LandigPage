@@ -1,0 +1,33 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import GufAiChat from "../mockups/GufAiChat.astro";
+import CheckItem from "../ui/CheckItem.astro";
+import Container from "../ui/Container.astro";
+import Eyebrow from "../ui/Eyebrow.astro";
+import Heading from "../ui/Heading.astro";
+import Section from "../ui/Section.astro";
+
+interface Props {
+  data: SectionOf<"gufai">;
+}
+
+const { data } = Astro.props;
+---
+
+<Section labelledBy="ai-title" tone="surface">
+  <Container class="grid items-center gap-14 grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))]">
+    <div data-reveal class="flex flex-col gap-5">
+      {data.eyebrow && <Eyebrow text={data.eyebrow} />}
+      <Heading id="ai-title" text={data.title} />
+      <ul class="m-0 flex list-none flex-col gap-3.5 p-0 text-[17px] leading-normal text-fg-2">
+        {data.bullets.map((bullet) => (
+          <CheckItem text={bullet} size="lg" />
+        ))}
+      </ul>
+      <p class="m-0 text-[15px] leading-[1.55] text-fg-muted">{data.note}</p>
+    </div>
+    <div class="flex justify-center">
+      <GufAiChat data={data.chat} />
+    </div>
+  </Container>
+</Section>

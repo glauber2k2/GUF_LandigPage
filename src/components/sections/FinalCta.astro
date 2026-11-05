@@ -1,0 +1,35 @@
+---
+import { site } from "../../config/site";
+import type { SectionOf } from "../../content/schemas/sections";
+import Button from "../ui/Button.astro";
+import Container from "../ui/Container.astro";
+import Heading from "../ui/Heading.astro";
+import Icon from "../ui/Icon.astro";
+import Section from "../ui/Section.astro";
+
+interface Props {
+  data: SectionOf<"finalCta">;
+}
+
+const { data } = Astro.props;
+---
+
+<Section labelledBy="final-title" tone="band" spacing="band">
+  <Container size="narrow" class="flex flex-col items-center gap-6 text-center">
+    <div data-reveal class="flex flex-col items-center gap-6">
+      <Heading id="final-title" size="band" text={data.title} />
+      <p class="m-0 max-w-[40ch] text-[clamp(18px,2.2vw,21px)] leading-normal text-band-fg-soft">{data.lead}</p>
+      <Button cta={data.cta} source="final" variant="band" size="xl" arrow />
+      <a
+        href={site.social.instagram.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-cta="instagram-final"
+        class="flex min-h-11 items-center gap-2 text-base font-semibold text-band-fg underline underline-offset-4"
+      >
+        <Icon name="instagram" size={20} />
+        {data.instagramLabel}
+      </a>
+    </div>
+  </Container>
+</Section>

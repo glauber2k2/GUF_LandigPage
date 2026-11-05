@@ -1,0 +1,39 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import SetLoggingDemo from "../mockups/SetLoggingDemo.astro";
+import CheckItem from "../ui/CheckItem.astro";
+import Container from "../ui/Container.astro";
+import Eyebrow from "../ui/Eyebrow.astro";
+import Heading from "../ui/Heading.astro";
+import Icon from "../ui/Icon.astro";
+import Section from "../ui/Section.astro";
+
+interface Props {
+  data: SectionOf<"logging">;
+}
+
+const { data } = Astro.props;
+---
+
+<Section id={data.anchor} labelledBy="demo-title" tone="surface">
+  <Container class="grid items-center gap-14 grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))]">
+    <div data-reveal class="flex flex-col gap-5">
+      {data.eyebrow && <Eyebrow text={data.eyebrow} />}
+      <Heading id="demo-title" text={data.title} />
+      <ul class="m-0 flex list-none flex-col gap-3.5 p-0 text-[17px] leading-normal text-fg-2">
+        {data.bullets.map((bullet) => (
+          <CheckItem text={bullet} size="lg" />
+        ))}
+      </ul>
+      <div class="flex gap-3.5 rounded-xl border border-line-strong bg-bg px-[18px] py-4">
+        <Icon name="wifiOff" size={22} class="mt-0.5 text-fg-2" />
+        <p class="m-0 text-[15px] leading-normal text-fg-2">
+          <strong class="text-fg">{data.offline.title}</strong> {data.offline.text}
+        </p>
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <SetLoggingDemo data={data.demo} />
+    </div>
+  </Container>
+</Section>

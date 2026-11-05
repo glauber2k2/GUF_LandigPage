@@ -1,0 +1,34 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import TodayCard from "../mockups/TodayCard.astro";
+import Container from "../ui/Container.astro";
+import Eyebrow from "../ui/Eyebrow.astro";
+import Heading from "../ui/Heading.astro";
+import Section from "../ui/Section.astro";
+
+interface Props {
+  data: SectionOf<"organization">;
+}
+
+const { data } = Astro.props;
+---
+
+<Section labelledBy="org-title">
+  <Container class="grid items-center gap-14 grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))]">
+    <div class="flex justify-center">
+      <TodayCard data={data.today} />
+    </div>
+    <div data-reveal class="flex flex-col gap-5">
+      {data.eyebrow && <Eyebrow text={data.eyebrow} />}
+      <Heading id="org-title" text={data.title} />
+      <ul class="m-0 flex list-none flex-col gap-4 p-0">
+        {data.items.map((item) => (
+          <li class="flex flex-col gap-1">
+            <strong class="text-[17px]">{item.title}</strong>
+            <span class="text-base leading-normal text-fg-2">{item.text}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Container>
+</Section>

@@ -1,0 +1,95 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import Container from "../ui/Container.astro";
+import Icon from "../ui/Icon.astro";
+import Section from "../ui/Section.astro";
+
+interface Props {
+  data: SectionOf<"benefits">;
+}
+
+const { data } = Astro.props;
+---
+
+<Section ariaLabel={data.ariaLabel} tone="surface" spacing="compact" class="border-y border-line">
+  <Container>
+    <ul class="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,190px),1fr))] gap-6 p-0" data-benefits>
+      {data.items.map((item) => (
+        <li data-reveal class="flex flex-col gap-2.5">
+          <span
+            data-benefit-icon
+            data-tone={item.tone}
+            class="benefit-icon grid size-11 place-items-center rounded-lg bg-s3"
+          >
+            <Icon name={item.icon} size={24} class={item.tone === "pr" ? "text-pr-text" : "text-accent-text"} />
+          </span>
+          <strong class="text-base">{item.title}</strong>
+          <span class="text-sm leading-normal text-fg-2">{item.text}</span>
+        </li>
+      ))}
+    </ul>
+  </Container>
+</Section>
+
+<style>
+  .benefit-icon {
+    position: relative;
+    box-shadow: 0 0 0 1px var(--border);
+    transition: transform 450ms var(--ease-out-enter);
+  }
+  .benefit-icon::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--accent-soft);
+    box-shadow: 0 0 0 1.5px var(--accent-text);
+    opacity: 0;
+    transition: opacity 450ms ease;
+  }
+  .benefit-icon[data-tone="pr"]::after {
+    background: var(--pr-soft);
+    box-shadow: 0 0 0 1.5px var(--pr);
+  }
+  .benefit-icon > :global(svg) {
+    position: relative;
+    z-index: 1;
+  }
+  .benefit-icon.is-on {
+    transform: translateY(-3px) scale(1.06);
+  }
+  .benefit-icon.is-on::after {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  import { prefersReducedMotion, whileVisible } from "../../lib/motion/reveal";
+
+  // Destaca um benefício por vez (como no protótipo), só enquanto a faixa está na tela.
+  document.querySelectorAll<HTMLElement>("[data-benefits]").forEach((list) => {
+    if (prefersReducedMotion()) return;
+    const icons = [...list.querySelectorAll<HTMLElement>("[data-benefit-icon]")];
+    let index = -1;
+    let timer: number | undefined;
+    const tick = () => {
+      index = (index + 1) % icons.length;
+      icons.forEach((icon, i) => icon.classList.toggle("is-on", i === index));
+    };
+    whileVisible(
+      list,
+      {
+        onEnter: () => {
+          if (timer !== undefined) return;
+          tick();
+          timer = window.setInterval(tick, 1600);
+        },
+        onLeave: () => {
+          window.clearInterval(timer);
+          timer = undefined;
+        },
+      },
+      0.5,
+    );
+  });
+</script>

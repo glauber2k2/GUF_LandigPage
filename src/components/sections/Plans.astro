@@ -1,0 +1,92 @@
+---
+import type { PlanCatalog } from "../../content/schemas/app-data";
+import type { SectionOf } from "../../content/schemas/sections";
+import { activePrice, defaultPlan, formatIntervalSuffix, formatMoney, upgradePlan } from "../../lib/domain/plans";
+import Button from "../ui/Button.astro";
+import CheckItem from "../ui/CheckItem.astro";
+import Container from "../ui/Container.astro";
+import Eyebrow from "../ui/Eyebrow.astro";
+import Heading from "../ui/Heading.astro";
+import Icon from "../ui/Icon.astro";
+import Section from "../ui/Section.astro";
+
+/**
+ * Comparação Free × Pro. Nomes, limites e preço vêm do catálogo do app (plans, plan_features,
+ * plan_prices). Sem preço ativo, o Pro mostra "chega em breve", exatamente como o app faz.
+ * Sem preço riscado, desconto ou contador: o app não tem nada disso.
+ */
+interface Props {
+  data: SectionOf<"plans">;
+  catalog: PlanCatalog;
+}
+
+const { data, catalog } = Astro.props;
+const free = defaultPlan(catalog);
+const pro = upgradePlan(catalog);
+const price = activePrice(catalog, pro.code);
+---
+
+<Section id={data.anchor} labelledBy="plans-title">
+  <Container size="wide" class="flex flex-col gap-10">
+    <div data-reveal class="flex flex-col items-center gap-4 text-center">
+      {data.eyebrow && <Eyebrow text={data.eyebrow} />}
+      <Heading id="plans-title" text={data.title} />
+      <p class="m-0 max-w-[52ch] text-lg leading-[1.55] text-fg-2">{data.lead}</p>
+    </div>
+
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] items-stretch gap-4">
+      <article data-reveal class="flex flex-col gap-5 rounded-2xl border-[1.5px] border-accent-text bg-surface p-7">
+        <div class="flex flex-col gap-1.5">
+          <Heading level={3} size="md" text={free.name} />
+          <span class="text-[15px] text-fg-2">{data.free.tagline}</span>
+        </div>
+        <ul class="m-0 flex flex-1 list-none flex-col gap-3 p-0 text-[15px] leading-[1.45]">
+          {data.free.features.map((feature) => (
+            <CheckItem text={feature} />
+          ))}
+        </ul>
+        <Button cta={data.free.cta} source="planos-free" block />
+      </article>
+
+      <article data-reveal class="flex flex-col gap-5 rounded-2xl border border-line bg-surface p-7">
+        <div class="flex flex-col gap-1.5">
+          <h3 class="m-0 flex items-center gap-2.5 font-display text-4xl leading-none font-bold">
+            {pro.name}
+            <Icon name="crown" size={24} class="text-pr" />
+          </h3>
+          <span class="text-[15px] text-fg-2">{data.pro.tagline}</span>
+          {price && (
+            <p class="m-0 mt-2 flex items-baseline gap-1">
+              <span class="font-display text-[40px] leading-none font-bold">
+                {formatMoney(price.amount_cents, price.currency)}
+              </span>
+              <span class="text-[15px] text-fg-muted">{formatIntervalSuffix(price)}</span>
+            </p>
+          )}
+        </div>
+        <ul class="m-0 flex flex-1 list-none flex-col gap-3 p-0 text-[15px] leading-[1.45]">
+          {data.pro.features.map((feature) => (
+            <CheckItem text={feature} icon="plus" tone="pr" />
+          ))}
+        </ul>
+        {price ? (
+          <>
+            <ul class="m-0 flex list-none flex-col gap-2 p-0 text-[13px] leading-snug text-fg-muted">
+              {data.pro.guarantees.map((g) => (
+                <li class="flex items-center gap-2">
+                  <Icon name={g.icon} size={16} class="text-fg-2" />
+                  {g.text}
+                </li>
+              ))}
+            </ul>
+            <Button cta={data.pro.cta} source="planos-pro" variant="secondary" block />
+          </>
+        ) : (
+          <p class="m-0 flex h-[52px] items-center justify-center rounded-lg border border-dashed border-line-strong px-3 text-center text-[15px] font-semibold text-fg-2">
+            {data.pro.unavailable}
+          </p>
+        )}
+      </article>
+    </div>
+  </Container>
+</Section>

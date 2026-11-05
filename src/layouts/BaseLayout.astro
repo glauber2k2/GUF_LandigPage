@@ -1,0 +1,73 @@
+---
+import { Font } from "astro:assets";
+import CookieConsent from "../components/layout/CookieConsent.astro";
+import Footer from "../components/layout/Footer.astro";
+import Header from "../components/layout/Header.astro";
+import StickyCta from "../components/layout/StickyCta.astro";
+import JsonLd from "../components/seo/JsonLd.astro";
+import SEO, { type SeoProps } from "../components/seo/SEO.astro";
+import { seo } from "../config/seo";
+import { analyticsEnabled, site } from "../config/site";
+import { loadSiteData } from "../lib/content/site-data";
+import { brandInfo } from "../lib/content/structured-data";
+import { organizationSchema, websiteSchema } from "../lib/seo/jsonld";
+import "../styles/global.css";
+
+/**
+ * html/head/body comuns a todas as páginas: fontes, SEO, JSON-LD da marca, cabeçalho, rodapé,
+ * CTA fixo, aviso de cookies e o script da página (UTM, entrada, analytics).
+ */
+interface Props {
+  seo?: SeoProps;
+  /** Blocos JSON-LD extras da página (ex.: SoftwareApplication e FAQPage na home). */
+  jsonLd?: Array<Record<string, unknown>>;
+  showSticky?: boolean;
+}
+
+const { seo: pageSeo = {}, jsonLd = [], showSticky = site.features.mobileStickyCta } = Astro.props;
+const { ui } = await loadSiteData();
+const siteUrl = Astro.site ?? new URL("http://localhost:4321");
+const brand = brandInfo(siteUrl);
+const analyticsConfig = JSON.stringify(site.analytics);
+---
+
+<!doctype html>
+<html lang={site.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content={seo.themeColor} />
+    <meta name="color-scheme" content="dark light" />
+    <Font cssVariable="--font-barlow" preload={[{ weight: "700" }]} />
+    <Font cssVariable="--font-inter" />
+    <SEO {...pageSeo} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="Resumo do guf para assistentes de IA" />
+    <JsonLd data={[organizationSchema(brand), websiteSchema(brand), ...jsonLd]} />
+  </head>
+  <body data-analytics={analyticsEnabled ? analyticsConfig : undefined}>
+    <a
+      href="#conteudo"
+      class="fixed top-2 left-2 z-[70] -translate-y-20 rounded-lg bg-accent px-4 py-2.5 font-bold text-accent-fg focus:translate-y-0"
+    >
+      {ui.skipLink}
+    </a>
+    <Header ui={ui.header} />
+    <main id="conteudo" tabindex="-1" class="outline-none">
+      <span id="topo" class="absolute top-0"></span>
+      <slot />
+    </main>
+    <Footer ui={ui.footer} />
+    {showSticky && <StickyCta ui={ui.sticky} />}
+    {analyticsEnabled && <CookieConsent ui={ui.consent} />}
+
+    <script>
+      import { initPage } from "../scripts/page";
+      initPage();
+    </script>
+  </body>
+</html>

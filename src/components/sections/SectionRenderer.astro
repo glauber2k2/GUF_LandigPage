@@ -1,0 +1,31 @@
+---
+import type { Section } from "../../content/schemas/sections";
+import type { SiteData } from "../../lib/content/site-data";
+import { estimate1RM } from "../../lib/domain/epley";
+import { SECTION_COMPONENTS } from "./registry";
+
+/**
+ * Desenha uma seção pelo tipo. Algumas seções recebem dados do app além do próprio conteúdo
+ * (regras da competição, catálogo de planos, FAQ); isso fica aqui, não espalhado pela página.
+ */
+interface Props {
+  section: Section;
+  site: SiteData;
+  sections: Section[];
+}
+
+const { section, site, sections } = Astro.props;
+const Component = SECTION_COMPONENTS[section.type];
+const records = sections.find((s) => s.type === "records");
+const recordValue = records?.type === "records" ? estimate1RM(records.demo.after.load, records.demo.after.reps) : 0;
+
+const extras: Record<string, unknown> =
+  {
+    competition: { rules: site.rules },
+    plans: { catalog: site.catalog },
+    faq: { items: site.faq },
+    evolution: { recordValue },
+  }[section.type as string] ?? {};
+---
+
+<Component data={section} {...extras} />

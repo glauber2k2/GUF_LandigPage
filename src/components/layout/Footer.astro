@@ -1,0 +1,41 @@
+---
+import { site } from "../../config/site";
+import type { UiContent } from "../../content/schemas/sections";
+import Logo from "../ui/Logo.astro";
+
+interface Props {
+  ui: UiContent["footer"];
+}
+
+const { ui } = Astro.props;
+const linkClass = "flex min-h-11 items-center text-fg-2 hover:text-fg";
+---
+
+<footer class="border-t border-line px-5 pt-10 pb-[calc(40px+var(--sticky-space,0px))]">
+  <div class="mx-auto flex max-w-page flex-wrap items-center justify-between gap-5">
+    <div class="flex items-center gap-3.5">
+      <Logo height={28} />
+      <span class="text-sm text-fg-muted">{ui.tagline}</span>
+    </div>
+    <div class="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-fg-muted">
+      <nav aria-label={ui.legalNavLabel} class="flex flex-wrap items-center gap-x-5">
+        <a href={site.appLink("terms")} class={linkClass}>
+          {ui.termsLabel}
+        </a>
+        <a href={site.appLink("privacy")} class={linkClass}>
+          {ui.privacyLabel}
+        </a>
+      </nav>
+      <a
+        href={site.social.instagram.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-cta="instagram-rodape"
+        class={linkClass}
+      >
+        {ui.instagramLabel}
+      </a>
+      <span>{ui.copyright}</span>
+    </div>
+  </div>
+</footer>

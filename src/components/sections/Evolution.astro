@@ -1,0 +1,44 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import EvolutionChart from "../mockups/EvolutionChart.astro";
+import StreakWeeks from "../mockups/StreakWeeks.astro";
+import Card from "../ui/Card.astro";
+import Container from "../ui/Container.astro";
+import Eyebrow from "../ui/Eyebrow.astro";
+import Heading from "../ui/Heading.astro";
+import Section from "../ui/Section.astro";
+
+interface Props {
+  data: SectionOf<"evolution">;
+  /** 1RM do recorde mostrado na seção de recordes (fim do gráfico). */
+  recordValue: number;
+}
+
+const { data, recordValue } = Astro.props;
+---
+
+<Section labelledBy="evo-title" tone="surface" data-evolution>
+  <Container class="flex flex-col gap-12">
+    <div data-reveal class="flex max-w-[720px] flex-col gap-5">
+      {data.eyebrow && <Eyebrow text={data.eyebrow} />}
+      <Heading id="evo-title" text={data.title} />
+      <p class="m-0 text-lg leading-[1.55] text-fg-2">{data.body}</p>
+    </div>
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] gap-4">
+      <Card tone="elevated" padding="md" reveal>
+        <EvolutionChart data={data.chart} endValue={recordValue} />
+      </Card>
+      <Card tone="elevated" padding="md" reveal>
+        <StreakWeeks data={data.streak} />
+      </Card>
+    </div>
+    <p data-reveal class="m-0 max-w-[720px] text-base leading-[1.55] text-fg-muted">
+      {data.note}
+    </p>
+  </Container>
+</Section>
+
+<script>
+  import { initEvolution } from "../../scripts/mockups/evolution";
+  document.querySelectorAll<HTMLElement>("[data-evolution]").forEach(initEvolution);
+</script>

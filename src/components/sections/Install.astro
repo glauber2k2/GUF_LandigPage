@@ -1,0 +1,54 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import Card from "../ui/Card.astro";
+import Container from "../ui/Container.astro";
+import Eyebrow from "../ui/Eyebrow.astro";
+import Heading from "../ui/Heading.astro";
+import Icon from "../ui/Icon.astro";
+import InlineText from "../ui/InlineText.astro";
+import Section from "../ui/Section.astro";
+
+interface Props {
+  data: SectionOf<"install">;
+}
+
+const { data } = Astro.props;
+---
+
+<Section labelledBy="inst-title" tone="surface">
+  <Container class="flex flex-col gap-10">
+    <div data-reveal class="flex max-w-[720px] flex-col gap-4">
+      {data.eyebrow && <Eyebrow text={data.eyebrow} />}
+      <Heading id="inst-title" text={data.title} />
+      <p class="m-0 text-lg leading-[1.55] text-fg-2">{data.lead}</p>
+    </div>
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] gap-4">
+      {data.platforms.map((platform) => (
+        <Card tone="bg" padding="base" reveal class="flex flex-col gap-[18px]">
+          <h3 class="m-0 text-xl font-bold">
+            {platform.title} <span class="font-medium text-fg-muted">· {platform.browser}</span>
+          </h3>
+          <ol class="m-0 flex list-none flex-col gap-3.5 p-0">
+            {platform.steps.map((step, index) => (
+              <li class="flex items-center gap-3.5">
+                <span
+                  class="grid size-9 flex-none place-items-center rounded-full bg-s3 font-display text-xl font-bold"
+                  aria-hidden="true"
+                >
+                  {index + 1}
+                </span>
+                <span class="flex flex-wrap items-center gap-1.5 text-base leading-[1.45]">
+                  <span>
+                    <InlineText text={step.text} strongClass="font-semibold" />
+                  </span>
+                  {step.icon && <Icon name={step.icon} size={18} class={step.icon === "share" ? "text-data" : ""} />}
+                </span>
+              </li>
+            ))}
+          </ol>
+          <p class="m-0 text-sm text-fg-muted">{platform.note}</p>
+        </Card>
+      ))}
+    </div>
+  </Container>
+</Section>

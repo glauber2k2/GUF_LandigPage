@@ -1,0 +1,50 @@
+---
+import { seo } from "../../config/seo";
+import { site } from "../../config/site";
+import { absoluteUrl, buildTitle, canonicalUrl } from "../../lib/seo/meta";
+
+/** Meta tags de SEO, Open Graph e Twitter Card. Toda página passa por aqui (via BaseLayout). */
+export interface SeoProps {
+  title?: string | undefined;
+  description?: string | undefined;
+  /** Caminho da imagem OG (1200×630) em public/. */
+  image?: string | undefined;
+  imageAlt?: string | undefined;
+  noindex?: boolean | undefined;
+  type?: "website" | "article" | undefined;
+}
+
+type Props = SeoProps;
+
+const { title, description = seo.description, image, imageAlt, noindex = false, type = "website" } = Astro.props;
+const siteUrl = Astro.site ?? new URL("http://localhost:4321");
+const fullTitle = buildTitle(title, seo.titleTemplate, seo.defaultTitle);
+const canonical = canonicalUrl(Astro.url.pathname, siteUrl);
+const ogImage = absoluteUrl(image ?? seo.ogImage.path, siteUrl);
+const ogAlt = imageAlt ?? seo.ogImage.alt;
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, follow" />}
+
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content={site.locale} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content={String(seo.ogImage.width)} />
+<meta property="og:image:height" content={String(seo.ogImage.height)} />
+<meta property="og:image:alt" content={ogAlt} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content={ogAlt} />
+
+{site.googleSiteVerification && <meta name="google-site-verification" content={site.googleSiteVerification} />}

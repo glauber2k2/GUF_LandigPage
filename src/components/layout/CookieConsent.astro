@@ -1,0 +1,42 @@
+---
+import { site } from "../../config/site";
+import type { UiContent } from "../../content/schemas/sections";
+
+/**
+ * Aviso de cookies (LGPD). Só existe quando há algum rastreador configurado; os rastreadores só
+ * carregam depois de "Aceitar". "Aceitar" e "Recusar" têm o mesmo peso visual (sem dark pattern).
+ * Fica escondido até o script confirmar que a pessoa ainda não escolheu.
+ */
+interface Props {
+  ui: UiContent["consent"];
+}
+
+const { ui } = Astro.props;
+const buttonClass =
+  "h-11 flex-1 cursor-pointer rounded-lg border border-line-strong bg-s3 px-5 text-[15px] font-semibold text-fg hover:bg-elevated";
+---
+
+<section
+  data-consent
+  hidden
+  role="region"
+  aria-labelledby="consent-title"
+  class="fixed inset-x-3 bottom-3 z-[60] mx-auto max-w-[560px] rounded-xl border border-line bg-elevated p-4 shadow-toast"
+>
+  <h2 id="consent-title" class="m-0 mb-1 text-base font-bold">
+    {ui.title}
+  </h2>
+  <!-- prettier-ignore -->
+  <p class="m-0 mb-3 text-sm leading-normal text-fg-2">
+    {ui.text}{" "}
+    <a href={site.appLink("privacy")} class="underline underline-offset-2">{ui.policyLabel}</a>{"."}
+  </p>
+  <div class="flex gap-2">
+    <button type="button" data-consent-choice="denied" class={buttonClass}>
+      {ui.reject}
+    </button>
+    <button type="button" data-consent-choice="granted" class={buttonClass}>
+      {ui.accept}
+    </button>
+  </div>
+</section>

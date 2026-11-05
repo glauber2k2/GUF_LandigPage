@@ -1,0 +1,28 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import RecordSetDemo from "../mockups/RecordSetDemo.astro";
+import Container from "../ui/Container.astro";
+import Eyebrow from "../ui/Eyebrow.astro";
+import Heading from "../ui/Heading.astro";
+import Section from "../ui/Section.astro";
+
+interface Props {
+  data: SectionOf<"records">;
+}
+
+const { data } = Astro.props;
+---
+
+<Section labelledBy="pr-title">
+  <Container class="grid items-center gap-14 grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))]">
+    <div class="flex justify-center">
+      <RecordSetDemo data={data.demo} />
+    </div>
+    <div data-reveal class="flex flex-col gap-5">
+      {data.eyebrow && <Eyebrow text={data.eyebrow} tone="pr" />}
+      <Heading id="pr-title" text={data.title} />
+      <p class="m-0 max-w-[52ch] text-lg leading-[1.55] text-fg-2">{data.body}</p>
+      <p class="m-0 max-w-[52ch] text-[15px] leading-[1.55] text-fg-muted">{data.note}</p>
+    </div>
+  </Container>
+</Section>

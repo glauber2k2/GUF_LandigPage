@@ -1,0 +1,43 @@
+---
+import type { FaqItem, SectionOf } from "../../content/schemas/sections";
+import Container from "../ui/Container.astro";
+import Heading from "../ui/Heading.astro";
+import Icon from "../ui/Icon.astro";
+import Section from "../ui/Section.astro";
+
+/** Perguntas frequentes. A mesma lista gera o JSON-LD FAQPage (BaseLayout), sem divergência. */
+interface Props {
+  data: SectionOf<"faq">;
+  items: FaqItem[];
+}
+
+const { data, items } = Astro.props;
+---
+
+<Section id={data.anchor} labelledBy="faq-title">
+  <Container size="text" class="flex flex-col gap-8">
+    <div data-reveal>
+      <Heading id="faq-title" text={data.title} />
+    </div>
+    <div class="flex flex-col border-t border-line" data-faq>
+      {items.map((item) => (
+        <details class="faq-item border-b border-line" data-faq-item={item.id}>
+          <summary class="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-[18px] text-lg font-semibold">
+            <h3 class="m-0 text-lg font-semibold">{item.question}</h3>
+            <Icon name="chevronDown" size={20} class="faq-chevron text-fg-muted" />
+          </summary>
+          <p class="m-0 max-w-[65ch] pb-[22px] text-base leading-relaxed text-fg-2">{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .faq-item :global(.faq-chevron) {
+    transition: transform var(--duration-base) var(--ease-std);
+  }
+  .faq-item[open] :global(.faq-chevron) {
+    transform: rotate(180deg);
+  }
+</style>

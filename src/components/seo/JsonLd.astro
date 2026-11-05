@@ -1,0 +1,12 @@
+---
+import { serializeJsonLd } from "../../lib/seo/jsonld";
+
+/** Um bloco JSON-LD. Os dados vêm dos builders de lib/seo, nunca escritos à mão. */
+interface Props {
+  data: Record<string, unknown> | Array<Record<string, unknown>>;
+}
+
+const { data } = Astro.props;
+---
+
+<script type="application/ld+json" is:inline set:html={serializeJsonLd(data)} />

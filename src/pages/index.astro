@@ -1,0 +1,24 @@
+---
+import SectionRenderer from "../components/sections/SectionRenderer.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { loadPageSections, loadSiteData } from "../lib/content/site-data";
+import { appInfo, brandInfo, faqEntries } from "../lib/content/structured-data";
+import { faqPageSchema, softwareApplicationSchema } from "../lib/seo/jsonld";
+
+/** A home só monta as seções na ordem do conteúdo (src/content/pages/pages.json). */
+const site = await loadSiteData();
+const sections = (await loadPageSections("home")).map((entry) => entry.data);
+const siteUrl = Astro.site ?? new URL("http://localhost:4321");
+const hasFaq = sections.some((s) => s.type === "faq");
+
+const jsonLd = [
+  softwareApplicationSchema(appInfo(siteUrl, site.catalog), brandInfo(siteUrl)),
+  ...(hasFaq ? [faqPageSchema(faqEntries(site.faq))] : []),
+];
+---
+
+<BaseLayout jsonLd={jsonLd}>
+  {sections.map((section) => (
+    <SectionRenderer section={section} site={site} sections={sections} />
+  ))}
+</BaseLayout>

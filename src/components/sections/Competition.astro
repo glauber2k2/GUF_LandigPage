@@ -1,0 +1,101 @@
+---
+import type { CompetitionRules } from "../../content/schemas/app-data";
+import type { SectionOf } from "../../content/schemas/sections";
+import PointsSimulator from "../islands/PointsSimulator.astro";
+import Podium from "../mockups/Podium.astro";
+import Button from "../ui/Button.astro";
+import Card from "../ui/Card.astro";
+import Container from "../ui/Container.astro";
+import Eyebrow from "../ui/Eyebrow.astro";
+import Heading from "../ui/Heading.astro";
+import Icon from "../ui/Icon.astro";
+import InlineText from "../ui/InlineText.astro";
+import Section from "../ui/Section.astro";
+
+interface Props {
+  data: SectionOf<"competition">;
+  rules: CompetitionRules;
+}
+
+const { data, rules } = Astro.props;
+const valueTones = { accent: "text-accent-text", pr: "text-pr-text", data: "text-data" } as const;
+---
+
+<Section id={data.anchor} labelledBy="comp-title">
+  <Container class="flex flex-col gap-14">
+    <div data-reveal class="flex max-w-[760px] flex-col gap-5">
+      {data.eyebrow && <Eyebrow text={data.eyebrow} />}
+      <Heading id="comp-title" size="xl" text={data.title} />
+      <p class="m-0 text-lg leading-[1.55] text-fg-2">{data.lead}</p>
+    </div>
+
+    <ul class="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-4 p-0">
+      {data.cards.map((card) => (
+        <Card as="li" reveal class="flex flex-col gap-2.5">
+          <Icon name={card.icon} size={24} class="text-accent-text" />
+          <h3 class="m-0 text-lg font-bold">{card.title}</h3>
+          <p class="m-0 text-[15px] leading-normal text-fg-2">{card.text}</p>
+        </Card>
+      ))}
+    </ul>
+
+    <div class="grid items-start gap-6 grid-cols-[repeat(auto-fit,minmax(min(100%,440px),1fr))]">
+      <div data-reveal class="flex flex-col gap-4">
+        <Heading level={3} size="md" text={data.scoring.title} />
+        <ul class="m-0 flex list-none flex-col overflow-hidden rounded-xl border border-line bg-surface p-0">
+          {data.scoring.items.map((item) => (
+            <li class="grid grid-cols-[76px_1fr] gap-4 border-b border-line px-5 py-[18px] last:border-b-0">
+              <span class:list={["font-display text-[34px] leading-none font-bold", valueTones[item.tone]]}>
+                {item.value}
+              </span>
+              <span class="flex flex-col gap-1">
+                <strong class="text-base">{item.title}</strong>
+                <span class="text-[15px] leading-normal text-fg-2">{item.text}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p class="m-0 flex gap-2.5 text-[15px] leading-normal text-fg-2">
+          <Icon name="shield" size={20} class="mt-px text-accent-text" />
+          <span>
+            <InlineText text={data.scoring.validNote} />
+          </span>
+        </p>
+      </div>
+      <div data-reveal>
+        <PointsSimulator data={data.simulator} rules={rules} />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] gap-4">
+      <Card reveal class="flex flex-col gap-[18px]">
+        <div class="flex flex-col gap-1.5">
+          <h3 class="m-0 text-lg font-bold">{data.podium.title}</h3>
+          <p class="m-0 text-[15px] leading-normal text-fg-2">{data.podium.text}</p>
+        </div>
+        <Podium data={data.podium} />
+      </Card>
+      <Card reveal class="flex flex-col gap-[18px]">
+        <div class="flex flex-col gap-1.5">
+          <h3 class="m-0 text-lg font-bold">{data.alerts.title}</h3>
+          <p class="m-0 text-[15px] leading-normal text-fg-2">{data.alerts.text}</p>
+        </div>
+        <ul class="m-0 flex list-none flex-col gap-2.5 p-0">
+          {data.alerts.items.map((alert) => (
+            <li class="flex items-center gap-3 rounded-xl border border-line bg-elevated p-3">
+              <Icon name="bell" size={20} class="text-accent-text" />
+              <span class="flex flex-col gap-0.5">
+                <strong class="text-sm">{alert.title}</strong>
+                <span class="text-[13px] text-fg-muted">{alert.text}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </Card>
+    </div>
+
+    <div data-reveal class="flex justify-center">
+      <Button cta={data.cta} source="competicao" size="lg" />
+    </div>
+  </Container>
+</Section>

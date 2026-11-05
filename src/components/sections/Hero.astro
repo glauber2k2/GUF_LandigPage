@@ -1,0 +1,41 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import Ranking from "../mockups/Ranking.astro";
+import Badge from "../ui/Badge.astro";
+import Button from "../ui/Button.astro";
+import Container from "../ui/Container.astro";
+import Heading from "../ui/Heading.astro";
+import Icon from "../ui/Icon.astro";
+import Section from "../ui/Section.astro";
+
+interface Props {
+  data: SectionOf<"hero">;
+}
+
+const { data } = Astro.props;
+---
+
+<Section labelledBy="hero-title" spacing="hero" class="overflow-hidden" data-hero>
+  <Container class="grid items-center gap-14 grid-cols-[repeat(auto-fit,minmax(min(100%,440px),1fr))]">
+    <div class="flex flex-col items-start gap-6">
+      <Badge text={data.badge} dot />
+      <Heading level={1} size="hero" id="hero-title" text={data.title} />
+      <p class="m-0 max-w-[34ch] text-[clamp(18px,2.2vw,21px)] leading-normal text-pretty text-fg-2">{data.lead}</p>
+      <div class="flex flex-wrap gap-3">
+        <Button cta={data.primaryCta} source="hero" size="lg" arrow />
+        <Button cta={data.secondaryCta} source="hero-secundario" size="lg" variant="secondary" />
+      </div>
+      <ul class="m-0 flex list-none flex-wrap gap-x-[18px] gap-y-2 p-0 text-sm text-fg-muted">
+        {data.checks.map((check) => (
+          <li class="flex items-center gap-1.5">
+            <Icon name="check" size={16} strokeWidth={2.4} class="text-accent-text" />
+            {check}
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="flex justify-center">
+      <Ranking data={data.ranking} />
+    </div>
+  </Container>
+</Section>

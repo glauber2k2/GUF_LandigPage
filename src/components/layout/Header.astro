@@ -1,0 +1,23 @@
+---
+import type { UiContent } from "../../content/schemas/sections";
+import Button from "../ui/Button.astro";
+import Logo from "../ui/Logo.astro";
+
+interface Props {
+  ui: UiContent["header"];
+}
+
+const { ui } = Astro.props;
+---
+
+<header class="fixed inset-x-0 top-0 z-50 border-b border-line bg-header backdrop-blur-md">
+  <div class="mx-auto flex h-16 max-w-page items-center justify-between gap-4 px-5">
+    <a href="#topo" aria-label={ui.homeLabel} class="flex items-center">
+      <Logo height={32} label="" class="pointer-events-none" />
+    </a>
+    <nav aria-label={ui.navLabel} class="flex items-center gap-2">
+      <Button cta={ui.login} source="header-entrar" variant="ghost" size="sm" />
+      <Button cta={ui.signup} source="header" size="sm" class="px-[18px]" />
+    </nav>
+  </div>
+</header>

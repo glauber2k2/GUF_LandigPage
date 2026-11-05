@@ -1,0 +1,32 @@
+---
+import Button from "../components/ui/Button.astro";
+import Container from "../components/ui/Container.astro";
+import Heading from "../components/ui/Heading.astro";
+import Icon from "../components/ui/Icon.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { loadSiteData } from "../lib/content/site-data";
+
+const { ui } = await loadSiteData();
+const nf = ui.notFound;
+const linkClass =
+  "inline-flex h-[52px] items-center gap-2 rounded-lg border border-line-strong px-6 font-semibold text-fg hover:bg-s3";
+---
+
+<BaseLayout seo={{ title: nf.title, noindex: true }} showSticky={false}>
+  <section aria-labelledby="nf-title" class="px-5 pt-36 pb-28" data-hero>
+    <Container size="text" class="flex flex-col items-start gap-6">
+      <Heading level={1} size="lg" id="nf-title" text={nf.heading} />
+      <p class="m-0 max-w-[48ch] text-lg leading-[1.55] text-fg-2">{nf.text}</p>
+      <div class="flex flex-wrap gap-3">
+        <Button cta={nf.signup} source="404" />
+        <a href="/" class={linkClass}>
+          <Icon name="home" size={18} />
+          {nf.homeLabel}
+        </a>
+        <a href="/#perguntas-frequentes" class={linkClass}>
+          {nf.faqLabel}
+        </a>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
