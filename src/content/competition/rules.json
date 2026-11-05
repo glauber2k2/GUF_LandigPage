@@ -1,0 +1,26 @@
+[
+  {
+    "id": "current",
+    "snapshotDate": "2026-11-05",
+    "sources": [
+      "guf_backend/supabase/migrations/20261018171956_social_competition.sql (sessions_for_max_constancy 3, bonus_per_week 5, bonus_max 20, min_minutes 20)",
+      "guf_backend/supabase/migrations/20261020012117_competition_scoring_without_rpe.sql (volume_max 15, volume_window_weeks 4)",
+      "guf_backend/supabase/migrations/20261023200000_competition_points_per_day.sql (constancy_points_per_day 15; fórmula em competition_week_scores)",
+      "guf_backend/supabase/migrations/20261029120000_competition_records_unlimited.sql (record_points 3, records_max nulo)",
+      "guf_backend/supabase/migrations/20261029130000_competition_season_podium.sql (pódio nos 3 primeiros dias)",
+      "guf_backend/packages/core/src/competition.ts (COMPETITION_ALERT_GAP 20)"
+    ],
+    "howToUpdate": "A tabela competition_parameters só pode ser lida por usuário logado (RLS 'to authenticated'), então o build não a busca. Quando uma migration nova do app mudar a pontuação, atualize os números aqui, a data em snapshotDate e a lista em sources, e rode `npm test` (os testes de lib/domain conferem exemplos calculados à mão).",
+    "constancyPointsPerDay": 15,
+    "daysForFulfilledWeek": 3,
+    "bonusPerWeek": 5,
+    "bonusMax": 20,
+    "recordPoints": 3,
+    "recordsMax": null,
+    "volumeMax": 15,
+    "volumeWindowWeeks": 4,
+    "minValidMinutes": 20,
+    "podiumDays": 3,
+    "alertGap": 20
+  }
+]

@@ -1,0 +1,121 @@
+[
+  {
+    "id": "current",
+    "syncedAt": "2026-11-05T21:49:15.072Z",
+    "source": "Supabase do app (plans, features, plan_features, plan_prices ativos) via chave pública",
+    "plans": [
+      {
+        "code": "free",
+        "name": "Free",
+        "rank": 0,
+        "is_default": true,
+        "is_purchasable": false
+      },
+      {
+        "code": "pro",
+        "name": "Pro",
+        "rank": 20,
+        "is_default": false,
+        "is_purchasable": true
+      }
+    ],
+    "features": [
+      {
+        "code": "chart_months",
+        "kind": "limit",
+        "description": "Meses que os gráficos mostram, contando o atual (2 = o mês atual e o anterior)"
+      },
+      {
+        "code": "competition_full_history",
+        "kind": "flag",
+        "description": "Competição em outros períodos além do mês atual"
+      },
+      {
+        "code": "custom_projects",
+        "kind": "limit",
+        "description": "Projetos ativos criados pela pessoa, além do Favoritos"
+      },
+      {
+        "code": "guf_ai_daily_messages",
+        "kind": "limit",
+        "description": "Perguntas ao GUF AI em 24 horas"
+      },
+      {
+        "code": "measurement_chart_months",
+        "kind": "limit",
+        "description": "Meses mostrados nos gráficos de medidas corporais, contando de hoje para trás"
+      },
+      {
+        "code": "routines_per_project",
+        "kind": "limit",
+        "description": "Rotinas ativas (não arquivadas) em cada projeto"
+      }
+    ],
+    "planFeatures": [
+      {
+        "plan_code": "free",
+        "feature_code": "chart_months",
+        "limit_value": 2
+      },
+      {
+        "plan_code": "free",
+        "feature_code": "custom_projects",
+        "limit_value": 0
+      },
+      {
+        "plan_code": "free",
+        "feature_code": "guf_ai_daily_messages",
+        "limit_value": 3
+      },
+      {
+        "plan_code": "free",
+        "feature_code": "measurement_chart_months",
+        "limit_value": 3
+      },
+      {
+        "plan_code": "free",
+        "feature_code": "routines_per_project",
+        "limit_value": 5
+      },
+      {
+        "plan_code": "pro",
+        "feature_code": "chart_months",
+        "limit_value": null
+      },
+      {
+        "plan_code": "pro",
+        "feature_code": "competition_full_history",
+        "limit_value": null
+      },
+      {
+        "plan_code": "pro",
+        "feature_code": "custom_projects",
+        "limit_value": null
+      },
+      {
+        "plan_code": "pro",
+        "feature_code": "guf_ai_daily_messages",
+        "limit_value": 40
+      },
+      {
+        "plan_code": "pro",
+        "feature_code": "measurement_chart_months",
+        "limit_value": null
+      },
+      {
+        "plan_code": "pro",
+        "feature_code": "routines_per_project",
+        "limit_value": null
+      }
+    ],
+    "prices": [
+      {
+        "plan_code": "pro",
+        "provider": "stripe",
+        "billing_interval": "month",
+        "amount_cents": 1480,
+        "currency": "brl"
+      }
+    ]
+  }
+]
