@@ -161,16 +161,31 @@ No CI, cadastre-as como **Variables** do repositório (Settings › Secrets and 
 
 ## 6. Publicação
 
-Configuração da hospedagem (Cloudflare Pages ou Netlify):
+Hospedagem: **Cloudflare Workers com Static Assets** (site estático, sem script de Worker, sem custo de invocação).
+A configuração está em `wrangler.jsonc`: publica `dist/`, devolve o `404.html` com status 404 e usa barra final nas páginas.
+Os cabeçalhos de segurança e de cache ficam em `public/_headers`, que o Astro copia para `dist/`.
 
-- **Build:** `npm run build` · **Saída:** `dist` · **Node:** 24
-- As variáveis da seção 5 vão no painel da hospedagem.
-- `public/_headers` funciona nas duas: cabeçalhos de segurança e cache imutável para `/_astro/*`.
+### Primeira publicação pelo painel (deploy automático a cada push)
+
+1. Cloudflare › **Workers & Pages** › **Create** › **Import a repository** › escolher `glauber2k2/GUF_LandigPage`.
+2. **Build command:** `npm run build` · **Deploy command:** `npx wrangler deploy` · **Root directory:** `/`.
+3. Em **Variables and secrets** do build, cadastrar `NODE_VERSION=24` e as variáveis da seção 5 (`PUBLIC_SITE_URL`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` e, se for usar, `PUBLIC_META_PIXEL_ID`, `PUBLIC_GA_ID` e `PUBLIC_GSC_VERIFICATION`).
+4. Depois do primeiro deploy: **Settings › Domains & Routes › Add › Custom domain** para ligar o domínio. Em seguida, atualizar `PUBLIC_SITE_URL` e publicar de novo.
+
+### Publicar pelo terminal (alternativa)
+
+```bash
+npx wrangler login       # uma vez
+npm run build
+npx wrangler deploy
+```
+
+Para conferir sem publicar: `npx wrangler deploy --dry-run`.
 
 ### Checklist
 
 - [ ] **Domínio:** definir `PUBLIC_SITE_URL` com o domínio final e fazer um novo build. O build avisa enquanto estiver em localhost.
-- [ ] **DNS:** apontar o domínio (CNAME/registro pedido pela hospedagem) e ativar HTTPS.
+- [ ] **Domínio na Cloudflare:** adicionar como Custom domain do Worker `guf-site` (o DNS e o HTTPS são configurados pela própria Cloudflare se o domínio estiver na conta).
 - [ ] **Confirmar o HSTS** em `public/_headers` (`preload`) só depois que o domínio e todos os subdomínios estiverem em HTTPS.
 - [ ] **Search Console:** adicionar a propriedade, preencher `PUBLIC_GSC_VERIFICATION`, publicar, verificar e enviar `https://<domínio>/sitemap-index.xml`.
 - [ ] **Meta (domínio):** em Business Manager › Segurança da marca › Domínios, verificar o domínio (meta tag ou DNS) antes de usar o Pixel.

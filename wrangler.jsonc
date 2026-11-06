@@ -1,0 +1,14 @@
+// Cloudflare Workers com Static Assets: site 100% estático, sem script (`main`), sem custo de invocação.
+// Build: `npm run build` → dist/. Deploy: `npx wrangler deploy`.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "guf-site",
+  "compatibility_date": "2026-11-05",
+  "assets": {
+    "directory": "./dist",
+    // Endereço inexistente → dist/404.html com status 404.
+    "not_found_handling": "404-page",
+    // Padrão da Cloudflare, explícito: páginas em pasta (/pagina/index.html) respondem com barra final.
+    "html_handling": "auto-trailing-slash",
+  },
+}
