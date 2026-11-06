@@ -29,7 +29,9 @@ jobs:
           node-version: 24
           cache: npm
 
-      - run: npm ci
+      # Mesmo npm da Cloudflare (Workers Builds): se o lock ficar incompatível, quebra aqui, antes do deploy.
+      - name: Instalar dependências (npm 10.9.2, igual à Cloudflare)
+        run: npx -y npm@10.9.2 ci
 
       - name: Lint e formatação
         run: |

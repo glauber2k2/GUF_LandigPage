@@ -172,6 +172,8 @@ Os cabeçalhos de segurança e de cache ficam em `public/_headers`, que o Astro 
 3. Em **Variables and secrets** do build, cadastrar `NODE_VERSION=24` e as variáveis da seção 5 (`PUBLIC_SITE_URL`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` e, se for usar, `PUBLIC_META_PIXEL_ID`, `PUBLIC_GA_ID` e `PUBLIC_GSC_VERIFICATION`).
 4. Depois do primeiro deploy: **Settings › Domains & Routes › Add › Custom domain** para ligar o domínio. Em seguida, atualizar `PUBLIC_SITE_URL` e publicar de novo.
 
+> **Lock do npm:** a Cloudflare instala com o npm 10.9.2. Ao mudar dependências, gere o `package-lock.json` com ele (`npx npm@10.9.2 install`); o npm 11 pode gravar um lock que o npm 10 recusa. O CI instala com a mesma versão e acusa o problema.
+
 ### Publicar pelo terminal (alternativa)
 
 ```bash
