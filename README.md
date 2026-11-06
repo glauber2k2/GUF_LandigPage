@@ -116,6 +116,20 @@ Edite a lista em `src/content/pages/pages.json`. Os nomes são os arquivos de `s
 - Instagram e outras redes: `src/config/site.ts` (`social` e `sameAs`, que alimenta o JSON-LD).
 - Domínio da landing: `PUBLIC_SITE_URL`.
 
+### Dia do lançamento (pré-lançamento → app aberto)
+
+Hoje a página está em **pré-lançamento**: não há botão "Entrar", os botões que levariam ao app ficam bloqueados com o tooltip "Lançamento em breve" e o preço do Pro aparece como "R$ ??,??" (também fora do JSON-LD e do llms.txt). No dia do lançamento, em `src/config/site.ts`:
+
+```ts
+launch: {
+  appOpen: true,       // botões voltam a ser links para o app, com UTM
+  showProPrice: true,  // mostra o preço de lançamento: R$ 14,80/mês (vem de plan_prices)
+  …
+}
+```
+
+Depois é só publicar de novo. O botão "Entrar" do cabeçalho foi removido do conteúdo. Se quiser de volta, acrescente `"login": { "label": "Entrar", "appRoute": "login" }` em `site/ui.json › header` (e no schema e no `Header.astro`).
+
 ### Atualizar preço, limites ou pontuação
 
 - **Preço e limites dos planos:** vêm sozinhos do app a cada build (`npm run sync:data`), com a chave pública. Sem acesso, o build usa o snapshot `src/content/plans/catalog.json` e avisa no log. Sem preço ativo no app, o card do Pro mostra "A assinatura chega em breve no app", como o próprio app faz.

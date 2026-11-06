@@ -38,6 +38,27 @@ export const site = {
     /** O CTA fixo no rodapé aparece só no celular, depois do hero. */
     mobileStickyCta: true,
   },
+
+  /**
+   * PRÉ-LANÇAMENTO. No dia do lançamento, mudar as duas chaves para `true` e publicar de novo:
+   *
+   *  - `appOpen: true`      → os botões voltam a ser links para o app (cadastro, planos), com UTM.
+   *  - `showProPrice: true` → o card do Pro, o JSON-LD e o llms.txt mostram o preço.
+   *
+   * PREÇO DE LANÇAMENTO DO PRO: R$ 14,80/mês (confirmado em 2026-11-06).
+   * O valor NÃO é escrito aqui: vem de `plan_prices` do app a cada build (src/content/plans/catalog.json).
+   * Para mudar o preço, mude no app; a página acompanha no próximo deploy.
+   */
+  launch: {
+    appOpen: false,
+    showProPrice: false,
+    /** Texto do tooltip nos botões bloqueados. */
+    lockedLabel: "Lançamento em breve",
+    /** O que aparece no lugar do preço enquanto `showProPrice` é false. */
+    priceMask: "R$ ??,??",
+    /** Lido por leitores de tela no lugar das interrogações. */
+    priceMaskLabel: "Preço anunciado no lançamento",
+  },
 } as const;
 
 export const analyticsEnabled = Boolean(site.analytics.metaPixelId || site.analytics.gaId);

@@ -4,9 +4,10 @@
     "skipLink": "Pular para o conteúdo",
     "header": {
       "homeLabel": "guf, voltar ao topo",
-      "navLabel": "Conta",
-      "login": { "label": "Entrar", "appRoute": "login" },
-      "signup": { "label": "Começar grátis", "appRoute": "signup" }
+      "signup": {
+        "label": "Começar grátis",
+        "appRoute": "signup"
+      }
     },
     "footer": {
       "tagline": "App de treino de musculação",
@@ -16,7 +17,12 @@
       "privacyLabel": "Política de Privacidade",
       "copyright": "© {year} guf"
     },
-    "sticky": { "cta": { "label": "Começar grátis", "appRoute": "signup" } },
+    "sticky": {
+      "cta": {
+        "label": "Começar grátis",
+        "appRoute": "signup"
+      }
+    },
     "consent": {
       "title": "Cookies",
       "text": "Usamos cookies de medição para saber quais anúncios e páginas trazem pessoas ao guf. Eles só são carregados se você aceitar.",
@@ -30,7 +36,10 @@
       "text": "O endereço pode ter mudado ou estar digitado errado. Volte para o início ou veja as perguntas frequentes.",
       "homeLabel": "Voltar ao início",
       "faqLabel": "Perguntas frequentes",
-      "signup": { "label": "Começar grátis", "appRoute": "signup" }
+      "signup": {
+        "label": "Começar grátis",
+        "appRoute": "signup"
+      }
     }
   }
 ]

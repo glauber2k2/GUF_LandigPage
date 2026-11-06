@@ -1,11 +1,17 @@
 ---
+import { site } from "../../config/site";
 import type { Cta } from "../../content/schemas/sections";
 import { ctaTarget } from "../../lib/content/cta";
 import Icon from "./Icon.astro";
+import Tooltip from "./Tooltip.astro";
 
 /**
  * Botão-link. Destino vem do conteúdo (rota do app ou âncora). Links do app ganham `data-app-link`
  * (repasse de UTM) e `data-cta` com a seção de origem (evento de clique).
+ *
+ * Pré-lançamento (`site.launch.appOpen` false): botões que levariam ao app viram botões bloqueados
+ * com o tooltip "Lançamento em breve". Âncoras da própria página continuam funcionando.
+ * O clique continua gerando `cta_click` (mede o interesse antes do lançamento).
  */
 interface Props {
   cta: Cta;
@@ -17,6 +23,8 @@ interface Props {
   block?: boolean;
   class?: string;
   tabindex?: number;
+  /** Lado do tooltip do botão bloqueado (no cabeçalho, embaixo). */
+  tooltipSide?: "top" | "bottom";
 }
 
 const {
@@ -28,14 +36,25 @@ const {
   block = false,
   class: className,
   tabindex,
+  tooltipSide = "top",
 } = Astro.props;
 const { href, isApp } = ctaTarget(cta);
+const locked = isApp && !site.launch.appOpen;
+const tooltipId = `tt-${source}`;
 
 const variants = {
-  primary: "bg-accent text-accent-fg font-bold hover:brightness-[1.06]",
-  secondary: "border border-line-strong text-fg font-semibold hover:bg-s3",
-  ghost: "text-fg font-semibold hover:bg-s3",
-  band: "bg-band-button text-band-button-fg font-bold hover:-translate-y-px",
+  primary: "bg-accent text-accent-fg font-bold",
+  secondary: "border border-line-strong text-fg font-semibold",
+  ghost: "text-fg font-semibold",
+  band: "bg-band-button text-band-button-fg font-bold",
+} as const;
+
+/** Efeitos de hover/pressão só em botões ativos. */
+const interactions = {
+  primary: "hover:brightness-[1.06] active:scale-[0.97]",
+  secondary: "hover:bg-s3 active:scale-[0.97]",
+  ghost: "hover:bg-s3 active:scale-[0.97]",
+  band: "hover:-translate-y-px active:scale-[0.97]",
 } as const;
 
 const sizes = {
@@ -44,21 +63,40 @@ const sizes = {
   lg: "h-14 px-7 text-[17px] rounded-lg",
   xl: "h-[60px] px-8 text-lg rounded-lg",
 } as const;
+
+const base = [
+  "inline-flex items-center justify-center gap-2.5 whitespace-nowrap no-underline transition-[transform,filter,background-color] duration-150",
+  variants[variant],
+  sizes[size],
+  block && "w-full",
+  className,
+];
 ---
 
-<a
-  href={href}
-  data-app-link={isApp ? "" : undefined}
-  data-cta={source}
-  tabindex={tabindex}
-  class:list={[
-    "inline-flex items-center justify-center gap-2.5 whitespace-nowrap no-underline transition-[transform,filter,background-color] duration-150 active:scale-[0.97]",
-    variants[variant],
-    sizes[size],
-    block && "w-full",
-    className,
-  ]}
->
-  {cta.label}
-  {arrow && <Icon name="arrowRight" size={20} strokeWidth={2.4} />}
-</a>
+{locked ? (
+  <Tooltip id={tooltipId} label={site.launch.lockedLabel} side={tooltipSide} block={block}>
+    <button
+      type="button"
+      aria-disabled="true"
+      aria-describedby={tooltipId}
+      data-cta={source}
+      data-locked
+      tabindex={tabindex}
+      class:list={[...base, "cursor-not-allowed opacity-60"]}
+    >
+      {cta.label}
+      {arrow && <Icon name="arrowRight" size={20} strokeWidth={2.4} />}
+    </button>
+  </Tooltip>
+) : (
+  <a
+    href={href}
+    data-app-link={isApp ? "" : undefined}
+    data-cta={source}
+    tabindex={tabindex}
+    class:list={[...base, interactions[variant]]}
+  >
+    {cta.label}
+    {arrow && <Icon name="arrowRight" size={20} strokeWidth={2.4} />}
+  </a>
+)}

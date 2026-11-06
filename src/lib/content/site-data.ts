@@ -51,6 +51,11 @@ async function build(): Promise<SiteData> {
     instagramHandle: site.social.instagram.handle,
     year: new Date().getFullYear(),
   });
+  if (!site.launch.showProPrice) {
+    // Pré-lançamento: nenhum texto (FAQ, llms.txt) pode revelar o preço do Pro.
+    delete values["pro.price"];
+    delete values["pro.priceSuffix"];
+  }
 
   return {
     rules: rulesEntry.data,

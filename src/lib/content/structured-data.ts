@@ -26,7 +26,8 @@ export function appInfo(siteUrl: URL, catalog: PlanCatalog): AppInfo {
   const pro = upgradePlan(catalog);
   const price = activePrice(catalog, pro.code);
   const offers: OfferInfo[] = [{ name: free.name, price: "0", currency: "BRL" }];
-  if (price) {
+  // Pré-lançamento: o preço do Pro não sai no JSON-LD enquanto site.launch.showProPrice for false.
+  if (price && site.launch.showProPrice) {
     offers.push({
       name: `${pro.name} ${price.billing_interval === "month" ? "mensal" : "anual"}`,
       price: priceForSchema(price),

@@ -1,4 +1,5 @@
 ---
+import { site } from "../../config/site";
 import type { PlanCatalog } from "../../content/schemas/app-data";
 import type { SectionOf } from "../../content/schemas/sections";
 import { activePrice, defaultPlan, formatIntervalSuffix, formatMoney, upgradePlan } from "../../lib/domain/plans";
@@ -14,6 +15,8 @@ import Section from "../ui/Section.astro";
  * Comparação Free × Pro. Nomes, limites e preço vêm do catálogo do app (plans, plan_features,
  * plan_prices). Sem preço ativo, o Pro mostra "chega em breve", exatamente como o app faz.
  * Sem preço riscado, desconto ou contador: o app não tem nada disso.
+ * Pré-lançamento (site.launch.showProPrice false): o valor aparece como "R$ ??,??".
+ * Preço de lançamento: R$ 14,80/mês, vindo de plan_prices (ver o comentário em src/config/site.ts).
  */
 interface Props {
   data: SectionOf<"plans">;
@@ -58,7 +61,14 @@ const price = activePrice(catalog, pro.code);
           {price && (
             <p class="m-0 mt-2 flex items-baseline gap-1">
               <span class="font-display text-[40px] leading-none font-bold">
-                {formatMoney(price.amount_cents, price.currency)}
+                {site.launch.showProPrice ? (
+                  formatMoney(price.amount_cents, price.currency)
+                ) : (
+                  <>
+                    <span aria-hidden="true">{site.launch.priceMask}</span>
+                    <span class="sr-only">{site.launch.priceMaskLabel}</span>
+                  </>
+                )}
               </span>
               <span class="text-[15px] text-fg-muted">{formatIntervalSuffix(price)}</span>
             </p>

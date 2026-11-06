@@ -1,0 +1,100 @@
+---
+/**
+ * Tooltip no visual do shadcn/ui (new-york v4): `bg-foreground text-background rounded-md px-3 py-1.5
+ * text-xs`, seta quadrada girada 45°, entrada fade + zoom 95% + deslize de 2 (8 px), sem atraso.
+ * Feito sem React/Radix para não estourar o orçamento de JS da home: CSS para hover e foco,
+ * scripts/page.ts para toque (abre no toque) e Esc (fecha).
+ *
+ * Uso: envolve o gatilho e recebe o texto.
+ *   <Tooltip id="tt-1" label="Lançamento em breve"><button aria-describedby="tt-1">…</button></Tooltip>
+ */
+interface Props {
+  id: string;
+  label: string;
+  side?: "top" | "bottom";
+  block?: boolean;
+}
+
+const { id, label, side = "top", block = false } = Astro.props;
+---
+
+<span data-tooltip-root data-side={side} class:list={["tooltip-root relative", block ? "flex w-full" : "inline-flex"]}>
+  <slot />
+  <span id={id} role="tooltip" data-slot="tooltip-content" class="tooltip-content">
+    {label}
+    <span class="tooltip-arrow" aria-hidden="true"></span>
+  </span>
+</span>
+
+<style>
+  .tooltip-content {
+    position: absolute;
+    left: 50%;
+    z-index: 50;
+    width: max-content;
+    max-width: min(240px, calc(100vw - 32px));
+    border-radius: 6px; /* rounded-md do shadcn */
+    background: var(--text-primary); /* bg-foreground */
+    color: var(--background); /* text-background */
+    padding: 6px 12px; /* px-3 py-1.5 */
+    font-size: 12px; /* text-xs */
+    line-height: 16px;
+    font-weight: 500;
+    text-align: center;
+    text-wrap: balance;
+    white-space: normal;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease,
+      visibility 0s linear 150ms;
+  }
+  .tooltip-arrow {
+    position: absolute;
+    left: 50%;
+    width: 10px; /* size-2.5 */
+    height: 10px;
+    border-radius: 2px;
+    background: var(--text-primary);
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  /* side="top": acima do botão; entra deslizando de baixo (slide-in-from-bottom-2). */
+  [data-side="top"] > .tooltip-content {
+    bottom: calc(100% + 7px);
+    transform: translate(-50%, 8px) scale(0.95);
+    transform-origin: bottom center;
+  }
+  [data-side="top"] .tooltip-arrow {
+    bottom: -4px;
+  }
+
+  /* side="bottom": abaixo do botão; entra deslizando de cima (slide-in-from-top-2). */
+  [data-side="bottom"] > .tooltip-content {
+    top: calc(100% + 7px);
+    transform: translate(-50%, -8px) scale(0.95);
+    transform-origin: top center;
+  }
+  [data-side="bottom"] .tooltip-arrow {
+    top: -4px;
+  }
+
+  /* Aberto: hover (mouse), foco pelo teclado ou toque (data-open, via scripts/page.ts). Fade-in + zoom-in-95. */
+  .tooltip-root:hover > .tooltip-content,
+  .tooltip-root:has(:focus-visible) > .tooltip-content,
+  .tooltip-root[data-open] > .tooltip-content {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease,
+      visibility 0s;
+  }
+  .tooltip-root[data-dismissed] > .tooltip-content {
+    visibility: hidden;
+    opacity: 0;
+  }
+</style>

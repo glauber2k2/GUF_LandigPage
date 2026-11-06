@@ -33,9 +33,49 @@ test.describe("home", () => {
     expect(errors).toEqual([]);
   });
 
+  test("pré-lançamento: sem botão Entrar, CTAs bloqueados com 'Lançamento em breve' e preço escondido", async ({
+    page,
+    isMobile,
+  }) => {
+    await page.goto("/");
+    const locked = page.locator("button[data-locked]");
+    test.skip((await locked.count()) === 0, "app já lançado (site.launch.appOpen = true)");
+
+    await expect(page.getByRole("link", { name: "Entrar" })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Entrar" })).toHaveCount(0);
+    await expect(page.locator("a[data-app-link]")).toHaveCount(0);
+    for (const button of await locked.all()) {
+      await expect(button).toHaveAttribute("aria-disabled", "true");
+      const tooltipId = await button.getAttribute("aria-describedby");
+      await expect(page.locator(`#${tooltipId}`)).toHaveText("Lançamento em breve");
+    }
+
+    // Abre por hover (desktop) ou toque (celular) e não navega.
+    const hero = page.locator('button[data-cta="hero"]');
+    const tooltip = page.locator("#tt-hero");
+    await expect(tooltip).toBeHidden();
+    // aria-disabled: o Playwright só interage com elemento "desabilitado" se forçado.
+    if (isMobile) await hero.tap({ force: true });
+    else await hero.hover({ force: true });
+    await expect(tooltip).toBeVisible();
+    await hero.click({ force: true });
+    await expect(page).toHaveURL(/localhost:\d+\/$/);
+    await page.keyboard.press("Escape");
+    await expect(tooltip).toBeHidden();
+
+    // Teclado: foco mostra o tooltip.
+    await page.locator('button[data-cta="header"]').focus();
+    await expect(page.locator("#tt-header")).toBeVisible();
+
+    // Preço do Pro escondido em toda a página (inclusive JSON-LD).
+    await expect(page.locator("#planos")).toContainText("R$ ??,??");
+    expect(await page.content()).not.toMatch(/14,80|14\.80/);
+  });
+
   test("CTAs apontam para o app e repassam UTM, fbclid e gclid", async ({ page }) => {
     await page.goto("/?utm_source=instagram&utm_campaign=lancamento&fbclid=abc&gclid=xyz&ref=ignorar");
     const links = page.locator("a[data-app-link]");
+    test.skip((await links.count()) === 0, "pré-lançamento: os botões do app estão bloqueados");
     expect(await links.count()).toBeGreaterThan(5);
     for (const href of await links.evaluateAll((els) => els.map((el) => (el as HTMLAnchorElement).href))) {
       const url = new URL(href);

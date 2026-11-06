@@ -15,9 +15,6 @@ const { ui } = Astro.props;
     <a href="#topo" aria-label={ui.homeLabel} class="flex items-center">
       <Logo height={32} label="" class="pointer-events-none" />
     </a>
-    <nav aria-label={ui.navLabel} class="flex items-center gap-2">
-      <Button cta={ui.login} source="header-entrar" variant="ghost" size="sm" />
-      <Button cta={ui.signup} source="header" size="sm" class="px-[18px]" />
-    </nav>
+    <Button cta={ui.signup} source="header" size="sm" class="px-[18px]" tooltipSide="bottom" />
   </div>
 </header>

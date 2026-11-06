@@ -13,7 +13,7 @@ export interface LlmsInput {
 
 export function buildLlmsTxt(input: LlmsInput): string {
   const { values: v, rules: r } = input;
-  const price = v["pro.price"] ? `${v["pro.price"]}${v["pro.priceSuffix"] ?? ""}` : "assinatura ainda não disponível";
+  const price = v["pro.price"] ? `${v["pro.price"]}${v["pro.priceSuffix"] ?? ""}` : "preço anunciado no lançamento";
   const facts = [
     "App de treino de musculação em português do Brasil. Funciona no navegador e instala no celular (iPhone pelo Safari, Android pelo Chrome), sem loja de aplicativos.",
     "Registro de séries com carga, repetições e tipo (normal, aquecimento, drop-set, falha); coluna Anterior com a série do último treino; atalhos de carga e repetições; cronômetro de descanso; o registro continua sem internet e é enviado quando a conexão volta.",

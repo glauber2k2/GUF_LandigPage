@@ -329,7 +329,7 @@ export type SectionOf<T extends SectionType> = Extract<Section, { type: T }>;
 export const uiSchema = z.object({
   id: z.string(),
   skipLink: text,
-  header: z.object({ homeLabel: text, navLabel: text, login: ctaSchema, signup: ctaSchema }),
+  header: z.object({ homeLabel: text, signup: ctaSchema }),
   footer: z.object({
     tagline: text,
     instagramLabel: text,

@@ -9,9 +9,57 @@ import { applyTrackedParamsToAppLinks } from "../lib/utm/apply";
 /** Comportamentos comuns a todas as páginas. Cada um é independente e falha sozinho. */
 export function initPage(): void {
   applyTrackedParamsToAppLinks();
+  initLockedTooltips();
   initReveal();
   initStickyCta();
   initAnalytics();
+}
+
+const TOOLTIP_TOUCH_MS = 2500;
+
+/**
+ * Tooltip dos botões bloqueados (pré-lançamento). Hover e foco pelo teclado são CSS (Tooltip.astro);
+ * aqui: toque abre (celular não tem hover) e fecha sozinho, toque fora fecha, Esc fecha (como o Radix).
+ */
+function initLockedTooltips(): void {
+  const roots = () => document.querySelectorAll<HTMLElement>("[data-tooltip-root]");
+  let timer: number | undefined;
+
+  const closeAll = (except?: Element | null) =>
+    roots().forEach((root) => {
+      if (root !== except) root.removeAttribute("data-open");
+    });
+
+  document.addEventListener("click", (event) => {
+    const button = event.target instanceof Element ? event.target.closest("[data-locked]") : null;
+    const root = button?.closest<HTMLElement>("[data-tooltip-root]") ?? null;
+    closeAll(root);
+    if (!root) return;
+    event.preventDefault();
+    root.removeAttribute("data-dismissed");
+    root.setAttribute("data-open", "");
+    window.clearTimeout(timer);
+    timer = window.setTimeout(() => root.removeAttribute("data-open"), TOOLTIP_TOUCH_MS);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    // Só o tooltip que está aberto agora (toque, mouse em cima ou foco dentro); os outros não mudam.
+    roots().forEach((root) => {
+      if (!root.matches("[data-open], :hover, :focus-within")) return;
+      root.removeAttribute("data-open");
+      root.setAttribute("data-dismissed", "");
+    });
+  });
+
+  // Esc esconde até o ponteiro ou o foco saírem do botão; na próxima vez, abre normalmente.
+  const reset = (event: Event) => {
+    const root = event.target instanceof Element ? event.target.closest("[data-tooltip-root]") : null;
+    const next = event instanceof FocusEvent || event instanceof PointerEvent ? event.relatedTarget : null;
+    if (root && !(next instanceof Node && root.contains(next))) root.removeAttribute("data-dismissed");
+  };
+  document.addEventListener("pointerout", reset);
+  document.addEventListener("focusout", reset);
 }
 
 /** CTA fixo no celular: aparece quando o hero sai da tela e some quando o aviso de cookies está aberto. */
