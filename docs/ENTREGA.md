@@ -102,7 +102,7 @@ Mantido sem mudança: "3 amizades" (é texto do app) e todos os demais números 
 Nada disso aparece como texto provisório na página. São configurações ou decisões.
 
 1. **Domínio e hospedagem:** definir `PUBLIC_SITE_URL` e fazer um novo build. Enquanto isso, canonical, OG, sitemap e robots apontam para `localhost` e o build avisa. Depois: DNS, HTTPS e checklist do README.
-2. **Confirmar o preço do Pro.** O banco de produção tem um preço **ativo** de R$ 14,80/mês no Stripe, e é ele que a página mostra. Se for um preço de teste, desative-o no app antes de publicar a landing; a página volta sozinha para "chega em breve" no próximo build.
+2. ~~Confirmar o preço do Pro~~ **Confirmado em 2026-11-06:** R$ 14,80/mês é o preço real. A página o lê de `plan_prices` a cada build; se mudar no app, a landing acompanha no próximo deploy.
 3. **IDs de analytics (opcionais):** `PUBLIC_META_PIXEL_ID` e `PUBLIC_GA_ID`. Sem eles, nada é rastreado e o aviso de cookies não aparece.
 4. **⚠️ Risco jurídico (LGPD):** a Política de Privacidade linkada é a do app. Antes de ligar o Pixel ou o GA, valide com o jurídico se ela cobre os cookies de medição da landing e o compartilhamento com Meta e Google. Talvez seja preciso uma seção nova ou uma política de cookies própria.
 5. **Search Console:** código da verificação em `PUBLIC_GSC_VERIFICATION`. Também a verificação de domínio na Meta, se for usar o Pixel.
