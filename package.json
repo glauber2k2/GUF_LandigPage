@@ -25,7 +25,8 @@
     "lhci": "node scripts/lhci.mjs",
     "lhci:desktop": "node scripts/lhci.mjs desktop",
     "icons": "node scripts/generate-icons.mjs",
-    "verify": "npm run lint && npm run check && npm test && npm run build && npm run links && npm run test:e2e"
+    "verify": "npm run lint && npm run check && npm test && npm run build && npm run links && npm run test:e2e",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",

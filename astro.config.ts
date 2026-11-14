@@ -9,7 +9,10 @@ const directive = <D extends string>(name: D, ...sources: string[]) => [name, ..
 
 // A config roda antes do astro:env; as variáveis que mudam o build (domínio, CSP) são lidas aqui.
 const env = loadEnv(process.env.NODE_ENV ?? "production", process.cwd(), "");
-const siteUrl = env.PUBLIC_SITE_URL || "http://localhost:4321";
+// Domínio oficial como padrão: um build sem a variável (ex.: Workers Builds sem PUBLIC_SITE_URL) publicou
+// canonical, Open Graph, sitemap e robots apontando para localhost, e o Google ignora a página.
+const PRODUCTION_SITE_URL = "https://gufapp.com.br";
+const siteUrl = env.PUBLIC_SITE_URL || PRODUCTION_SITE_URL;
 const analytics = analyticsCspSources({
   metaPixelId: env.PUBLIC_META_PIXEL_ID,
   gaId: env.PUBLIC_GA_ID,
@@ -103,6 +106,8 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) => !page.includes("/404"),
+      // Data do build: avisa os buscadores de que a página mudou a cada publicação.
+      lastmod: new Date(),
     }),
   ],
 
