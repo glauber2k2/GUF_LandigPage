@@ -4,6 +4,7 @@
  *   npm run indexnow
  * A chave é pública por definição (fica em public/<chave>.txt); trocar = novo arquivo + INDEXNOW_KEY.
  */
+/* global fetch -- fetch nativo do Node 18+ (o eslint dos scripts não conhece o global). */
 import { readFileSync } from "node:fs";
 
 const INDEXNOW_KEY = "f7b3ba69c5ddc112cad0958c176af3fa";
