@@ -67,9 +67,15 @@ test.describe("home", () => {
     await page.locator('button[data-cta="header"]').focus();
     await expect(page.locator("#tt-header")).toBeVisible();
 
-    // Preço do Pro escondido em toda a página (inclusive JSON-LD).
-    await expect(page.locator("#planos")).toContainText("R$ ??,??");
-    expect(await page.content()).not.toMatch(/14,80|14\.80/);
+    // Preço do Pro: com a máscara ligada (site.launch.showProPrice false) nenhum valor aparece, nem no
+    // JSON-LD; com ela desligada, o card mostra o preço real (mensal e anual).
+    const plans = page.locator("#planos");
+    if ((await plans.textContent())?.includes("R$ ??,??")) {
+      expect(await page.content()).not.toMatch(/R\$\s?[1-9]\d*,\d{2}/);
+    } else {
+      await expect(plans).toContainText(/R\$\s?[1-9]\d*,\d{2}/);
+      await expect(plans).toContainText("/ano");
+    }
   });
 
   test("CTAs apontam para o app e repassam UTM, fbclid e gclid", async ({ page }) => {

@@ -5,6 +5,8 @@ import {
   defaultPlan,
   featureLimit,
   formatMoney,
+  intervalPrice,
+  monthlyEquivalentCents,
   planTemplateValues,
   upgradePlan,
 } from "../../src/lib/domain/plans";
@@ -38,6 +40,15 @@ describe("catálogo de planos", () => {
     expect(formatMoney(1480, "brl").replace(/\s/g, " ")).toBe("R$ 14,80");
     const price = activePrice(catalog, "pro");
     expect(price === null || price.amount_cents > 0).toBe(true);
+  });
+  it("preço do site vem do Stripe, e o anual sai por mês arredondado como no app", () => {
+    const monthly = intervalPrice(catalog, "pro", "month");
+    const yearly = intervalPrice(catalog, "pro", "year");
+    if (catalog.prices.some((p) => p.provider === "stripe")) expect(monthly?.provider).toBe("stripe");
+    expect(yearly === null || yearly.billing_interval === "year").toBe(true);
+    if (!monthly) return;
+    expect(monthlyEquivalentCents({ ...monthly, billing_interval: "year", amount_cents: 14800 })).toBe(1233);
+    expect(formatMoney(1233, "brl").replace(/\s/g, " ")).toBe("R$ 12,33");
   });
   it("textos que dependem do catálogo continuam verdadeiros", () => {
     // Free: "Gráficos com o mês atual e o anterior" → chart_months = 2. Se o app mudar, revisar plans.json.

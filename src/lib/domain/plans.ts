@@ -25,10 +25,31 @@ export function upgradePlan(catalog: PlanCatalog) {
   return plan;
 }
 
+/** Quem vem pelo site paga pelo Stripe (o Google Play é só dentro do app da loja). */
+const WEB_PROVIDER = "stripe";
+const MONTHS_PER_YEAR = 12;
+
+/**
+ * Preço à venda do plano num intervalo, preferindo o do site (Stripe).
+ * @returns `null` quando o app não vende o plano nesse intervalo.
+ */
+export function intervalPrice(
+  catalog: PlanCatalog,
+  planCode: string,
+  interval: PlanPrice["billing_interval"],
+): PlanPrice | null {
+  const prices = catalog.prices.filter((p) => p.plan_code === planCode && p.billing_interval === interval);
+  return prices.find((p) => p.provider === WEB_PROVIDER) ?? prices[0] ?? null;
+}
+
 /** Preço mensal à venda do plano; sem preço ativo, a venda está desligada no app. */
 export function activePrice(catalog: PlanCatalog, planCode: string): PlanPrice | null {
-  const prices = catalog.prices.filter((p) => p.plan_code === planCode);
-  return prices.find((p) => p.billing_interval === "month") ?? prices[0] ?? null;
+  return intervalPrice(catalog, planCode, "month") ?? catalog.prices.find((p) => p.plan_code === planCode) ?? null;
+}
+
+/** Quanto o anual sai por mês, em centavos, arredondado como no app ("R$ 148,00/ano" → 1233 = R$ 12,33). */
+export function monthlyEquivalentCents(yearly: PlanPrice): number {
+  return Math.round(yearly.amount_cents / MONTHS_PER_YEAR);
 }
 
 /** "R$ 14,80" — mesmo formato do app (`formatMoney` em packages/core/src/billing.ts). */

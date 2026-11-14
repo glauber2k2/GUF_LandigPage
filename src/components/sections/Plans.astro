@@ -2,7 +2,15 @@
 import { site } from "../../config/site";
 import type { PlanCatalog } from "../../content/schemas/app-data";
 import type { SectionOf } from "../../content/schemas/sections";
-import { activePrice, defaultPlan, formatIntervalSuffix, formatMoney, upgradePlan } from "../../lib/domain/plans";
+import {
+  activePrice,
+  defaultPlan,
+  formatIntervalSuffix,
+  formatMoney,
+  intervalPrice,
+  monthlyEquivalentCents,
+  upgradePlan,
+} from "../../lib/domain/plans";
 import Button from "../ui/Button.astro";
 import Icon from "../ui/Icon.astro";
 import InlineText from "../ui/InlineText.astro";
@@ -11,7 +19,8 @@ import InlineText from "../ui/InlineText.astro";
  * Comparação Free × Pro na vitrine (Free em grafite, Pro em grafite com borda volt). Nomes, limites e preço vêm do
  * catálogo do app (plans, plan_features, plan_prices). Sem preço ativo, o Pro mostra "chega em breve",
  * exatamente como o app faz. Sem preço riscado, desconto ou contador: o app não tem nada disso.
- * Pré-lançamento (site.launch.showProPrice false): o valor aparece como "R$ ??,??".
+ * Preço do Pro: o mensal em destaque e, abaixo, o anual com o valor por mês (os dois do Stripe, pelo site).
+ * Com site.launch.showProPrice false, o valor aparece como "R$ ??,??".
  */
 interface Props {
   data: SectionOf<"plans">;
@@ -22,6 +31,9 @@ const { data, catalog } = Astro.props;
 const free = defaultPlan(catalog);
 const pro = upgradePlan(catalog);
 const price = activePrice(catalog, pro.code);
+const yearly = price?.billing_interval === "month" ? intervalPrice(catalog, pro.code, "year") : null;
+const yearlyLabel = yearly && `${formatMoney(yearly.amount_cents, yearly.currency)}${formatIntervalSuffix(yearly)}`;
+const yearlyPerMonth = yearly && `${formatMoney(monthlyEquivalentCents(yearly), yearly.currency)}/mês`;
 ---
 
 <section id={data.anchor} aria-labelledby="plans-title" class="px-5 py-[clamp(72px,10vw,120px)] text-snow">
@@ -81,6 +93,11 @@ const price = activePrice(catalog, pro.code);
                 )}
               </span>
               <span class="text-[15px] text-mist">{formatIntervalSuffix(price)}</span>
+            </p>
+          )}
+          {site.launch.showProPrice && yearly && (
+            <p class="m-0 text-[15px] text-mist">
+              ou <strong class="font-semibold text-snow">{yearlyLabel}</strong> · sai por {yearlyPerMonth}
             </p>
           )}
           <span class="text-[15px] text-mist">{data.pro.tagline}</span>

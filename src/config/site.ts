@@ -64,7 +64,7 @@ export const site = {
    */
   launch: {
     appOpen: false,
-    showProPrice: false,
+    showProPrice: true,
     /** Texto do tooltip nos botões bloqueados. */
     lockedLabel: "Lançamento em breve",
     /** O que aparece no lugar do preço enquanto `showProPrice` é false. */
