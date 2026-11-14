@@ -36,6 +36,34 @@
   --color-band-button: var(--band-button-bg);
   --color-band-button-fg: var(--band-button-fg);
 
+  --color-volt: var(--vitrine-volt);
+  --color-volt-deep: var(--vitrine-volt-deep);
+  --color-ink-2: var(--vitrine-ink-2);
+  --color-ink-3: var(--vitrine-ink-3);
+  --color-ink-4: var(--vitrine-ink-4);
+  --color-ink-line: var(--vitrine-line);
+  --color-ink-line-strong: var(--vitrine-line-strong);
+  --color-paper: var(--vitrine-paper);
+  --color-paper-2: var(--vitrine-paper-2);
+  --color-on-volt-soft: var(--vitrine-on-volt-soft);
+  --color-on-paper-soft: var(--vitrine-on-paper-soft);
+  --color-mist: var(--vitrine-mist);
+  --color-mist-2: var(--vitrine-mist-2);
+  --color-snow: var(--vitrine-snow);
+  --color-gold: var(--vitrine-gold);
+  --color-gold-ink: var(--vitrine-gold-ink);
+  --color-blue: var(--vitrine-blue);
+  --color-green: var(--vitrine-green);
+  --color-volt-glow: var(--vitrine-volt-glow);
+  --color-volt-tint: var(--vitrine-volt-tint);
+  --color-volt-edge: var(--vitrine-volt-edge);
+  --color-gold-tint: var(--vitrine-gold-tint);
+  --color-ink-tint: var(--vitrine-ink-tint);
+  --color-ink-edge: var(--vitrine-ink-edge);
+  --color-snow-tint: var(--vitrine-snow-tint);
+  --color-snow-edge: var(--vitrine-snow-edge);
+  --color-vitrine-nav: var(--vitrine-nav);
+
   --font-sans: var(--font-inter);
   --font-display: var(--font-barlow);
 
@@ -91,8 +119,14 @@
   }
 
   /* Na faixa volt, o contorno de foco volt sumiria: usa tinta escura. */
-  .bg-band :focus-visible {
-    outline-color: var(--band-fg);
+  .bg-band :focus-visible,
+  .bg-volt :focus-visible,
+  .bg-paper :focus-visible {
+    outline-color: var(--vitrine-ink);
+  }
+  .bg-ink :focus-visible,
+  .bg-ink-2 :focus-visible {
+    outline-color: var(--vitrine-volt);
   }
 
   [id] {
@@ -123,6 +157,29 @@
     transition:
       opacity var(--duration-screen) var(--ease-std),
       transform var(--duration-screen) var(--ease-std);
+  }
+}
+
+@layer components {
+  /*
+   * Animações contínuas (laço): só rodam enquanto o bloco com [data-loop] está na tela e a aba está
+   * visível (lib/motion/loops.ts põe .is-playing). Fora disso ficam pausadas.
+   */
+  [data-loop]:not(.is-playing),
+  [data-loop]:not(.is-playing) *,
+  [data-loop]:not(.is-playing) *::before,
+  [data-loop]:not(.is-playing) *::after {
+    animation-play-state: paused !important;
+  }
+
+  /* Texto vazado: o preenchimento some, mas a cor real continua lá para leitores e para o contraste. */
+  .text-outline-ink {
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 2px var(--vitrine-ink);
+  }
+  .text-outline-volt {
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 2px var(--vitrine-volt);
   }
 }
 

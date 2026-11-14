@@ -1,0 +1,28 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+
+/** Faixa grafite com três fatos grandes em volt (registro rápido, tudo num app, treino sem sinal). */
+interface Props {
+  data: SectionOf<"facts">;
+}
+
+const { data } = Astro.props;
+---
+
+<section aria-labelledby="facts-title" class="bg-ink px-5 py-[clamp(72px,10vw,110px)] text-snow">
+  <div class="mx-auto max-w-page">
+    <h2 id="facts-title" data-reveal class="m-0 mb-10 text-xs font-bold tracking-[0.08em] text-volt uppercase">
+      {data.eyebrow}
+    </h2>
+    <ul class="m-0 grid list-none gap-6 p-0 md:grid-cols-3">
+      {data.items.map((item) => (
+        <li data-reveal class="border-t-2 border-ink-4 pt-6">
+          <p class="m-0 font-display text-[clamp(84px,10vw,150px)] leading-[0.86] font-bold text-volt uppercase">
+            {item.value}
+          </p>
+          <p class="m-0 mt-4 text-lg leading-[27px] text-mist">{item.text}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

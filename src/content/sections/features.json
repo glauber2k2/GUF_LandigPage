@@ -1,0 +1,62 @@
+{
+  "type": "features",
+  "anchor": "recursos",
+  "title": "Tudo que conta para evoluir.",
+  "hint": "Arraste para o lado",
+  "prevLabel": "Recurso anterior",
+  "nextLabel": "Próximo recurso",
+  "ariaLabel": "Recursos do guf",
+  "cards": [
+    {
+      "tone": "ink",
+      "eyebrow": "01 · Treino",
+      "title": "Uma série, um toque.",
+      "text": "Rotinas com séries, carga e descanso. A carga da última vez já vem preenchida e o descanso é cronometrado.",
+      "image": "dumbbell",
+      "imageAlt": "Halter"
+    },
+    {
+      "tone": "paper",
+      "eyebrow": "02 · Cardio",
+      "title": "Correu? Contou.",
+      "text": "Cronômetro no celular e pontos pela intensidade e pelo tempo. Cardio de 15 minutos ou mais garante a sua semana.",
+      "image": "sneaker",
+      "imageAlt": "Tênis de corrida"
+    },
+    {
+      "tone": "ink",
+      "eyebrow": "03 · GUF AI",
+      "title": "Pergunte ao seu histórico.",
+      "text": "Ele responde com os seus treinos e transforma a ficha que você colar em rotina, para você revisar antes de salvar.",
+      "chat": [
+        { "from": "user", "text": "Quanto evoluí no agachamento?" },
+        { "from": "assistant", "text": "Seu 1RM estimado subiu nos últimos 4 treinos. Bora tentar mais 2,5 kg?" }
+      ]
+    },
+    {
+      "tone": "paper",
+      "eyebrow": "04 · Competição",
+      "title": "O mês é uma disputa.",
+      "text": "Ranking mensal com quem segue você de volta. Treinos, cardios e recordes viram pontos.",
+      "image": "trophy",
+      "imageAlt": "Troféu"
+    },
+    {
+      "tone": "ink",
+      "eyebrow": "05 · Medidas",
+      "title": "O corpo em números.",
+      "text": "Cintura, braço, peito e mais, num boneco 3D. Opcional e visível só para você.",
+      "image": "tape",
+      "imageAlt": "Fita métrica"
+    },
+    {
+      "tone": "paper",
+      "eyebrow": "06 · Recordes",
+      "title": "Seu melhor, sempre à vista.",
+      "text": "1RM estimado, volume, calendário e recorde pessoal de cada exercício, com troféu dourado na hora.",
+      "image": "plate",
+      "imageAlt": "Anilha"
+    }
+  ],
+  "cta": { "label": "Quero tudo isso, grátis", "appRoute": "signup" }
+}

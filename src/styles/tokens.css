@@ -62,6 +62,39 @@
   --band-button-bg: var(--ink-950);
   --band-button-fg: var(--ink-50);
 
+  /*
+   * Vitrine (layout "Volt total"): blocos volt e grafite com cores FIXAS nos dois temas, como a faixa
+   * final. Texto sobre volt usa tinta; texto sobre grafite usa névoa (contraste AA conferido).
+   */
+  --vitrine-volt: var(--volt-400);
+  --vitrine-volt-deep: var(--volt-800);
+  --vitrine-ink: var(--ink-950);
+  --vitrine-ink-2: var(--ink-900);
+  --vitrine-ink-3: var(--ink-850);
+  --vitrine-ink-4: var(--ink-800);
+  --vitrine-line: var(--ink-750);
+  --vitrine-line-strong: var(--ink-700);
+  --vitrine-paper: var(--paper-50);
+  --vitrine-paper-2: var(--paper-100);
+  --vitrine-on-volt-soft: var(--ink-750);
+  --vitrine-on-paper-soft: var(--slate-700);
+  --vitrine-mist: var(--ink-300);
+  --vitrine-mist-2: var(--ink-500);
+  --vitrine-snow: var(--ink-50);
+  --vitrine-gold: var(--gold-400);
+  --vitrine-gold-ink: var(--gold-950);
+  --vitrine-blue: var(--blue-400);
+  --vitrine-green: #3dd68c;
+  --vitrine-volt-glow: rgb(198 244 50 / 0.16);
+  --vitrine-volt-tint: rgb(198 244 50 / 0.12);
+  --vitrine-volt-edge: rgb(198 244 50 / 0.35);
+  --vitrine-gold-tint: rgb(245 196 81 / 0.18);
+  --vitrine-ink-tint: rgb(11 13 16 / 0.08);
+  --vitrine-ink-edge: rgb(11 13 16 / 0.2);
+  --vitrine-snow-tint: rgb(242 244 247 / 0.06);
+  --vitrine-snow-edge: rgb(242 244 247 / 0.28);
+  --vitrine-nav: rgb(11 13 16 / 0.9);
+
   /* Sombras */
   --sh-phone: 0 30px 80px rgb(0 0 0 / 0.35);
   --sh-toast: 0 16px 40px rgb(0 0 0 / 0.4);

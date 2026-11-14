@@ -1,41 +1,143 @@
 ---
+import { Image } from "astro:assets";
+import handPhone from "../../assets/images/hand-phone.png";
 import type { SectionOf } from "../../content/schemas/sections";
-import Ranking from "../mockups/Ranking.astro";
-import Badge from "../ui/Badge.astro";
+import HomeScreen from "../mockups/HomeScreen.astro";
 import Button from "../ui/Button.astro";
-import Container from "../ui/Container.astro";
-import Heading from "../ui/Heading.astro";
 import Icon from "../ui/Icon.astro";
-import Section from "../ui/Section.astro";
 
+/**
+ * Abertura em volt: título em duas linhas (a segunda vazada), CTAs, selos de confiança e a mão
+ * segurando o celular com a tela Início do app por cima da tela branca da foto.
+ * A tela fica um pouco maior que a área branca e ganha um contorno de tinta, para nenhum fio branco
+ * da foto aparecer nas laterais em tamanho nenhum.
+ */
 interface Props {
   data: SectionOf<"hero">;
 }
 
 const { data } = Astro.props;
+const chipTones = {
+  pr: "bg-gold text-gold-ink",
+  ink: "bg-ink text-volt",
+  data: "bg-blue text-ink",
+} as const;
+const chipPlaces = [
+  "left-[-2%] top-[16%] md:left-[-14%] md:top-[22%]",
+  "right-[-2%] top-[34%] md:right-[-16%] md:top-[38%]",
+  "left-[-2%] top-[52%] md:left-[-8%] md:top-[58%]",
+] as const;
+const chipDelays = ["[animation-delay:-1s]", "[animation-delay:-2.6s]", "[animation-delay:-3.8s]"] as const;
 ---
 
-<Section labelledBy="hero-title" spacing="hero" class="overflow-hidden" data-hero>
-  <Container class="grid items-center gap-14 grid-cols-[repeat(auto-fit,minmax(min(100%,440px),1fr))]">
-    <div class="flex flex-col items-start gap-6">
-      <Badge text={data.badge} dot />
-      <Heading level={1} size="hero" id="hero-title" text={data.title} />
-      <p class="m-0 max-w-[34ch] text-[clamp(18px,2.2vw,21px)] leading-normal text-pretty text-fg-2">{data.lead}</p>
-      <div class="flex flex-wrap gap-3">
-        <Button cta={data.primaryCta} source="hero" size="lg" arrow />
-        <Button cta={data.secondaryCta} source="hero-secundario" size="lg" variant="secondary" />
-      </div>
-      <ul class="m-0 flex list-none flex-wrap gap-x-[18px] gap-y-2 p-0 text-sm text-fg-muted">
-        {data.checks.map((check) => (
-          <li class="flex items-center gap-1.5">
-            <Icon name="check" size={16} strokeWidth={2.4} class="text-accent-text" />
-            {check}
-          </li>
-        ))}
-      </ul>
+<section
+  aria-labelledby="hero-title"
+  data-hero
+  class="relative overflow-hidden bg-volt px-5 pt-28 text-center text-ink md:pt-32"
+>
+  <h1
+    id="hero-title"
+    class="m-0 mx-auto max-w-[1200px] font-display text-[clamp(60px,11vw,176px)] leading-[0.84] font-bold tracking-[-0.005em] uppercase"
+  >
+    <span class="hero-line block">{data.title[0]}</span>
+    <span class="hero-line hero-line-2 text-outline-ink block">{data.title[1]}</span>
+  </h1>
+  <p class="m-0 mx-auto mt-6 max-w-[600px] text-[19px] leading-[29px] text-on-volt-soft">{data.lead}</p>
+
+  <div class="mt-8 flex flex-wrap justify-center gap-3">
+    <Button cta={data.primaryCta} source="hero" variant="ink" size="lg" pill arrow />
+    <Button cta={data.secondaryCta} source="hero-lite" variant="outlineInk" size="lg" pill />
+  </div>
+
+  <ul class="m-0 mt-5 flex list-none flex-wrap justify-center gap-x-5 gap-y-2 p-0 text-sm font-semibold text-on-volt-soft">
+    {data.trust.map((item) => (
+      <li class="inline-flex items-center gap-1.5">
+        <Icon name="check" size={16} strokeWidth={2.6} />
+        {item}
+      </li>
+    ))}
+  </ul>
+
+  <div class="hand-in relative mx-auto mt-9 w-[min(560px,92vw)]" data-loop>
+    <div class="relative aspect-[1122/1402]" role="img" aria-label={data.screen.ariaLabel}>
+      <Image
+        src={handPhone}
+        alt=""
+        widths={[360, 560, 840, 1122]}
+        sizes="(min-width: 640px) 560px, 92vw"
+        loading="eager"
+        fetchpriority="high"
+        class="absolute inset-0 size-full"
+      />
+      <HomeScreen
+        screen={data.screen}
+        class="absolute top-[2.95%] left-[27.7%] h-[73.5%] w-[44.7%] rounded-[9%/4.4%] ring-[3px] ring-ink"
+      />
+      {data.chips.map((chip, i) => (
+        <div
+          class:list={[
+            "chip absolute z-[3] hidden items-center sm:flex gap-2 rounded-2xl bg-paper px-2.5 py-2 text-left shadow-toast md:gap-2.5 md:px-3.5 md:py-3",
+            chipPlaces[i],
+            chipDelays[i],
+          ]}
+        >
+          <span
+            class:list={[
+              "grid size-7 flex-none place-items-center rounded-lg md:size-9 md:rounded-[10px]",
+              chipTones[chip.tone],
+            ]}
+          >
+            <Icon name={chip.icon} size={18} />
+          </span>
+          <span class="flex flex-col">
+            <b class="text-xs md:text-sm">{chip.title}</b>
+            <span class="text-[11px] text-on-paper-soft md:text-[13px]">{chip.text}</span>
+          </span>
+        </div>
+      ))}
     </div>
-    <div class="flex justify-center">
-      <Ranking data={data.ranking} />
-    </div>
-  </Container>
-</Section>
+  </div>
+</section>
+
+<style>
+  .hero-line {
+    animation: line-up 800ms var(--ease-out-enter) both;
+  }
+  .hero-line-2 {
+    animation-delay: 120ms;
+  }
+  .hand-in {
+    animation: hand-in 1100ms 200ms var(--ease-out-enter) both;
+  }
+  .chip {
+    animation: bob 5s ease-in-out infinite;
+  }
+  @keyframes line-up {
+    from {
+      opacity: 0;
+      transform: translateY(40%);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  /* Só transform (sem opacidade) para não atrasar a pintura da imagem principal (LCP). */
+  @keyframes hand-in {
+    from {
+      transform: translateY(140px) rotate(5deg);
+    }
+    to {
+      transform: none;
+    }
+  }
+  @keyframes bob {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 -12px;
+    }
+  }
+</style>

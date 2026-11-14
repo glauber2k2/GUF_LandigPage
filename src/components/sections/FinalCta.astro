@@ -2,34 +2,81 @@
 import { site } from "../../config/site";
 import type { SectionOf } from "../../content/schemas/sections";
 import Button from "../ui/Button.astro";
-import Container from "../ui/Container.astro";
-import Heading from "../ui/Heading.astro";
 import Icon from "../ui/Icon.astro";
-import Section from "../ui/Section.astro";
 
+/** Fechamento em grafite: "Bora?" em volt, CTAs, redes (@guf.app) e um letreiro vazado em movimento. */
 interface Props {
   data: SectionOf<"finalCta">;
 }
 
 const { data } = Astro.props;
+const socialClass =
+  "inline-flex min-h-[52px] items-center gap-2.5 rounded-full border border-ink-line bg-ink-2 px-5 text-[15px] font-bold text-snow transition-colors duration-150 hover:bg-ink-4";
+const words = [...data.marquee, ...data.marquee];
 ---
 
-<Section labelledBy="final-title" tone="band" spacing="band">
-  <Container size="narrow" class="flex flex-col items-center gap-6 text-center">
-    <div data-reveal class="flex flex-col items-center gap-6">
-      <Heading id="final-title" size="band" text={data.title} />
-      <p class="m-0 max-w-[40ch] text-[clamp(18px,2.2vw,21px)] leading-normal text-band-fg-soft">{data.lead}</p>
-      <Button cta={data.cta} source="final" variant="band" size="xl" arrow />
+<section
+  aria-labelledby="final-title"
+  class="overflow-hidden bg-ink pt-[clamp(80px,11vw,120px)] pb-20 text-center text-snow"
+>
+  <div class="mx-auto max-w-page px-5">
+    <h2
+      id="final-title"
+      data-reveal
+      class="m-0 font-display text-[clamp(96px,16vw,260px)] leading-[0.8] font-bold text-volt uppercase"
+    >
+      {data.title}
+    </h2>
+    <p data-reveal class="m-0 mx-auto mt-6 max-w-[520px] text-[19px] leading-[29px] text-mist">
+      {data.lead}
+    </p>
+    <div data-reveal class="mt-8 flex flex-wrap justify-center gap-3">
+      <Button cta={data.cta} source="final" variant="volt" size="lg" pill arrow />
+      <Button cta={data.secondaryCta} source="final-lite" variant="outlineSnow" size="lg" pill />
+    </div>
+    <p data-reveal class="m-0 mt-12 text-[15px] text-mist">
+      {data.socialLabel}
+    </p>
+    <div data-reveal class="mt-3.5 flex flex-wrap justify-center gap-2.5">
       <a
         href={site.social.instagram.url}
         target="_blank"
         rel="noopener noreferrer"
         data-cta="instagram-final"
-        class="flex min-h-11 items-center gap-2 text-base font-semibold text-band-fg underline underline-offset-4"
+        class={socialClass}
       >
         <Icon name="instagram" size={20} />
         {data.instagramLabel}
       </a>
+      <a
+        href={site.social.tiktok.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-cta="tiktok-final"
+        class={socialClass}
+      >
+        <Icon name="music" size={20} />
+        {data.tiktokLabel}
+      </a>
     </div>
-  </Container>
-</Section>
+  </div>
+
+  <div class="mt-[72px] overflow-hidden whitespace-nowrap" aria-hidden="true" data-loop>
+    <div class="marquee inline-flex gap-7 font-display text-[clamp(72px,9vw,120px)] leading-none font-bold uppercase">
+      {words.map((word, i) => (
+        <span class:list={[i % 2 === 0 ? "text-outline-volt text-volt" : "text-volt"]}>{word}</span>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .marquee {
+    animation: marquee 26s linear infinite;
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+</style>

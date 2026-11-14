@@ -62,13 +62,13 @@ src/
                  plans/catalog.json (snapshot sincronizado) · competition/rules.json (snapshot manual)
                  schemas/ (Zod de tudo) → registrados em src/content.config.ts
   styles/        tokens.css (tokens do app) · global.css (Tailwind + utilitário de entrada)
-  components/    ui/ (primitivos sem produto) · mockups/ (telas do app em HTML/SVG)
-                 sections/ (uma seção = um componente + registry.ts) · islands/ (simulador)
+  components/    ui/ (primitivos sem produto) · mockups/ (a tela Início do app dentro do celular do hero)
+                 sections/ (uma seção = um componente + registry.ts)
                  layout/ (cabeçalho, rodapé, CTA fixo, cookies) · seo/
   layouts/       BaseLayout.astro
   lib/           domain/ (regras puras) · seo/ (JSON-LD, meta, llms) · analytics/ (interface + provedores)
                  utm/ · motion/ (entrada e "só anima na tela") · text/ (marcas e {chaves}) · content/
-  scripts/       comportamento no navegador (página, mockups, ilha)
+  scripts/       comportamento no navegador (página: UTM, entrada, laços, carrossel, analytics)
   pages/         index.astro · 404.astro · robots.txt.ts · llms.txt.ts
 public/          ícones, og.png, site.webmanifest, _headers
 scripts/         sync-app-data.ts · check-build.mjs · generate-icons.mjs · lhci.mjs
@@ -78,7 +78,8 @@ tests/           unit/ (Vitest) · e2e/ (Playwright + axe)
 **Decisões principais**
 
 - **Nenhum número escrito à mão.** Limites, preço e pontuação entram nos textos como `{chave}` (ex.: `{bonusMax}`, `{free.guf_ai_daily_messages}`, `{pro.price}`). Chave inexistente quebra o build. Melhor quebrar do que publicar um número errado.
-- **Ilha sem framework.** O simulador é TypeScript puro: a mesma função calcula no build (o HTML já vem pronto) e no navegador. O código só é baixado quando o simulador chega perto da tela. Não precisa de Preact nem de React.
+- **Visual "Volt total" (vitrine).** Blocos volt e grafite com cores fixas nos dois temas (tokens `--vitrine-*` em `tokens.css`), títulos em Barlow Condensed em caixa alta, botões em pílula. O hero mostra a tela Início do app dentro de um celular (`components/mockups/HomeScreen.astro`), medida em "pontos do app" para ficar igual em qualquer largura. Sem framework de JS: carrossel com rolagem nativa (setas em `lib/motion/carousel.ts`) e animações em CSS.
+- **Animações em laço só na tela.** Blocos com `data-loop` só animam enquanto aparecem e com a aba visível (`lib/motion/loops.ts`). Sem `style` inline (a CSP bloqueia): valores variáveis viram classes.
 - **Animações só com `transform` e `opacity`**, pausadas fora da tela e com a aba oculta. Com `prefers-reduced-motion`, tudo aparece no estado final.
 - **Analytics atrás de uma interface** (`track(evento, dados)`). Sem ID, nenhum script de terceiros é carregado e o aviso de cookies não aparece. Com ID, os scripts só carregam depois do "Aceitar" e do `load`.
 - **CSP** por `<meta>` com hashes gerados pelo Astro, mais o cabeçalho em `public/_headers` (`frame-ancestors`, HSTS etc.).
@@ -112,8 +113,9 @@ Edite a lista em `src/content/pages/pages.json`. Os nomes são os arquivos de `s
 
 ### Trocar links (app, redes, domínio)
 
-- Domínio do app: variável `PUBLIC_APP_URL` (padrão `https://gufapp.vercel.app`). As rotas (`/cadastro/`, `/login/`…) ficam em `src/config/site.ts`.
-- Instagram e outras redes: `src/config/site.ts` (`social` e `sameAs`, que alimenta o JSON-LD).
+- Domínio do app: variável `PUBLIC_APP_URL` (padrão `https://treino.gufapp.com.br`). As rotas (`/cadastro/`, `/login/`…) ficam em `src/config/site.ts`.
+- Instagram, TikTok e outras redes: `src/config/site.ts` (`social` e `sameAs`, que alimenta o JSON-LD).
+- **Google Play e App Store:** em `src/config/site.ts › stores`. Com `url: null` o selo mostra "Em breve"; ao colocar o link da loja e publicar de novo, o selo vira o botão de baixar. O Guf Lite (app no navegador) continua oferecido nos dois casos.
 - Domínio da landing: `PUBLIC_SITE_URL`.
 
 ### Dia do lançamento (pré-lançamento → app aberto)
@@ -123,7 +125,7 @@ Hoje a página está em **pré-lançamento**: não há botão "Entrar", os botõ
 ```ts
 launch: {
   appOpen: true,       // botões voltam a ser links para o app, com UTM
-  showProPrice: true,  // mostra o preço de lançamento: R$ 14,80/mês (vem de plan_prices)
+  showProPrice: true,  // mostra o preço do Pro (vem de plan_prices; em 2026-11-14: R$ 19,80/mês)
   …
 }
 ```
@@ -150,8 +152,8 @@ Depois é só publicar de novo. O botão "Entrar" do cabeçalho foi removido do 
    Depois coloque os arquivos em `src/content/guides/`.
 2. **Rota:** crie `src/pages/treinos/[slug].astro` com `getStaticPaths()` lendo `getCollection("guides")`. Para uma página única, basta `src/pages/calculadora-1rm.astro`.
 3. **Layout e SEO:** use `<BaseLayout seo={{ title, description }} jsonLd={[breadcrumbSchema([...])]}>`. Título, canonical, OG e Twitter saem prontos. O `breadcrumbSchema` já existe em `src/lib/seo/jsonld.ts`.
-4. **Componentes:** reutilize `components/ui` (Section, Container, Heading, Button, Card) e, se precisar, os mockups.
-5. **Regras:** calculadoras e afins vão em `src/lib/domain/` como funções puras, com teste em `tests/unit/` (ex.: a 1RM já existe em `lib/domain/epley.ts`). A interação é uma ilha como `components/islands/PointsSimulator.astro`.
+4. **Componentes:** reutilize `components/ui` (Container, Heading, Button, Icon, Logo) e os tokens da vitrine.
+5. **Regras:** calculadoras e afins vão em `src/lib/domain/` como funções puras, com teste em `tests/unit/` (ex.: a 1RM já existe em `lib/domain/epley.ts`). A interação vai num script de `src/lib/motion/` ou numa ilha própria, carregada só quando chega perto da tela.
 6. **Divulgação:** o sitemap inclui a página sozinho. Acrescente o link em `src/pages/llms.txt.ts` e, se fizer sentido, na home.
 
 ---
@@ -163,7 +165,7 @@ Veja `.env.example`. Tudo é público (vai para o HTML ou é chave publicável).
 | Variável                                    | Para quê                                                                   | Padrão                                      |
 | ------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------- |
 | `PUBLIC_SITE_URL`                           | Domínio da landing (canonical, OG, sitemap, robots, JSON-LD)               | `http://localhost:4321`, com aviso no build |
-| `PUBLIC_APP_URL`                            | Endereço do app (todos os CTAs)                                            | `https://gufapp.vercel.app`                 |
+| `PUBLIC_APP_URL`                            | Endereço do app (todos os CTAs)                                            | `https://treino.gufapp.com.br`              |
 | `PUBLIC_META_PIXEL_ID`                      | Meta Pixel (após consentimento)                                            | desligado                                   |
 | `PUBLIC_GA_ID`                              | Google Analytics 4 (após consentimento)                                    | desligado                                   |
 | `PUBLIC_GSC_VERIFICATION`                   | Código da meta tag do Search Console                                       | sem tag                                     |

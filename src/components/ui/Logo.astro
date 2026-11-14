@@ -2,12 +2,20 @@
 /** Logo do guf (geometria do app: packages/ui/src/ds/brand-geometry.ts). */
 interface Props {
   variant?: "full" | "mark";
+  /**
+   * `theme` segue o tema (volt + texto). Nos blocos de cor fixa da vitrine: `onInk` (anel volt e
+   * letras claras sobre grafite) e `ink` (tudo em tinta, sobre volt ou papel, como o tone="mono" do app).
+   */
+  tone?: "theme" | "onInk" | "ink";
   height?: number;
   label?: string;
   class?: string;
 }
 
-const { variant = "full", height = 32, label = "guf", class: className } = Astro.props;
+const { variant = "full", tone = "theme", height = 32, label = "guf", class: className } = Astro.props;
+const ringClass = { theme: "stroke-accent-text", onInk: "stroke-volt", ink: "stroke-ink" }[tone];
+const dotClass = { theme: "fill-accent-text", onInk: "fill-volt", ink: "fill-ink" }[tone];
+const letterClass = { theme: "stroke-fg", onInk: "stroke-snow", ink: "stroke-ink" }[tone];
 ---
 
 {variant === "full" ? (
@@ -29,10 +37,16 @@ const { variant = "full", height = 32, label = "guf", class: className } = Astro
       stroke-dasharray="78.2 200"
       transform="rotate(-20 24 24)"
       fill="none"
-      class="stroke-accent-text"
+      class={ringClass}
     />
-    <circle cx="32" cy="10.14" r="4.5" class="fill-accent-text" />
-    <g stroke-width="7" stroke-linejoin="round" transform="translate(54 -4.6) scale(1.1)" fill="none" class="stroke-fg">
+    <circle cx="32" cy="10.14" r="4.5" class={dotClass} />
+    <g
+      stroke-width="7"
+      stroke-linejoin="round"
+      transform="translate(54 -4.6) scale(1.1)"
+      fill="none"
+      class={letterClass}
+    >
       <path d="M18.5 25A7.5 7.5 0 0 0 3.5 25V27A7.5 7.5 0 0 0 18.5 27" />
       <path d="M18.5 14V41A7.5 7.5 0 0 1 11 48.5H4" />
       <path d="M29.5 14V27A7.5 7.5 0 0 0 44.5 27" />

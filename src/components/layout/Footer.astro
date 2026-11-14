@@ -1,23 +1,49 @@
 ---
 import { site } from "../../config/site";
 import type { UiContent } from "../../content/schemas/sections";
+import Icon from "../ui/Icon.astro";
 import Logo from "../ui/Logo.astro";
 
+/** Rodapé grafite da vitrine: marca, redes (@guf.app), documentos legais do app e direitos. */
 interface Props {
   ui: UiContent["footer"];
 }
 
 const { ui } = Astro.props;
-const linkClass = "flex min-h-11 items-center text-fg-2 hover:text-fg";
+const linkClass = "flex min-h-11 items-center text-mist hover:text-snow";
+const socialClass =
+  "inline-flex min-h-11 items-center gap-2 rounded-full border border-ink-line bg-ink-2 px-4 font-semibold text-snow hover:bg-ink-4";
 ---
 
-<footer class="border-t border-line px-5 pt-10 pb-[calc(40px+var(--sticky-space,0px))]">
-  <div class="mx-auto flex max-w-page flex-wrap items-center justify-between gap-5">
-    <div class="flex items-center gap-3.5">
-      <Logo height={28} />
-      <span class="text-sm text-fg-muted">{ui.tagline}</span>
+<footer class="border-t border-ink-4 bg-ink px-5 pt-11 pb-[calc(48px+var(--sticky-space,0px))] text-sm text-mist">
+  <div class="mx-auto flex max-w-page flex-wrap items-center justify-between gap-6">
+    <div class="flex flex-col gap-2.5">
+      <Logo height={28} tone="onInk" />
+      <span>{ui.tagline}</span>
     </div>
-    <div class="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-fg-muted">
+    <div class="flex flex-wrap gap-2.5">
+      <a
+        href={site.social.instagram.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-cta="instagram-rodape"
+        class={socialClass}
+      >
+        <Icon name="instagram" size={18} />
+        {ui.instagramLabel}
+      </a>
+      <a
+        href={site.social.tiktok.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-cta="tiktok-rodape"
+        class={socialClass}
+      >
+        <Icon name="music" size={18} />
+        {ui.tiktokLabel}
+      </a>
+    </div>
+    <div class="flex flex-wrap items-center gap-x-5 gap-y-1">
       <nav aria-label={ui.legalNavLabel} class="flex flex-wrap items-center gap-x-5">
         <a href={site.appLink("terms")} class={linkClass}>
           {ui.termsLabel}
@@ -26,15 +52,6 @@ const linkClass = "flex min-h-11 items-center text-fg-2 hover:text-fg";
           {ui.privacyLabel}
         </a>
       </nav>
-      <a
-        href={site.social.instagram.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-cta="instagram-rodape"
-        class={linkClass}
-      >
-        {ui.instagramLabel}
-      </a>
       <span>{ui.copyright}</span>
     </div>
   </div>

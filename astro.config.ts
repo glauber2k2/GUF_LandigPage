@@ -30,7 +30,7 @@ export default defineConfig({
       PUBLIC_APP_URL: envField.string({
         context: "client",
         access: "public",
-        default: "https://gufapp.vercel.app",
+        default: "https://treino.gufapp.com.br",
       }),
       PUBLIC_META_PIXEL_ID: envField.string({ context: "client", access: "public", optional: true }),
       PUBLIC_GA_ID: envField.string({ context: "client", access: "public", optional: true }),

@@ -8,6 +8,8 @@ const appUrl = PUBLIC_APP_URL.replace(/\/+$/, "");
 
 /** Rotas públicas do app (todas existem em guf_backend/apps/web/src/app; o app usa barra final). */
 const APP_ROUTES = {
+  /** Abrir o app (Guf Lite) direto: o próprio app leva ao login ou à Início. */
+  app: "/",
   signup: "/cadastro/",
   login: "/login/",
   plans: "/planos/",
@@ -26,9 +28,20 @@ export const site = {
   appLink: (route: AppRoute): string => `${appUrl}${APP_ROUTES[route]}`,
   social: {
     instagram: { handle: "@guf.app", url: "https://www.instagram.com/guf.app/" },
+    tiktok: { handle: "@guf.app", url: "https://www.tiktok.com/@guf.app" },
   },
   /** Mesmas redes em todo lugar: rodapé, CTA final e JSON-LD (sameAs). */
-  sameAs: ["https://www.instagram.com/guf.app/"] as const,
+  sameAs: ["https://www.instagram.com/guf.app/", "https://www.tiktok.com/@guf.app"] as const,
+
+  /**
+   * LOJAS DE APLICATIVOS. Enquanto o link for `null`, o selo aparece como "Em breve" (sem link).
+   * No dia em que o app entrar na loja, coloque o link aqui e publique de novo: o selo vira o botão
+   * de baixar sozinho. O Guf Lite (o app no navegador) continua sendo oferecido nos dois casos.
+   */
+  stores: {
+    googlePlay: { url: null as string | null },
+    appStore: { url: null as string | null },
+  },
   analytics: {
     metaPixelId: PUBLIC_META_PIXEL_ID || undefined,
     gaId: PUBLIC_GA_ID || undefined,
@@ -45,7 +58,7 @@ export const site = {
    *  - `appOpen: true`      → os botões voltam a ser links para o app (cadastro, planos), com UTM.
    *  - `showProPrice: true` → o card do Pro, o JSON-LD e o llms.txt mostram o preço.
    *
-   * PREÇO DE LANÇAMENTO DO PRO: R$ 14,80/mês (confirmado em 2026-11-06).
+   * PREÇO DO PRO (sincronizado do app em 2026-11-14): R$ 19,80/mês ou R$ 148,00/ano.
    * O valor NÃO é escrito aqui: vem de `plan_prices` do app a cada build (src/content/plans/catalog.json).
    * Para mudar o preço, mude no app; a página acompanha no próximo deploy.
    */

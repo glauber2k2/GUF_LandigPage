@@ -8,8 +8,6 @@ import {
   planTemplateValues,
   upgradePlan,
 } from "../../src/lib/domain/plans";
-import { MOVEMENT_GLYPH, movementOf, ranksOf } from "../../src/lib/domain/ranking";
-import { simulatorNote } from "../../src/lib/domain/simulator-note";
 import { buildTemplateValues } from "../../src/lib/domain/template-values";
 import { fillDeep, fillTemplate } from "../../src/lib/text/template";
 import { parseInline, plainText } from "../../src/lib/text/inline";
@@ -48,21 +46,8 @@ describe("catálogo de planos", () => {
     expect(featureLimit(catalog, "free", "competition_full_history")).toBe(false);
     expect(featureLimit(catalog, "pro", "competition_full_history")).toBeNull();
     const v = planTemplateValues(catalog);
-    expect(v["free.guf_ai_daily_messages"]).toBe("3");
-    expect(v["pro.guf_ai_daily_messages"]).toBe("40");
-  });
-});
-
-describe("ranking do mockup", () => {
-  const order = ["ana", "me", "bruno"];
-  it("ordena por pontos e mantém a ordem no empate", () => {
-    expect(ranksOf({ ana: 10, me: 20, bruno: 10 }, order)).toEqual({ me: 1, ana: 2, bruno: 3 });
-  });
-  it("movimento", () => {
-    expect(movementOf(3, 1)).toBe("up");
-    expect(movementOf(1, 2)).toBe("down");
-    expect(movementOf(undefined, 2)).toBe("same");
-    expect(MOVEMENT_GLYPH.up).toBe("▲");
+    expect(v["free.guf_ai_daily_messages"]).toBe("1");
+    expect(v["pro.guf_ai_daily_messages"]).toBe("15");
   });
 });
 
@@ -85,37 +70,22 @@ describe("textos", () => {
   });
 
   it("todo o conteúdo das seções resolve sem chave faltando", () => {
-    const records = section("records");
-    const evolution = section("evolution");
-    if (records.type !== "records" || evolution.type !== "evolution") throw new Error("tipo");
     const values = buildTemplateValues({
       rules,
       catalog,
-      lifts: { before: records.demo.before, after: records.demo.after },
-      evolutionStart: evolution.chart.startValue,
       instagramHandle: "@guf.app",
+      tiktokHandle: "@guf.app",
       year: 2026,
     });
-    for (const file of ["hero", "competition", "gufai", "plans", "final-cta"]) {
-      expect(() => fillDeep(section(file), values, ["previous", "streak", "bonus"])).not.toThrow();
+    for (const file of ["hero", "facts", "features", "lite", "plans", "steps", "faq", "final-cta"]) {
+      expect(() => fillDeep(section(file), values)).not.toThrow();
     }
-    expect(values.end).toBe("101,3");
-    expect(values.start).toBe("92,0");
+    expect(fillTemplate("{tiktok}", values)).toBe("@guf.app");
   });
 
-  it("nota do simulador", () => {
-    const competition = section("competition");
-    if (competition.type !== "competition") throw new Error("tipo");
-    const sim = fillDeep(competition.simulator, { bonusMax: 20, daysForFulfilledWeek: 3 }, [
-      "previous",
-      "streak",
-      "bonus",
-    ]);
-    expect(simulatorNote(sim, rules, 2, { fulfilled: true, streakWeeks: 3, streakBonus: 15 })).toBe(
-      "Semana cumprida: com 2 semanas cumpridas antes, a sequência chega a 3 e vale 15 pontos (máximo 20).",
-    );
-    expect(simulatorNote(sim, rules, 2, { fulfilled: false, streakWeeks: 0, streakBonus: 0 })).toMatch(
-      /^Com menos de 3 dias/,
-    );
+  it("barras do gráfico do hero em passos de 5% (viram classes, sem style inline)", () => {
+    const hero = section("hero");
+    if (hero.type !== "hero") throw new Error("tipo");
+    expect(hero.screen.volume.bars.every((h) => h % 5 === 0)).toBe(true);
   });
 });

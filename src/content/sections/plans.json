@@ -1,8 +1,7 @@
 {
   "type": "plans",
   "anchor": "planos",
-  "eyebrow": "Planos",
-  "title": "Comece grátis. De verdade.",
+  "title": ["Grátis para sempre.", "Pro se quiser mais."],
   "lead": "Treinos, calendário, resumos, recordes e evolução são completos em qualquer plano.",
   "free": {
     "tagline": "Grátis, sem prazo para acabar.",
@@ -10,7 +9,7 @@
       "Treinos, calendário, resumos, recordes e evolução completos",
       "Competição na temporada do mês atual",
       "Projeto Favoritos com até {free.routines_per_project} rotinas",
-      "GUF AI: {free.guf_ai_daily_messages} perguntas por dia",
+      "Perguntas ao GUF AI por dia: {free.guf_ai_daily_messages}",
       "Gráficos com o mês atual e o anterior"
     ],
     "cta": { "label": "Começar grátis", "appRoute": "signup" }
@@ -20,7 +19,7 @@
     "features": [
       "Competição em 3 meses, 6 meses, 1 ano e período personalizado",
       "Projetos e rotinas sem limite",
-      "GUF AI: {pro.guf_ai_daily_messages} perguntas por dia",
+      "Perguntas ao GUF AI por dia: {pro.guf_ai_daily_messages}",
       "Gráficos com todo o seu período"
     ],
     "cta": { "label": "Assinar pelo app", "appRoute": "plans" },

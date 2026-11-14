@@ -1,7 +1,7 @@
 [
   {
     "id": "current",
-    "syncedAt": "2026-11-05T21:49:15.072Z",
+    "syncedAt": "2026-11-14T15:25:23.875Z",
     "source": "Supabase do app (plans, features, plan_features, plan_prices ativos) via chave pública",
     "plans": [
       {
@@ -41,6 +41,11 @@
         "description": "Perguntas ao GUF AI em 24 horas"
       },
       {
+        "code": "guf_ai_imports_in_daily",
+        "kind": "flag",
+        "description": "Importar ficha usa primeiro o limite diário do GUF AI (sem a flag, só os brindes)"
+      },
+      {
         "code": "measurement_chart_months",
         "kind": "limit",
         "description": "Meses mostrados nos gráficos de medidas corporais, contando de hoje para trás"
@@ -65,7 +70,7 @@
       {
         "plan_code": "free",
         "feature_code": "guf_ai_daily_messages",
-        "limit_value": 3
+        "limit_value": 1
       },
       {
         "plan_code": "free",
@@ -95,7 +100,12 @@
       {
         "plan_code": "pro",
         "feature_code": "guf_ai_daily_messages",
-        "limit_value": 40
+        "limit_value": 15
+      },
+      {
+        "plan_code": "pro",
+        "feature_code": "guf_ai_imports_in_daily",
+        "limit_value": null
       },
       {
         "plan_code": "pro",
@@ -111,9 +121,30 @@
     "prices": [
       {
         "plan_code": "pro",
+        "provider": "google",
+        "billing_interval": "month",
+        "amount_cents": 1980,
+        "currency": "brl"
+      },
+      {
+        "plan_code": "pro",
+        "provider": "google",
+        "billing_interval": "year",
+        "amount_cents": 14800,
+        "currency": "brl"
+      },
+      {
+        "plan_code": "pro",
         "provider": "stripe",
         "billing_interval": "month",
-        "amount_cents": 1480,
+        "amount_cents": 1980,
+        "currency": "brl"
+      },
+      {
+        "plan_code": "pro",
+        "provider": "stripe",
+        "billing_interval": "year",
+        "amount_cents": 14800,
         "currency": "brl"
       }
     ]

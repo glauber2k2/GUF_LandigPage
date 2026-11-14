@@ -1,0 +1,94 @@
+---
+import type { SectionOf } from "../../content/schemas/sections";
+import Button from "../ui/Button.astro";
+
+/**
+ * "Carregue a barra": três passos para começar e uma barra que recebe as anilhas conforme a seção
+ * rola (animação ligada à rolagem, só com transform). Navegador sem esse recurso, ou com movimento
+ * reduzido, mostra a barra já carregada.
+ */
+interface Props {
+  data: SectionOf<"steps">;
+}
+
+const { data } = Astro.props;
+---
+
+<section
+  id={data.anchor}
+  aria-labelledby="steps-title"
+  class="steps overflow-hidden bg-ink px-5 py-[clamp(72px,10vw,110px)] text-snow"
+>
+  <div class="mx-auto max-w-page">
+    <h2
+      id="steps-title"
+      data-reveal
+      class="m-0 font-display text-[clamp(52px,7vw,104px)] leading-[0.86] font-bold uppercase"
+    >
+      {data.title}
+      <br />
+      <span class="text-volt">{data.highlight}</span>
+    </h2>
+
+    <div class="barbell relative mx-auto mt-14 h-[110px] max-w-[900px] md:h-[150px]" aria-hidden="true">
+      <div class="absolute inset-x-0 top-[46px] h-[18px] rounded-full bg-mist md:top-[66px]"></div>
+      <div class="plate plate-l absolute top-0 left-[14%] h-full w-[26px] rounded-[10px] bg-volt md:w-9"></div>
+      <div class="plate plate-l plate-2 absolute top-[11%] left-[calc(14%-34px)] h-[78%] w-[26px] rounded-[10px] bg-snow md:left-[calc(14%-44px)] md:w-9"></div>
+      <div class="plate plate-l plate-3 absolute top-[24%] left-[calc(14%-62px)] h-[52%] w-[26px] rounded-[10px] bg-blue md:left-[calc(14%-80px)] md:w-9"></div>
+      <div class="plate plate-r absolute top-0 right-[14%] h-full w-[26px] rounded-[10px] bg-volt md:w-9"></div>
+      <div class="plate plate-r plate-2 absolute top-[11%] right-[calc(14%-34px)] h-[78%] w-[26px] rounded-[10px] bg-snow md:right-[calc(14%-44px)] md:w-9"></div>
+      <div class="plate plate-r plate-3 absolute top-[24%] right-[calc(14%-62px)] h-[52%] w-[26px] rounded-[10px] bg-blue md:right-[calc(14%-80px)] md:w-9"></div>
+    </div>
+
+    <ol class="m-0 mt-14 grid list-none gap-6 p-0 md:grid-cols-3">
+      {data.items.map((item, i) => (
+        <li data-reveal class="flex flex-col gap-2.5">
+          <span class="font-display text-[96px] leading-[0.85] font-bold text-volt" aria-hidden="true">
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <h3 class="m-0 text-[22px] font-bold">{item.title}</h3>
+          <p class="m-0 text-base leading-6 text-mist">{item.text}</p>
+        </li>
+      ))}
+    </ol>
+
+    <div data-reveal class="mt-12">
+      <Button cta={data.cta} source="como-funciona" variant="volt" size="lg" pill arrow />
+    </div>
+  </div>
+</section>
+
+<style>
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .plate {
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 45%;
+      }
+      .plate-l {
+        animation-name: slide-left;
+      }
+      .plate-r {
+        animation-name: slide-right;
+      }
+      .plate-2 {
+        animation-range: entry 25% cover 55%;
+      }
+      .plate-3 {
+        animation-range: entry 40% cover 65%;
+      }
+    }
+  }
+  @keyframes slide-left {
+    from {
+      transform: translateX(-60vw);
+    }
+  }
+  @keyframes slide-right {
+    from {
+      transform: translateX(60vw);
+    }
+  }
+</style>

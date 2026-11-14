@@ -1,0 +1,12 @@
+{
+  "type": "facts",
+  "eyebrow": "Por que o guf",
+  "items": [
+    { "value": "<3 s", "text": "para registrar uma série. Carga e repetições já vêm do último treino." },
+    { "value": "5 em 1", "text": "treino, cardio, GUF AI, competição e medidas corporais no mesmo lugar." },
+    {
+      "value": "Offline",
+      "text": "Começou o treino? Pode perder o sinal: cada série fica salva no celular e sobe quando a internet voltar."
+    }
+  ]
+}

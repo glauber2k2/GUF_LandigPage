@@ -1,33 +1,70 @@
 {
   "type": "hero",
-  "badge": "App de treino de musculação",
-  "title": "Seu treino agora é uma ==competição.==",
-  "lead": "Registre cargas em segundos, veja sua evolução e dispute o ranking com seus amigos.",
+  "title": ["Pare de anotar.", "Comece a evoluir."],
+  "lead": "Treino, cardio, GUF AI, competição com os amigos e medidas corporais num app que você usa com uma mão, entre uma série e outra.",
   "primaryCta": { "label": "Começar grátis", "appRoute": "signup" },
-  "secondaryCta": { "label": "Ver como funciona", "anchor": "#como-funciona" },
-  "checks": ["Plano gratuito", "Funciona no celular, sem loja", "iPhone e Android"],
-  "ranking": {
-    "ariaLabel": "Tela de ranking do guf: as posições trocam conforme os pontos sobem",
-    "title": "Competição",
-    "periodLabel": "Este mês",
-    "tabs": ["Pontos", "Volume", "Treinos", "Recordes"],
-    "listTitle": "Ranking",
-    "countLabel": "3 amizades",
-    "workoutsLabel": "treinos",
-    "streakLabel": "sem.",
-    "pointsLabel": "pts",
-    "people": [
-      { "id": "ana", "name": "Ana", "initial": "A", "workouts": 14, "streakWeeks": 6 },
-      { "id": "me", "name": "Você", "initial": "V", "workouts": 13, "streakWeeks": 9, "isMe": true },
-      { "id": "bruno", "name": "Bruno", "initial": "B", "workouts": 13, "streakWeeks": 4 },
-      { "id": "carla", "name": "Carla", "initial": "C", "workouts": 10, "streakWeeks": 2 }
-    ],
-    "frames": [
-      { "ana": 312, "me": 298, "bruno": 286, "carla": 241 },
-      { "ana": 312, "me": 316, "bruno": 286, "carla": 241 },
-      { "ana": 312, "me": 316, "bruno": 319, "carla": 241 },
-      { "ana": 327, "me": 334, "bruno": 319, "carla": 256 }
-    ],
-    "toast": { "title": "Bruno te ultrapassou", "meta": "Temporada deste mês · agora", "frame": 2 }
-  }
+  "secondaryCta": { "label": "Usar sem baixar nada", "anchor": "#sem-baixar" },
+  "trust": ["Grátis para começar", "Sem cartão de crédito", "O treino continua sem internet"],
+  "imageAlt": "Mão segurando um celular com a tela Início do guf",
+  "screen": {
+    "ariaLabel": "Tela Início do guf: treino de hoje, semana com 3 treinos, sequência de 8 semanas e gráfico de volume",
+    "greeting": "Boa tarde, Ana",
+    "date": "Sábado, 14 de novembro",
+    "avatarInitial": "A",
+    "today": {
+      "label": "Treino de hoje",
+      "project": "Hipertrofia – ABC",
+      "title": "Treino A – Peito e Tríceps",
+      "meta": "6 exercícios · 18 séries",
+      "average": "Média de 52 min nos últimos treinos",
+      "tags": ["Peito", "Tríceps", "Ombros"],
+      "exercises": [
+        { "name": "Supino reto com barra", "sets": "4 × 8–12" },
+        { "name": "Supino inclinado com halteres", "sets": "3 × 10" },
+        { "name": "Crucifixo na máquina", "sets": "3 × 12" }
+      ],
+      "more": "+3 exercícios",
+      "start": "Iniciar treino",
+      "swap": "Trocar rotina"
+    },
+    "week": {
+      "title": "Esta semana",
+      "count": "3",
+      "goalSuffix": "de 4 treinos",
+      "days": [
+        { "letter": "D", "day": 8, "state": "done" },
+        { "letter": "S", "day": 9, "state": "off" },
+        { "letter": "T", "day": 10, "state": "done" },
+        { "letter": "Q", "day": 11, "state": "off" },
+        { "letter": "Q", "day": 12, "state": "done" },
+        { "letter": "S", "day": 13, "state": "off" },
+        { "letter": "S", "day": 14, "state": "today" }
+      ]
+    },
+    "historyTitle": "Histórico",
+    "streak": {
+      "value": "8",
+      "unit": "semanas",
+      "caption": "seguidas treinando",
+      "badge": "Recorde",
+      "pattern": [false, false, false, false, true, true, true, true, true, true, true, true],
+      "securedTitle": "Semana garantida",
+      "securedText": "3 de 4 treinos da sua meta"
+    },
+    "volume": {
+      "title": "Volume",
+      "periods": ["4 sem", "3 m", "6 m"],
+      "value": "12.480",
+      "unit": "kg",
+      "delta": "+12% vs. período anterior",
+      "bars": [40, 50, 45, 60, 55, 70, 75, 90]
+    },
+    "toast": { "title": "Recorde pessoal", "text": "Supino reto · 82,5 kg × 8" },
+    "nav": { "home": "Início", "compete": "Competir", "start": "Iniciar", "projects": "Projetos", "profile": "Perfil" }
+  },
+  "chips": [
+    { "icon": "trophy", "tone": "pr", "title": "Recorde pessoal", "text": "Supino · 82,5 kg × 8" },
+    { "icon": "activity", "tone": "ink", "title": "Cardio · 32 min", "text": "Semana garantida" },
+    { "icon": "users", "tone": "data", "title": "1º no ranking", "text": "com os amigos" }
+  ]
 }

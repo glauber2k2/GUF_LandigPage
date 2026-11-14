@@ -1,0 +1,25 @@
+{
+  "type": "lite",
+  "anchor": "sem-baixar",
+  "badge": "Guf Lite · já disponível",
+  "title": ["Comece agora.", "Sem baixar nada."],
+  "lead": "O Guf Lite abre direto no navegador do celular e fica na sua tela inicial com o ícone do guf, igual a um app. É leve, o treino continua sem internet e ele se atualiza sozinho.",
+  "steps": [
+    { "text": "Abra **treino.gufapp.com.br** no celular" },
+    {
+      "text": "Toque em **Adicionar à tela inicial**",
+      "note": "No iPhone, pelo Safari: Compartilhar › Adicionar à Tela de Início"
+    },
+    { "text": "Pronto: o guf fica junto com os seus apps" }
+  ],
+  "cta": { "label": "Abrir o Guf Lite", "appRoute": "app" },
+  "perks": ["Android e iPhone", "Quase nada de espaço", "Sempre atualizado"],
+  "homeCaption": "O ícone do guf na sua tela inicial",
+  "homeAriaLabel": "Tela inicial de um celular com o ícone do guf entre os apps",
+  "storesLabel": "App completo nas lojas, com a mesma conta:",
+  "stores": {
+    "soon": "Em breve",
+    "googlePlay": { "soonCaption": "Android", "liveCaption": "Disponível no", "name": "Google Play" },
+    "appStore": { "soonCaption": "iPhone", "liveCaption": "Baixar na", "name": "App Store" }
+  }
+}

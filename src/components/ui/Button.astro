@@ -17,8 +17,14 @@ interface Props {
   cta: Cta;
   /** Seção de origem para o evento (ex.: "hero"). */
   source: string;
-  variant?: "primary" | "secondary" | "ghost" | "band";
+  /**
+   * Na vitrine (fundos volt e grafite com cores fixas): `volt` (volt sobre grafite), `ink` (grafite
+   * sobre volt ou papel), `outlineInk` (contorno escuro sobre volt) e `outlineSnow` (contorno claro sobre grafite).
+   */
+  variant?: "primary" | "secondary" | "ghost" | "band" | "volt" | "ink" | "outlineInk" | "outlineSnow";
   size?: "sm" | "md" | "lg" | "xl";
+  /** Cantos totalmente arredondados (pílula), como na vitrine. */
+  pill?: boolean;
   arrow?: boolean;
   block?: boolean;
   class?: string;
@@ -32,6 +38,7 @@ const {
   source,
   variant = "primary",
   size = "md",
+  pill = false,
   arrow = false,
   block = false,
   class: className,
@@ -47,6 +54,10 @@ const variants = {
   secondary: "border border-line-strong text-fg font-semibold",
   ghost: "text-fg font-semibold",
   band: "bg-band-button text-band-button-fg font-bold",
+  volt: "bg-volt text-ink font-bold",
+  ink: "bg-ink text-volt font-bold",
+  outlineInk: "border-2 border-ink text-ink font-bold",
+  outlineSnow: "border-2 border-snow-edge text-snow font-bold",
 } as const;
 
 /** Efeitos de hover/pressão só em botões ativos. */
@@ -55,19 +66,24 @@ const interactions = {
   secondary: "hover:bg-s3 active:scale-[0.97]",
   ghost: "hover:bg-s3 active:scale-[0.97]",
   band: "hover:-translate-y-px active:scale-[0.97]",
+  volt: "hover:brightness-[1.06] active:scale-[0.97]",
+  ink: "hover:-translate-y-px active:scale-[0.97]",
+  outlineInk: "hover:bg-ink-tint active:scale-[0.97]",
+  outlineSnow: "hover:bg-snow-tint active:scale-[0.97]",
 } as const;
 
 const sizes = {
-  sm: "h-11 px-3.5 text-[15px] rounded-lg",
-  md: "h-[52px] px-6 text-base rounded-lg",
-  lg: "h-14 px-7 text-[17px] rounded-lg",
-  xl: "h-[60px] px-8 text-lg rounded-lg",
+  sm: "h-11 px-3.5 text-[15px]",
+  md: "h-[52px] px-6 text-base",
+  lg: "h-14 px-7 text-[17px]",
+  xl: "h-[60px] px-8 text-lg",
 } as const;
 
 const base = [
   "inline-flex items-center justify-center gap-2.5 whitespace-nowrap no-underline transition-[transform,filter,background-color] duration-150",
   variants[variant],
   sizes[size],
+  pill ? "rounded-full" : "rounded-lg",
   block && "w-full",
   className,
 ];

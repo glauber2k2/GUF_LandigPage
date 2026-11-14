@@ -17,9 +17,9 @@ const { ui } = Astro.props;
   data-sticky-cta
   aria-hidden="true"
   inert
-  class="sticky-cta fixed inset-x-0 bottom-0 z-40 translate-y-[110%] border-t border-line bg-sticky px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))] opacity-0 backdrop-blur-md md:hidden"
+  class="sticky-cta fixed inset-x-0 bottom-0 z-40 translate-y-[110%] border-t border-ink-4 bg-vitrine-nav px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))] opacity-0 backdrop-blur-md md:hidden"
 >
-  <Button cta={ui.cta} source="fixo-mobile" size="md" block />
+  <Button cta={ui.cta} source="fixo-mobile" variant="volt" size="md" pill block />
 </div>
 
 <style>

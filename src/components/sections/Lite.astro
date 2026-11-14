@@ -1,0 +1,179 @@
+---
+import { site } from "../../config/site";
+import type { SectionOf } from "../../content/schemas/sections";
+import Button from "../ui/Button.astro";
+import Icon from "../ui/Icon.astro";
+import InlineText from "../ui/InlineText.astro";
+import Logo from "../ui/Logo.astro";
+
+/**
+ * "Comece agora. Sem baixar nada.": o PWA apresentado como Guf Lite, sem termos técnicos, num cartão
+ * grafite com detalhes em volt. Abaixo, as lojas: sem link em `site.stores` o selo diz "Em breve";
+ * com link, vira o botão de baixar (mudar só em src/config/site.ts).
+ */
+interface Props {
+  data: SectionOf<"lite">;
+}
+
+const { data } = Astro.props;
+const stores = [
+  { key: "googlePlay", icon: "play", url: site.stores.googlePlay.url, text: data.stores.googlePlay },
+  { key: "appStore", icon: "smartphone", url: site.stores.appStore.url, text: data.stores.appStore },
+] as const;
+const storeClass =
+  "inline-flex min-h-14 items-center gap-3 rounded-[14px] border border-ink-line-strong bg-ink-2 px-[18px] text-left text-[15px] font-bold text-snow";
+---
+
+<section id={data.anchor} aria-labelledby="lite-title" class="bg-ink px-5 py-[clamp(72px,10vw,110px)] text-snow">
+  <div class="mx-auto max-w-page">
+    <div
+      data-reveal
+      class="lite-card relative grid items-center gap-12 overflow-hidden rounded-[28px] border border-snow-tint bg-linear-to-br from-ink-3 via-ink-2 to-ink px-5 py-8 md:grid-cols-[1.1fr_0.9fr] md:rounded-[40px] md:p-16"
+    >
+      <div class="relative">
+        <span class="inline-flex items-center rounded-full border border-volt-edge bg-volt-tint px-3 py-1.5 text-xs font-bold tracking-[0.08em] text-volt uppercase">
+          {data.badge}
+        </span>
+        <h2
+          id="lite-title"
+          class="m-0 mt-[18px] font-display text-[clamp(52px,6.4vw,96px)] leading-[0.86] font-bold uppercase"
+        >
+          {data.title[0]}
+          <br />
+          <span class="text-volt">{data.title[1]}</span>
+        </h2>
+        <p class="m-0 mt-[18px] max-w-[520px] text-lg leading-7 text-mist">{data.lead}</p>
+        <ol class="m-0 mt-7 list-none p-0">
+          {data.steps.map((step, i) => (
+            <li class="flex items-center gap-3.5 border-t border-ink-4 py-3.5 text-base leading-[22px] text-snow">
+              <b class="grid size-9 flex-none place-items-center rounded-full border border-volt-edge bg-volt-tint font-display text-xl text-volt">
+                {i + 1}
+              </b>
+              <span>
+                <InlineText text={step.text} strongClass="font-semibold text-snow" />
+                {step.note && <small class="mt-0.5 block text-[13px] text-mist-2">{step.note}</small>}
+              </span>
+            </li>
+          ))}
+        </ol>
+        <div class="mt-7">
+          <Button cta={data.cta} source="guf-lite" variant="volt" size="lg" pill arrow />
+        </div>
+        <ul class="m-0 mt-[22px] flex list-none flex-wrap gap-2 p-0">
+          {data.perks.map((perk) => (
+            <li class="rounded-full border border-ink-line bg-snow-tint px-3 py-2 text-[13px] font-semibold text-mist">
+              {perk}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <figure class="relative m-0" data-loop>
+        <div
+          role="img"
+          aria-label={data.homeAriaLabel}
+          class="mx-auto grid w-[300px] max-w-full grid-cols-4 gap-4 rounded-[44px] border border-ink-line bg-ink p-[22px] shadow-phone"
+        >
+          {Array.from({ length: 16 }, (_, i) =>
+            i === 5 ? (
+              <span class="app-icon relative grid aspect-square place-items-center rounded-[14px] border border-ink-line-strong bg-ink">
+                <Logo variant="mark" height={34} />
+              </span>
+            ) : (
+              <span class="aspect-square rounded-[14px] bg-ink-3" />
+            ),
+          )}
+        </div>
+        <figcaption class="mt-4 text-center text-sm font-semibold text-mist">{data.homeCaption}</figcaption>
+      </figure>
+    </div>
+
+    <div data-reveal class="mt-7 flex flex-wrap items-center justify-center gap-x-4 gap-y-3">
+      <span class="mr-2 text-[15px] text-mist">{data.storesLabel}</span>
+      {stores.map((store) =>
+        store.url ? (
+          <a
+            href={store.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-cta={`loja-${store.key}`}
+            class={`${storeClass} hover:bg-ink-3`}
+          >
+            <Icon name={store.icon} size={20} />
+            <span>
+              <small class="block text-[11px] font-medium text-mist-2">{store.text.liveCaption}</small>
+              {store.text.name}
+            </span>
+          </a>
+        ) : (
+          <span class={storeClass}>
+            <Icon name={store.icon} size={20} />
+            <span>
+              <small class="block text-[11px] font-medium text-mist-2">{store.text.name}</small>
+              {store.text.soonCaption}
+            </span>
+            <span class="rounded-full bg-volt px-2 py-0.5 text-[11px] font-bold text-ink">{data.stores.soon}</span>
+          </span>
+        ),
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .lite-card::before {
+    content: "";
+    position: absolute;
+    right: -12%;
+    top: 50%;
+    width: 62%;
+    aspect-ratio: 1;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--vitrine-volt-glow) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .app-icon {
+    animation: land 3.2s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+  }
+  .app-icon::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 18px;
+    border: 2px solid var(--vitrine-volt);
+    opacity: 0;
+    animation: tap 3.2s ease-out infinite;
+  }
+  @keyframes land {
+    0%,
+    60%,
+    100% {
+      transform: translateY(0);
+    }
+    70% {
+      transform: translateY(-14px);
+    }
+    80% {
+      transform: translateY(0);
+    }
+    86% {
+      transform: translateY(-5px);
+    }
+  }
+  @keyframes tap {
+    0%,
+    84% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    88% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.25);
+    }
+  }
+</style>

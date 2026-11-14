@@ -6,7 +6,7 @@ import type { AnalyticsProvider } from "../../src/lib/analytics/types";
 import { isTrackedParam, pickTrackedParams, withTrackedParams } from "../../src/lib/utm/params";
 
 describe("lib/utm", () => {
-  const app = "https://gufapp.vercel.app/cadastro/";
+  const app = "https://treino.gufapp.com.br/cadastro/";
 
   it("reconhece utm_*, fbclid e gclid", () => {
     expect(isTrackedParam("utm_source")).toBe(true);

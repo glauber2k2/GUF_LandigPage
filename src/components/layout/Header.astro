@@ -3,6 +3,10 @@ import type { UiContent } from "../../content/schemas/sections";
 import Button from "../ui/Button.astro";
 import Logo from "../ui/Logo.astro";
 
+/**
+ * Cabeçalho da vitrine: uma pílula clara que flutua no topo, com a marca, os atalhos das seções
+ * (escondidos no celular, onde só ficam a marca e o botão) e o CTA de cadastro.
+ */
 interface Props {
   ui: UiContent["header"];
 }
@@ -10,11 +14,21 @@ interface Props {
 const { ui } = Astro.props;
 ---
 
-<header class="fixed inset-x-0 top-0 z-50 border-b border-line bg-header backdrop-blur-md">
-  <div class="mx-auto flex h-16 max-w-page items-center justify-between gap-4 px-5">
-    <a href="#topo" aria-label={ui.homeLabel} class="flex items-center">
-      <Logo height={32} label="" class="pointer-events-none" />
+<header class="pointer-events-none fixed inset-x-0 top-3 z-50 flex justify-center px-3">
+  <div class="pointer-events-auto flex items-center gap-1.5 rounded-full bg-paper py-1.5 pr-1.5 pl-4 shadow-toast">
+    <a href="#topo" aria-label={ui.homeLabel} class="flex min-h-11 items-center pr-2">
+      <Logo height={26} label="" tone="ink" class="pointer-events-none" />
     </a>
-    <Button cta={ui.signup} source="header" size="sm" class="px-[18px]" tooltipSide="bottom" />
+    <nav aria-label={ui.navLabel} class="hidden items-center md:flex">
+      {ui.links.map((link) => (
+        <a
+          href={link.anchor}
+          class="flex min-h-11 items-center rounded-full px-3.5 text-sm font-semibold text-on-paper-soft transition-colors duration-150 hover:bg-paper-2 hover:text-ink"
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+    <Button cta={ui.signup} source="header" variant="ink" size="sm" pill class="px-[18px]" tooltipSide="bottom" />
   </div>
 </header>

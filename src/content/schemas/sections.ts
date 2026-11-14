@@ -9,258 +9,157 @@ import { ICON_NAMES } from "../../lib/icons.ts";
 const text = z.string().min(1);
 const icon = z.enum(ICON_NAMES);
 
+/** Imagens de objetos (src/assets/images): o conteúdo escolhe pelo nome, o componente importa. */
+export const OBJECT_IMAGES = ["dumbbell", "sneaker", "trophy", "tape", "plate"] as const;
+const objectImage = z.enum(OBJECT_IMAGES);
+
 /** Destino de um botão: rota do app (recebe UTM) ou âncora da própria página. */
 export const ctaSchema = z.union([
-  z.object({ label: text, appRoute: z.enum(["signup", "login", "plans"]) }),
+  z.object({ label: text, appRoute: z.enum(["app", "signup", "login", "plans"]) }),
   z.object({ label: text, anchor: z.string().regex(/^#[a-z0-9-]+$/) }),
 ]);
 export type Cta = z.infer<typeof ctaSchema>;
-
-const heading = {
-  eyebrow: text.optional(),
-  title: text,
-};
 
 const anchor = z
   .string()
   .regex(/^[a-z0-9-]+$/)
   .optional();
 
-const setColumns = z.object({ set: text, previous: text, load: text, reps: text });
-
-const heroSchema = z.object({
-  type: z.literal("hero"),
-  badge: text,
-  title: text,
-  lead: text,
-  primaryCta: ctaSchema,
-  secondaryCta: ctaSchema,
-  checks: z.array(text).min(1),
-  ranking: z.object({
-    ariaLabel: text,
+/** Tela Início do app desenhada dentro do celular do hero (dados de exemplo, como num print). */
+const homeScreenSchema = z.object({
+  ariaLabel: text,
+  greeting: text,
+  date: text,
+  avatarInitial: z.string().length(1),
+  today: z.object({
+    label: text,
+    project: text,
     title: text,
-    periodLabel: text,
-    tabs: z.array(text).length(4),
-    listTitle: text,
-    countLabel: text,
-    workoutsLabel: text,
-    streakLabel: text,
-    pointsLabel: text,
-    people: z
+    meta: text,
+    average: text,
+    tags: z.array(text).min(1),
+    exercises: z.array(z.object({ name: text, sets: text })).min(1),
+    more: text,
+    start: text,
+    swap: text,
+  }),
+  week: z.object({
+    title: text,
+    count: text,
+    goalSuffix: text,
+    /** Domingo a sábado, como no app. */
+    days: z
       .array(
         z.object({
-          id: z.string(),
-          name: text,
-          initial: z.string().length(1),
-          workouts: z.number().int().nonnegative(),
-          streakWeeks: z.number().int().nonnegative(),
-          isMe: z.boolean().default(false),
+          letter: z.string().length(1),
+          day: z.number().int().min(1).max(31),
+          state: z.enum(["done", "today", "off"]),
         }),
       )
-      .min(2),
-    /** Pontos de cada pessoa em cada quadro da animação (o primeiro é o estado inicial). */
-    frames: z.array(z.record(z.string(), z.number().int().nonnegative())).min(1),
-    toast: z.object({ title: text, meta: text, frame: z.number().int().nonnegative() }),
+      .length(7),
   }),
-});
-
-const benefitsSchema = z.object({
-  type: z.literal("benefits"),
-  ariaLabel: text,
-  items: z.array(z.object({ icon, tone: z.enum(["accent", "pr"]), title: text, text })).min(1),
-});
-
-const problemSchema = z.object({
-  type: z.literal("problem"),
-  title: text,
-  items: z.array(text).min(1),
-  closing: text,
-});
-
-const loggingSchema = z.object({
-  type: z.literal("logging"),
-  anchor,
-  ...heading,
-  bullets: z.array(text).min(1),
-  offline: z.object({ title: text, text }),
-  demo: z.object({
-    ariaLabel: text,
-    exercise: z.object({ initials: text, name: text, tags: z.array(text) }),
-    columns: setColumns,
-    sets: z
-      .array(z.object({ set: z.number().int(), previous: text, load: z.number(), reps: z.number().int() }))
-      .length(3),
-    loadLabel: text,
-    repsLabel: text,
-    loadChips: z.array(text).min(1),
-    repsChips: z.array(text).min(1),
-    animation: z.object({
-      loadChip: z.number().int().nonnegative(),
-      repsChip: z.number().int().nonnegative(),
-      load: z.number(),
-      reps: z.number().int(),
-    }),
-    rest: z.object({ seconds: z.number().int().positive(), nextLabel: text, pauseLabel: text }),
-  }),
-});
-
-const liftSchema = z.object({ load: z.number().positive(), reps: z.number().int().positive() });
-
-const recordsSchema = z.object({
-  type: z.literal("records"),
-  ...heading,
-  body: text,
-  note: text,
-  demo: z.object({
-    ariaLabel: text,
-    columns: setColumns,
-    set: z.number().int(),
-    badge: text,
-    before: liftSchema,
-    after: liftSchema,
-    beforeLabel: text,
-    afterLabel: text,
-    caption: text,
-    recordCaption: text,
-    unit: text,
-  }),
-});
-
-const evolutionSchema = z.object({
-  type: z.literal("evolution"),
-  ...heading,
-  body: text,
-  note: text,
-  chart: z.object({
-    title: text,
-    unit: text,
-    /** 1RM estimado no início do período (o fim é o recorde da seção anterior). */
-    startValue: z.number().positive(),
-    ariaLabel: text,
-    periods: z.array(text).min(1),
-    activePeriod: z.number().int().nonnegative(),
-    /** Pontos do traço (x 0–320, y 0–150). */
-    points: z.array(z.tuple([z.number(), z.number()])).min(2),
-  }),
+  historyTitle: text,
   streak: z.object({
-    weeks: z.number().int().nonnegative(),
-    word: text,
+    value: text,
+    unit: text,
     caption: text,
+    badge: text,
     /** Últimas 12 semanas; a última é a atual. */
     pattern: z.array(z.boolean()).length(12),
-    legend: text,
     securedTitle: text,
     securedText: text,
   }),
+  volume: z.object({
+    title: text,
+    periods: z.array(text).min(1),
+    value: text,
+    unit: text,
+    delta: text,
+    /** Altura de cada barra em %, de 5 em 5 (a última é a semana atual; vira classe, sem style inline por causa da CSP). */
+    bars: z.array(z.number().int().min(5).max(100).multipleOf(5)).length(8),
+  }),
+  toast: z.object({ title: text, text }),
+  nav: z.object({ home: text, compete: text, start: text, projects: text, profile: text }),
 });
 
-const competitionSchema = z.object({
-  type: z.literal("competition"),
-  anchor,
-  ...heading,
+const heroSchema = z.object({
+  type: z.literal("hero"),
+  /** Duas linhas do título: a segunda aparece vazada. */
+  title: z.tuple([text, text]),
   lead: text,
-  cards: z.array(z.object({ icon, title: text, text })).min(1),
-  scoring: z.object({
-    title: text,
-    items: z
-      .array(
-        z.object({
-          value: text,
-          tone: z.enum(["accent", "pr", "data"]),
-          title: text,
-          text,
-        }),
-      )
-      .min(1),
-    validNote: text,
-  }),
-  simulator: z.object({
-    title: text,
-    subtitle: text,
-    daysLegend: text,
-    recordsLabel: text,
-    recordsDecrease: text,
-    recordsIncrease: text,
-    recordsMax: z.number().int().positive(),
-    previousLabel: text,
-    previousOptions: z.array(z.object({ value: z.number().int().nonnegative(), label: text, noteLabel: text })).min(1),
-    volumeLabel: text,
-    volumeOptions: z.array(z.object({ label: text, ratio: z.number().positive() })).min(1),
-    breakdown: z.object({ constancy: text, streak: text, records: text, volume: text }),
-    totalCaption: text,
-    fulfilledNote: text,
-    notFulfilledNote: text,
-    defaults: z.object({
-      days: z.number().int().min(1).max(7),
-      records: z.number().int().nonnegative(),
-      previous: z.number().int().nonnegative(),
-      volumeOption: z.number().int().nonnegative(),
-    }),
-  }),
-  podium: z.object({
-    title: text,
-    text,
-    ariaLabel: text,
-    places: z
-      .array(
-        z.object({
-          place: z.number().int().min(1).max(3),
-          name: text,
-          initial: z.string().length(1),
-          points: z.number().int().nonnegative(),
-          isMe: z.boolean().default(false),
-        }),
-      )
-      .length(3),
-  }),
-  alerts: z.object({ title: text, text, items: z.array(z.object({ title: text, text })).min(1) }),
+  primaryCta: ctaSchema,
+  secondaryCta: ctaSchema,
+  trust: z.array(text).min(1).max(4),
+  imageAlt: text,
+  screen: homeScreenSchema,
+  chips: z.array(z.object({ icon, tone: z.enum(["pr", "ink", "data"]), title: text, text })).length(3),
+});
+
+const factsSchema = z.object({
+  type: z.literal("facts"),
+  eyebrow: text,
+  items: z
+    .array(z.object({ value: text, text }))
+    .min(1)
+    .max(4),
+});
+
+const featuresSchema = z.object({
+  type: z.literal("features"),
+  anchor,
+  title: text,
+  hint: text,
+  prevLabel: text,
+  nextLabel: text,
+  ariaLabel: text,
+  cards: z
+    .array(
+      z.object({
+        tone: z.enum(["ink", "paper"]),
+        eyebrow: text,
+        title: text,
+        text,
+        image: objectImage.optional(),
+        imageAlt: text.optional(),
+        chat: z.array(z.object({ from: z.enum(["user", "assistant"]), text })).optional(),
+      }),
+    )
+    .min(2),
   cta: ctaSchema,
 });
 
-const gufAiSchema = z.object({
-  type: z.literal("gufai"),
-  ...heading,
-  bullets: z.array(text).min(1),
-  note: text,
-  chat: z.object({
-    ariaLabel: text,
-    title: text,
-    messages: z
-      .array(
-        z.object({
-          from: z.enum(["user", "assistant"]),
-          text,
-          card: z.object({ title: text, meta: text, action: text }).optional(),
-        }),
-      )
-      .min(1),
+const liteSchema = z.object({
+  type: z.literal("lite"),
+  anchor,
+  badge: text,
+  title: z.tuple([text, text]),
+  lead: text,
+  steps: z.array(z.object({ text, note: text.optional() })).min(1),
+  cta: ctaSchema,
+  perks: z.array(text).min(1),
+  homeCaption: text,
+  homeAriaLabel: text,
+  storesLabel: text,
+  stores: z.object({
+    soon: text,
+    googlePlay: z.object({ soonCaption: text, liveCaption: text, name: text }),
+    appStore: z.object({ soonCaption: text, liveCaption: text, name: text }),
   }),
 });
 
-const organizationSchema = z.object({
-  type: z.literal("organization"),
-  ...heading,
-  items: z.array(z.object({ title: text, text })).min(1),
-  today: z.object({
-    ariaLabel: text,
-    label: text,
-    title: text,
-    meta: text,
-    days: z.array(z.object({ letter: text, state: z.enum(["off", "today", "planned"]) })).length(7),
-    action: text,
-  }),
-});
-
-const privacySchema = z.object({
-  type: z.literal("privacy"),
-  ...heading,
-  cards: z.array(z.object({ icon, title: text, text })).min(1),
+const stepsSchema = z.object({
+  type: z.literal("steps"),
+  anchor,
+  title: text,
+  highlight: text,
+  items: z.array(z.object({ title: text, text })).length(3),
+  cta: ctaSchema,
 });
 
 const plansSchema = z.object({
   type: z.literal("plans"),
   anchor,
-  ...heading,
+  title: z.tuple([text, text]),
   lead: text,
   free: z.object({ tagline: text, features: z.array(text).min(1), cta: ctaSchema }),
   pro: z.object({
@@ -274,22 +173,6 @@ const plansSchema = z.object({
   }),
 });
 
-const installSchema = z.object({
-  type: z.literal("install"),
-  ...heading,
-  lead: text,
-  platforms: z
-    .array(
-      z.object({
-        title: text,
-        browser: text,
-        steps: z.array(z.object({ text, icon: icon.optional() })).min(1),
-        note: text,
-      }),
-    )
-    .min(1),
-});
-
 const faqSchema = z.object({
   type: z.literal("faq"),
   anchor,
@@ -301,22 +184,20 @@ const finalCtaSchema = z.object({
   title: text,
   lead: text,
   cta: ctaSchema,
+  secondaryCta: ctaSchema,
+  socialLabel: text,
   instagramLabel: text,
+  tiktokLabel: text,
+  marquee: z.array(text).min(3),
 });
 
 export const sectionSchema = z.discriminatedUnion("type", [
   heroSchema,
-  benefitsSchema,
-  problemSchema,
-  loggingSchema,
-  recordsSchema,
-  evolutionSchema,
-  competitionSchema,
-  gufAiSchema,
-  organizationSchema,
-  privacySchema,
+  factsSchema,
+  featuresSchema,
+  liteSchema,
+  stepsSchema,
   plansSchema,
-  installSchema,
   faqSchema,
   finalCtaSchema,
 ]);
@@ -329,10 +210,16 @@ export type SectionOf<T extends SectionType> = Extract<Section, { type: T }>;
 export const uiSchema = z.object({
   id: z.string(),
   skipLink: text,
-  header: z.object({ homeLabel: text, signup: ctaSchema }),
+  header: z.object({
+    homeLabel: text,
+    navLabel: text,
+    links: z.array(z.object({ label: text, anchor: z.string().regex(/^#[a-z0-9-]+$/) })).max(4),
+    signup: ctaSchema,
+  }),
   footer: z.object({
     tagline: text,
     instagramLabel: text,
+    tiktokLabel: text,
     legalNavLabel: text,
     termsLabel: text,
     privacyLabel: text,

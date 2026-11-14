@@ -1,7 +1,11 @@
 {
   "type": "finalCta",
-  "title": "A temporada deste mês já começou.",
-  "lead": "Crie sua conta, chame seus amigos e veja quem evolui mais.",
-  "cta": { "label": "Começar grátis", "appRoute": "signup" },
-  "instagramLabel": "Siga {instagram} no Instagram"
+  "title": "Bora?",
+  "lead": "Crie a conta grátis agora e registre o seu primeiro treino ainda hoje.",
+  "cta": { "label": "Criar conta grátis", "appRoute": "signup" },
+  "secondaryCta": { "label": "Abrir o Guf Lite", "appRoute": "app" },
+  "socialLabel": "Dicas de treino, desafios e novidades:",
+  "instagramLabel": "Instagram · {instagram}",
+  "tiktokLabel": "TikTok · {tiktok}",
+  "marquee": ["Treino", "Cardio", "GUF AI", "Amigos", "Medidas", "Recordes"]
 }

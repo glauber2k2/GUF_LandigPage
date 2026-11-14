@@ -1,0 +1,163 @@
+---
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+import dumbbell from "../../assets/images/dumbbell.png";
+import plate from "../../assets/images/plate.png";
+import sneaker from "../../assets/images/sneaker.png";
+import tape from "../../assets/images/tape.png";
+import trophy from "../../assets/images/trophy.png";
+import type { OBJECT_IMAGES, SectionOf } from "../../content/schemas/sections";
+import Button from "../ui/Button.astro";
+import Icon from "../ui/Icon.astro";
+
+/**
+ * Carrossel de recursos: rolagem nativa com encaixe (arrastar, rolar e teclado), sem barra visível,
+ * e setas no desktop (lib/motion/carousel.ts). Cartões alternam grafite e papel; os objetos flutuam.
+ */
+interface Props {
+  data: SectionOf<"features">;
+}
+
+const { data } = Astro.props;
+const IMAGES: Record<(typeof OBJECT_IMAGES)[number], ImageMetadata> = { dumbbell, sneaker, trophy, tape, plate };
+const tones = {
+  ink: { card: "bg-ink text-snow", eyebrow: "text-volt", text: "text-mist" },
+  paper: { card: "bg-paper text-ink", eyebrow: "text-volt-deep", text: "text-on-paper-soft" },
+} as const;
+const floatDelays = [
+  "",
+  "[animation-delay:-2s]",
+  "[animation-delay:-3s]",
+  "[animation-delay:-1s]",
+  "[animation-delay:-4s]",
+];
+---
+
+<section
+  id={data.anchor}
+  aria-labelledby="features-title"
+  class="bg-volt py-[clamp(72px,10vw,110px)] text-ink"
+  data-carousel
+  data-loop
+>
+  <div class="mx-auto mb-9 flex max-w-page flex-wrap items-end justify-between gap-5 px-5">
+    <h2
+      id="features-title"
+      data-reveal
+      class="m-0 max-w-[12ch] font-display text-[clamp(52px,7vw,104px)] leading-[0.86] font-bold uppercase"
+    >
+      {data.title}
+    </h2>
+    <div class="flex items-center gap-3">
+      <span class="hint inline-flex items-center gap-2 text-sm font-bold">
+        {data.hint}
+        <Icon name="arrowRight" size={18} strokeWidth={2.5} class="nudge" />
+      </span>
+      <button
+        type="button"
+        data-carousel-step="-1"
+        aria-label={data.prevLabel}
+        class="hidden size-[52px] cursor-pointer place-items-center rounded-full border-2 border-ink bg-transparent text-ink transition-colors duration-150 hover:bg-ink hover:text-volt md:grid"
+      >
+        <Icon name="arrowLeft" size={20} strokeWidth={2.5} />
+      </button>
+      <button
+        type="button"
+        data-carousel-step="1"
+        aria-label={data.nextLabel}
+        class="hidden size-[52px] cursor-pointer place-items-center rounded-full border-2 border-ink bg-transparent text-ink transition-colors duration-150 hover:bg-ink hover:text-volt md:grid"
+      >
+        <Icon name="arrowRight" size={20} strokeWidth={2.5} />
+      </button>
+    </div>
+  </div>
+
+  <div
+    role="region"
+    aria-label={data.ariaLabel}
+    tabindex="0"
+    data-carousel-track
+    class="track flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-5 px-5 pt-2 pb-8 md:scroll-px-[max(20px,calc((100vw-var(--container))/2))] md:px-[max(20px,calc((100vw-var(--container))/2))]"
+  >
+    {data.cards.map((card, i) => (
+      <article
+        data-carousel-item
+        class:list={[
+          "card relative flex min-h-[480px] w-[min(340px,82vw)] flex-none snap-start flex-col gap-3 overflow-hidden rounded-[32px] p-[26px]",
+          tones[card.tone].card,
+        ]}
+      >
+        <span class:list={["text-xs font-bold tracking-[0.08em] uppercase", tones[card.tone].eyebrow]}>
+          {card.eyebrow}
+        </span>
+        <h3 class="m-0 font-display text-[44px] leading-[0.9] font-bold uppercase">{card.title}</h3>
+        <p class:list={["m-0 text-[15px] leading-[22px]", tones[card.tone].text]}>{card.text}</p>
+        {card.image && (
+          <Image
+            src={IMAGES[card.image]}
+            alt={card.imageAlt ?? ""}
+            widths={[260, 400, 520]}
+            sizes="260px"
+            loading="lazy"
+            class:list={[
+              "float mt-auto w-[76%] self-center drop-shadow-[0_20px_26px_rgb(0_0_0/0.35)]",
+              floatDelays[i % floatDelays.length],
+            ]}
+          />
+        )}
+        {card.chat && (
+          <div class="mt-auto flex flex-col gap-2">
+            {card.chat.map((message) =>
+              message.from === "user" ? (
+                <p class="m-0 max-w-[85%] self-end rounded-[14px_14px_4px_14px] bg-volt px-3 py-2.5 text-sm text-ink">
+                  {message.text}
+                </p>
+              ) : (
+                <p class="m-0 max-w-[90%] rounded-[14px_14px_14px_4px] bg-ink-4 px-3 py-2.5 text-sm text-snow">
+                  {message.text}
+                </p>
+              ),
+            )}
+          </div>
+        )}
+      </article>
+    ))}
+  </div>
+
+  <div data-reveal class="mt-6 flex justify-center px-5">
+    <Button cta={data.cta} source="recursos" variant="ink" size="lg" pill arrow />
+  </div>
+</section>
+
+<style>
+  .track {
+    scrollbar-width: none;
+  }
+  .track::-webkit-scrollbar {
+    display: none;
+  }
+  .card {
+    transition: transform var(--duration-base) var(--ease-std);
+  }
+  @media (hover: hover) {
+    .card:hover {
+      transform: translateY(-6px) rotate(-1deg);
+    }
+  }
+  .hint :global(.nudge) {
+    animation: nudge 1.4s ease-in-out infinite;
+  }
+  .card :global(.float) {
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    50% {
+      transform: translateX(6px);
+    }
+  }
+  @keyframes float {
+    50% {
+      transform: translateY(-14px);
+    }
+  }
+</style>

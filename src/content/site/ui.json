@@ -4,14 +4,21 @@
     "skipLink": "Pular para o conteúdo",
     "header": {
       "homeLabel": "guf, voltar ao topo",
+      "navLabel": "Seções da página",
+      "links": [
+        { "label": "Recursos", "anchor": "#recursos" },
+        { "label": "Guf Lite", "anchor": "#sem-baixar" },
+        { "label": "Planos", "anchor": "#planos" }
+      ],
       "signup": {
-        "label": "Começar grátis",
+        "label": "Começar",
         "appRoute": "signup"
       }
     },
     "footer": {
-      "tagline": "App de treino de musculação",
+      "tagline": "Evolução fitness",
       "instagramLabel": "Instagram {instagram}",
+      "tiktokLabel": "TikTok {tiktok}",
       "legalNavLabel": "Documentos",
       "termsLabel": "Termos de Uso",
       "privacyLabel": "Política de Privacidade",

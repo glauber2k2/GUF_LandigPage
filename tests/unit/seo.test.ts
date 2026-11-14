@@ -28,9 +28,8 @@ const brand: BrandInfo = {
 const values = buildTemplateValues({
   rules,
   catalog,
-  lifts: { before: { load: 80, reps: 6 }, after: { load: 80, reps: 8 } },
-  evolutionStart: 92,
   instagramHandle: "@guf.app",
+  tiktokHandle: "@guf.app",
   year: 2026,
 });
 const filledFaq = fillDeep(faq, values);
@@ -72,7 +71,7 @@ describe("JSON-LD", () => {
       {
         name: "guf",
         description: brand.description,
-        url: "https://gufapp.vercel.app",
+        url: "https://treino.gufapp.com.br",
         operatingSystem: "Web, iOS, Android",
         category: "HealthApplication",
         image: "https://exemplo.com.br/og.png",

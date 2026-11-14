@@ -3,6 +3,8 @@ import { readConsent, saveConsent, type ConsentChoice } from "../lib/analytics/c
 import { trackCtaClicks } from "../lib/analytics/cta-tracking";
 import type { AnalyticsIds } from "../lib/analytics/csp-sources";
 import { providersFor } from "../lib/analytics/providers";
+import { initCarousels } from "../lib/motion/carousel";
+import { initLoops } from "../lib/motion/loops";
 import { initReveal } from "../lib/motion/reveal";
 import { applyTrackedParamsToAppLinks } from "../lib/utm/apply";
 
@@ -11,6 +13,8 @@ export function initPage(): void {
   applyTrackedParamsToAppLinks();
   initLockedTooltips();
   initReveal();
+  initLoops();
+  initCarousels();
   initStickyCta();
   initAnalytics();
 }

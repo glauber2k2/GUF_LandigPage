@@ -17,7 +17,7 @@ test.describe("home", () => {
     await page.goto("/");
     await expect(page).toHaveTitle(/guf/);
     await expect(page.locator("h1")).toHaveCount(1);
-    await expect(page.locator("h1")).toContainText("competição");
+    await expect(page.locator("h1")).toContainText("evoluir");
     await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /.{80,}/);
     await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
     await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /og\.png$/);
@@ -101,29 +101,22 @@ test.describe("home", () => {
     await expect(first.locator("p")).toBeVisible();
   });
 
-  test("simulador calcula a semana com as regras do app", async ({ page }) => {
+  test("recursos: as setas passam os cartões do carrossel", async ({ page, isMobile }) => {
+    test.skip(isMobile, "no celular, o carrossel é só arrastar");
     await page.goto("/");
-    const sim = page.locator("points-simulator");
-    await sim.scrollIntoViewIfNeeded();
-    const total = sim.locator("[data-total]");
-    await expect(total).toHaveText("78");
-    await expect(sim).toHaveAttribute("data-hydrated", "true");
+    const track = page.locator("[data-carousel-track]");
+    await track.scrollIntoViewIfNeeded();
+    await expect(track).toHaveJSProperty("scrollLeft", 0);
+    await page.locator('button[data-carousel-step="1"]').click();
+    await expect.poll(() => track.evaluate((el) => el.scrollLeft)).toBeGreaterThan(100);
+  });
 
-    // 5 dias: 75 + sequência 15 + 1 recorde 3 + volume 15 = 108
-    await sim.locator('button[data-days="5"]').click();
-    await expect(total).toHaveText("108");
-    await expect(sim.locator('button[data-days="5"]')).toHaveAttribute("aria-pressed", "true");
-
-    // +1 recorde = 111; volume na metade (7,5) = 103,5 → 104
-    await sim.locator('button[data-records-step="1"]').click();
-    await expect(total).toHaveText("111");
-    await sim.locator('button[data-volume="0"]').click();
-    await expect(total).toHaveText("104");
-
-    // 2 dias: semana não cumprida, sem sequência: 30 + 0 + 6 + 7,5 = 43,5 → 44
-    await sim.locator('button[data-days="2"]').click();
-    await expect(total).toHaveText("44");
-    await expect(sim.locator("[data-note]")).toContainText("não é cumprida");
+  test("lojas: em breve enquanto não houver link", async ({ page }) => {
+    await page.goto("/");
+    const lite = page.locator("#sem-baixar");
+    await expect(lite).toContainText("Google Play");
+    await expect(lite).toContainText("App Store");
+    await expect(lite).toContainText("Em breve");
   });
 
   test("acessibilidade sem violações (axe, WCAG A/AA)", async ({ page }) => {

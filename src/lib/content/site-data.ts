@@ -5,8 +5,8 @@
 import { getCollection, getEntries, getEntry } from "astro:content";
 import { site } from "../../config/site.ts";
 import type { CompetitionRules, PlanCatalog } from "../../content/schemas/app-data.ts";
-import type { FaqItem, Section, SectionOf, UiContent } from "../../content/schemas/sections.ts";
-import { SIMULATOR_RUNTIME_KEYS, buildTemplateValues } from "../domain/template-values.ts";
+import type { FaqItem, Section, UiContent } from "../../content/schemas/sections.ts";
+import { buildTemplateValues } from "../domain/template-values.ts";
 import { fillDeep } from "../text/template.ts";
 
 export interface SiteData {
@@ -31,24 +31,18 @@ export function loadSiteData(): Promise<SiteData> {
 }
 
 async function build(): Promise<SiteData> {
-  const [rulesEntry, catalogEntry, uiEntry, recordsEntry, evolutionEntry, faqEntries] = await Promise.all([
+  const [rulesEntry, catalogEntry, uiEntry, faqEntries] = await Promise.all([
     required(getEntry("competition", "current"), "src/content/competition/rules.json"),
     required(getEntry("plans", "current"), "src/content/plans/catalog.json"),
     required(getEntry("ui", "ui"), "src/content/site/ui.json"),
-    required(getEntry("sections", "records"), "src/content/sections/records.json"),
-    required(getEntry("sections", "evolution"), "src/content/sections/evolution.json"),
     getCollection("faq"),
   ]);
-
-  const records = recordsEntry.data as SectionOf<"records">;
-  const evolution = evolutionEntry.data as SectionOf<"evolution">;
 
   const values = buildTemplateValues({
     rules: rulesEntry.data,
     catalog: catalogEntry.data,
-    lifts: { before: records.demo.before, after: records.demo.after },
-    evolutionStart: evolution.chart.startValue,
     instagramHandle: site.social.instagram.handle,
+    tiktokHandle: site.social.tiktok.handle,
     year: new Date().getFullYear(),
   });
   if (!site.launch.showProPrice) {
@@ -78,6 +72,6 @@ export async function loadPageSections(pageId: string): Promise<Array<{ id: stri
   const entries = await getEntries(page.data.sections);
   return entries.map((entry) => ({
     id: entry.id,
-    data: fillDeep(entry.data, values, SIMULATOR_RUNTIME_KEYS),
+    data: fillDeep(entry.data, values),
   }));
 }

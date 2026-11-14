@@ -1,21 +1,6 @@
 [
   {
     "id": "home",
-    "sections": [
-      "hero",
-      "benefits",
-      "problem",
-      "logging",
-      "records",
-      "evolution",
-      "competition",
-      "gufai",
-      "organization",
-      "privacy",
-      "plans",
-      "install",
-      "faq",
-      "final-cta"
-    ]
+    "sections": ["hero", "facts", "features", "lite", "plans", "steps", "faq", "final-cta"]
   }
 ]

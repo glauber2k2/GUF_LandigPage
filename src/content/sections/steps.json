@@ -1,0 +1,15 @@
+{
+  "type": "steps",
+  "anchor": "como-funciona",
+  "title": "Carregue a barra.",
+  "highlight": "Em 3 passos.",
+  "items": [
+    { "title": "Crie sua conta grátis", "text": "Com e-mail ou com a sua conta Google, em menos de um minuto." },
+    {
+      "title": "Monte ou importe a rotina",
+      "text": "Escolha os exercícios ou cole a ficha que o seu professor mandou para o GUF AI organizar."
+    },
+    { "title": "Treine e acompanhe", "text": "Toque em ✓ a cada série e veja recordes, sequência e ranking subirem." }
+  ],
+  "cta": { "label": "Carregar a minha barra", "appRoute": "signup" }
+}
