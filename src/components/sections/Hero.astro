@@ -7,8 +7,9 @@ import Button from "../ui/Button.astro";
 import Icon from "../ui/Icon.astro";
 
 /**
- * Abertura em volt: título em duas linhas (a segunda vazada), CTAs, selos de confiança e a mão
- * segurando o celular com a tela Início do app por cima da tela branca da foto.
+ * Abertura em grafite: título em duas linhas (a segunda vazada), CTAs, selos de confiança e a mão
+ * segurando o celular com a tela Início do app por cima da tela branca da foto. No desktop, duas colunas
+ * na altura da tela (até 920 px): texto à esquerda, mão à direita saindo pela base.
  * A tela fica um pouco maior que a área branca e ganha um contorno de tinta, para nenhum fio branco
  * da foto aparecer nas laterais em tamanho nenhum.
  */
@@ -19,7 +20,7 @@ interface Props {
 const { data } = Astro.props;
 const chipTones = {
   pr: "bg-gold text-gold-ink",
-  ink: "bg-ink text-volt",
+  ink: "bg-ink-4 text-volt",
   data: "bg-blue text-ink",
 } as const;
 const chipPlaces = [
@@ -33,38 +34,45 @@ const chipDelays = ["[animation-delay:-1s]", "[animation-delay:-2.6s]", "[animat
 <section
   aria-labelledby="hero-title"
   data-hero
-  class="relative overflow-hidden bg-volt px-5 pt-28 text-center text-ink md:pt-32"
+  class="relative overflow-hidden px-5 pt-28 text-center text-snow md:pt-32 lg:mx-auto lg:grid lg:h-[min(100svh,920px)] lg:min-h-[640px] lg:max-w-page lg:grid-cols-[1.05fr_0.95fr] lg:grid-rows-[minmax(0,1fr)] lg:items-center lg:gap-x-6 lg:overflow-visible lg:pt-24 lg:text-left"
 >
-  <h1
-    id="hero-title"
-    class="m-0 mx-auto max-w-[1200px] font-display text-[clamp(60px,11vw,176px)] leading-[0.84] font-bold tracking-[-0.005em] uppercase"
-  >
-    <span class="hero-line block">{data.title[0]}</span>
-    <span class="hero-line hero-line-2 text-outline-ink block">{data.title[1]}</span>
-  </h1>
-  <p class="m-0 mx-auto mt-6 max-w-[600px] text-[19px] leading-[29px] text-on-volt-soft">{data.lead}</p>
+  <div class="lg:pb-10">
+    <h1
+      id="hero-title"
+      class="m-0 mx-auto max-w-[1200px] font-display text-[clamp(60px,11vw,176px)] leading-[0.84] font-bold tracking-[-0.005em] uppercase lg:mx-0 lg:text-[clamp(64px,6.6vw,112px)]"
+    >
+      <span class="hero-line block">{data.title[0]}</span>
+      <span class="hero-line hero-line-2 text-outline-volt block opacity-90">{data.title[1]}</span>
+    </h1>
+    <p class="m-0 mx-auto mt-6 max-w-[600px] text-[19px] leading-[29px] text-mist lg:mx-0 lg:max-w-[520px]">
+      {data.lead}
+    </p>
 
-  <div class="mt-8 flex flex-wrap justify-center gap-3">
-    <Button cta={data.primaryCta} source="hero" variant="ink" size="lg" pill arrow />
-    <Button cta={data.secondaryCta} source="hero-lite" variant="outlineInk" size="lg" pill />
+    <div class="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
+      <Button cta={data.primaryCta} source="hero" variant="volt" size="lg" pill arrow />
+      <Button cta={data.secondaryCta} source="hero-lite" variant="outlineSnow" size="lg" pill />
+    </div>
+
+    <ul class="m-0 mt-5 flex list-none flex-wrap justify-center gap-x-5 gap-y-2 p-0 text-sm font-semibold text-mist lg:justify-start">
+      {data.trust.map((item) => (
+        <li class="inline-flex items-center gap-1.5">
+          <Icon name="check" size={16} strokeWidth={2.6} class="text-volt" />
+          {item}
+        </li>
+      ))}
+    </ul>
   </div>
 
-  <ul class="m-0 mt-5 flex list-none flex-wrap justify-center gap-x-5 gap-y-2 p-0 text-sm font-semibold text-on-volt-soft">
-    {data.trust.map((item) => (
-      <li class="inline-flex items-center gap-1.5">
-        <Icon name="check" size={16} strokeWidth={2.6} />
-        {item}
-      </li>
-    ))}
-  </ul>
-
-  <div class="hand-in relative mx-auto mt-9 w-[min(560px,92vw)]" data-loop>
+  <div
+    class="hand-in relative mx-auto mt-9 w-[min(560px,92vw)] lg:mx-0 lg:mt-0 lg:w-[min(100%,calc((min(100svh,920px)-96px)*0.8))] lg:self-end lg:justify-self-center"
+    data-loop
+  >
     <div class="relative aspect-[1122/1402]" role="img" aria-label={data.screen.ariaLabel}>
       <Image
         src={handPhone}
         alt=""
         widths={[360, 560, 840, 1122]}
-        sizes="(min-width: 640px) 560px, 92vw"
+        sizes="(min-width: 1024px) 660px, (min-width: 640px) 560px, 92vw"
         loading="eager"
         fetchpriority="high"
         class="absolute inset-0 size-full"
@@ -76,7 +84,7 @@ const chipDelays = ["[animation-delay:-1s]", "[animation-delay:-2.6s]", "[animat
       {data.chips.map((chip, i) => (
         <div
           class:list={[
-            "chip absolute z-[3] hidden items-center sm:flex gap-2 rounded-2xl bg-paper px-2.5 py-2 text-left shadow-toast md:gap-2.5 md:px-3.5 md:py-3",
+            "chip absolute z-[3] hidden items-center gap-2 rounded-2xl border border-snow-tint bg-chip px-2.5 py-2 text-left text-snow shadow-toast backdrop-blur-md sm:flex md:gap-2.5 md:px-3.5 md:py-3",
             chipPlaces[i],
             chipDelays[i],
           ]}
@@ -91,7 +99,7 @@ const chipDelays = ["[animation-delay:-1s]", "[animation-delay:-2.6s]", "[animat
           </span>
           <span class="flex flex-col">
             <b class="text-xs md:text-sm">{chip.title}</b>
-            <span class="text-[11px] text-on-paper-soft md:text-[13px]">{chip.text}</span>
+            <span class="text-[11px] text-mist md:text-[13px]">{chip.text}</span>
           </span>
         </div>
       ))}
@@ -108,6 +116,15 @@ const chipDelays = ["[animation-delay:-1s]", "[animation-delay:-2.6s]", "[animat
   }
   .hand-in {
     animation: hand-in 1100ms 200ms var(--ease-out-enter) both;
+  }
+  /* Halo volt suave atrás da mão: no fundo grafite, a silhueta preta precisa de contraste. */
+  .hand-in::before {
+    content: "";
+    position: absolute;
+    inset: 8% -18% -4%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, var(--vitrine-volt-glow), transparent);
+    pointer-events: none;
   }
   .chip {
     animation: bob 5s ease-in-out infinite;

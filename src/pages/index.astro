@@ -18,7 +18,9 @@ const jsonLd = [
 ---
 
 <BaseLayout jsonLd={jsonLd}>
-  {sections.map((section) => (
-    <SectionRenderer section={section} site={site} />
-  ))}
+  <div class="vitrine-page">
+    {sections.map((section) => (
+      <SectionRenderer section={section} site={site} />
+    ))}
+  </div>
 </BaseLayout>

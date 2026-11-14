@@ -17,7 +17,7 @@ const { data } = Astro.props;
 <section
   id={data.anchor}
   aria-labelledby="steps-title"
-  class="steps overflow-hidden bg-ink px-5 py-[clamp(72px,10vw,110px)] text-snow"
+  class="steps overflow-hidden border-y border-ink-4 bg-deep px-5 py-[clamp(72px,10vw,110px)] text-snow"
 >
   <div class="mx-auto max-w-page">
     <h2
@@ -43,7 +43,10 @@ const { data } = Astro.props;
     <ol class="m-0 mt-14 grid list-none gap-6 p-0 md:grid-cols-3">
       {data.items.map((item, i) => (
         <li data-reveal class="flex flex-col gap-2.5">
-          <span class="font-display text-[96px] leading-[0.85] font-bold text-volt" aria-hidden="true">
+          <span
+            class="font-display text-[96px] leading-[0.85] font-bold text-volt text-outline-volt"
+            aria-hidden="true"
+          >
             {String(i + 1).padStart(2, "0")}
           </span>
           <h3 class="m-0 text-[22px] font-bold">{item.title}</h3>

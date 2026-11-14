@@ -38,6 +38,7 @@
 
   --color-volt: var(--vitrine-volt);
   --color-volt-deep: var(--vitrine-volt-deep);
+  --color-deep: var(--vitrine-deep);
   --color-ink-2: var(--vitrine-ink-2);
   --color-ink-3: var(--vitrine-ink-3);
   --color-ink-4: var(--vitrine-ink-4);
@@ -63,6 +64,8 @@
   --color-snow-tint: var(--vitrine-snow-tint);
   --color-snow-edge: var(--vitrine-snow-edge);
   --color-vitrine-nav: var(--vitrine-nav);
+  --color-glass: var(--vitrine-glass);
+  --color-chip: var(--vitrine-chip);
 
   --font-sans: var(--font-inter);
   --font-display: var(--font-barlow);
@@ -125,7 +128,8 @@
     outline-color: var(--vitrine-ink);
   }
   .bg-ink :focus-visible,
-  .bg-ink-2 :focus-visible {
+  .bg-ink-2 :focus-visible,
+  .vitrine-page :focus-visible {
     outline-color: var(--vitrine-volt);
   }
 
@@ -179,7 +183,23 @@
   }
   .text-outline-volt {
     -webkit-text-fill-color: transparent;
-    -webkit-text-stroke: 2px var(--vitrine-volt);
+    -webkit-text-stroke: 1.5px var(--vitrine-volt);
+  }
+  .text-outline-volt-soft {
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1.5px var(--vitrine-volt-line);
+  }
+
+  /*
+   * Fundo da página da vitrine: grafite com um brilho volt e um azul bem suaves no topo, na largura
+   * toda e começando atrás do menu (sem faixa lisa nem corte nas laterais do hero).
+   */
+  .vitrine-page {
+    background:
+      radial-gradient(900px 700px at 72% 420px, var(--vitrine-glow-volt), transparent 70%) no-repeat,
+      radial-gradient(700px 520px at 8% 60px, var(--vitrine-glow-blue), transparent 70%) no-repeat,
+      var(--vitrine-ink);
+    color: var(--vitrine-snow);
   }
 }
 

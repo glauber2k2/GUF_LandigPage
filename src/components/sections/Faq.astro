@@ -2,7 +2,7 @@
 import type { FaqItem, SectionOf } from "../../content/schemas/sections";
 import Icon from "../ui/Icon.astro";
 
-/** Perguntas frequentes sobre volt. A mesma lista gera o JSON-LD FAQPage (BaseLayout), sem divergência. */
+/** Perguntas frequentes sobre o fundo grafite. A mesma lista gera o JSON-LD FAQPage (BaseLayout), sem divergência. */
 interface Props {
   data: SectionOf<"faq">;
   items: FaqItem[];
@@ -14,7 +14,7 @@ const { data, items } = Astro.props;
 <section
   id={data.anchor}
   aria-labelledby="faq-title"
-  class="bg-volt px-5 pt-[clamp(40px,6vw,72px)] pb-[clamp(72px,10vw,120px)] text-ink"
+  class="px-5 pt-[clamp(72px,10vw,110px)] pb-[clamp(72px,10vw,120px)] text-snow"
 >
   <div class="mx-auto max-w-page">
     <h2
@@ -26,14 +26,14 @@ const { data, items } = Astro.props;
     </h2>
     <div class="flex flex-col" data-faq>
       {items.map((item) => (
-        <details class="faq-item border-t-[1.5px] border-ink-edge" data-faq-item={item.id}>
+        <details class="faq-item border-t border-ink-4" data-faq-item={item.id}>
           <summary class="flex min-h-[72px] cursor-pointer list-none items-center justify-between gap-4 py-4">
             <h3 class="m-0 text-lg font-bold md:text-xl">{item.question}</h3>
-            <span class="faq-plus grid size-9 flex-none place-items-center rounded-full bg-ink text-volt">
+            <span class="faq-plus grid size-9 flex-none place-items-center rounded-full bg-ink-3 text-volt">
               <Icon name="plus" size={18} strokeWidth={2.6} />
             </span>
           </summary>
-          <p class="m-0 max-w-[70ch] pb-[22px] text-base leading-relaxed text-on-volt-soft">{item.answer}</p>
+          <p class="m-0 max-w-[70ch] pb-[22px] text-base leading-relaxed text-mist">{item.answer}</p>
         </details>
       ))}
     </div>

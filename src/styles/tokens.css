@@ -69,6 +69,7 @@
   --vitrine-volt: var(--volt-400);
   --vitrine-volt-deep: var(--volt-800);
   --vitrine-ink: var(--ink-950);
+  --vitrine-deep: #101317;
   --vitrine-ink-2: var(--ink-900);
   --vitrine-ink-3: var(--ink-850);
   --vitrine-ink-4: var(--ink-800);
@@ -94,6 +95,11 @@
   --vitrine-snow-tint: rgb(242 244 247 / 0.06);
   --vitrine-snow-edge: rgb(242 244 247 / 0.28);
   --vitrine-nav: rgb(11 13 16 / 0.9);
+  --vitrine-glass: rgb(20 23 28 / 0.78);
+  --vitrine-chip: rgb(28 32 39 / 0.92);
+  --vitrine-glow-volt: rgb(198 244 50 / 0.085);
+  --vitrine-glow-blue: rgb(77 141 255 / 0.055);
+  --vitrine-volt-line: rgb(198 244 50 / 0.55);
 
   /* Sombras */
   --sh-phone: 0 30px 80px rgb(0 0 0 / 0.35);

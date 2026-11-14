@@ -12,7 +12,7 @@ import Icon from "../ui/Icon.astro";
 
 /**
  * Carrossel de recursos: rolagem nativa com encaixe (arrastar, rolar e teclado), sem barra visível,
- * e setas no desktop (lib/motion/carousel.ts). Cartões alternam grafite e papel; os objetos flutuam.
+ * setas no desktop e rolagem automática que pausa ao mexer (lib/motion/carousel.ts). Cartões alternam grafite e papel; os objetos flutuam.
  */
 interface Props {
   data: SectionOf<"features">;
@@ -21,8 +21,12 @@ interface Props {
 const { data } = Astro.props;
 const IMAGES: Record<(typeof OBJECT_IMAGES)[number], ImageMetadata> = { dumbbell, sneaker, trophy, tape, plate };
 const tones = {
-  ink: { card: "bg-ink text-snow", eyebrow: "text-volt", text: "text-mist" },
-  paper: { card: "bg-paper text-ink", eyebrow: "text-volt-deep", text: "text-on-paper-soft" },
+  ink: { card: "border border-ink-4 bg-ink-2 text-snow", eyebrow: "text-volt", text: "text-mist" },
+  paper: {
+    card: "border border-ink-4 bg-linear-to-br from-ink-3 to-ink-2 text-snow",
+    eyebrow: "text-volt",
+    text: "text-mist",
+  },
 } as const;
 const floatDelays = [
   "",
@@ -36,8 +40,9 @@ const floatDelays = [
 <section
   id={data.anchor}
   aria-labelledby="features-title"
-  class="bg-volt py-[clamp(72px,10vw,110px)] text-ink"
+  class="py-[clamp(72px,10vw,110px)] text-snow"
   data-carousel
+  data-carousel-auto="3200"
   data-loop
 >
   <div class="mx-auto mb-9 flex max-w-page flex-wrap items-end justify-between gap-5 px-5">
@@ -49,7 +54,7 @@ const floatDelays = [
       {data.title}
     </h2>
     <div class="flex items-center gap-3">
-      <span class="hint inline-flex items-center gap-2 text-sm font-bold">
+      <span class="hint inline-flex items-center gap-2 text-sm font-bold text-mist">
         {data.hint}
         <Icon name="arrowRight" size={18} strokeWidth={2.5} class="nudge" />
       </span>
@@ -57,7 +62,7 @@ const floatDelays = [
         type="button"
         data-carousel-step="-1"
         aria-label={data.prevLabel}
-        class="hidden size-[52px] cursor-pointer place-items-center rounded-full border-2 border-ink bg-transparent text-ink transition-colors duration-150 hover:bg-ink hover:text-volt md:grid"
+        class="hidden size-[52px] cursor-pointer place-items-center rounded-full border-[1.5px] border-snow-edge bg-transparent text-snow transition-colors duration-150 hover:bg-snow hover:text-ink md:grid"
       >
         <Icon name="arrowLeft" size={20} strokeWidth={2.5} />
       </button>
@@ -65,7 +70,7 @@ const floatDelays = [
         type="button"
         data-carousel-step="1"
         aria-label={data.nextLabel}
-        class="hidden size-[52px] cursor-pointer place-items-center rounded-full border-2 border-ink bg-transparent text-ink transition-colors duration-150 hover:bg-ink hover:text-volt md:grid"
+        class="hidden size-[52px] cursor-pointer place-items-center rounded-full border-[1.5px] border-snow-edge bg-transparent text-snow transition-colors duration-150 hover:bg-snow hover:text-ink md:grid"
       >
         <Icon name="arrowRight" size={20} strokeWidth={2.5} />
       </button>
@@ -125,7 +130,7 @@ const floatDelays = [
   </div>
 
   <div data-reveal class="mt-6 flex justify-center px-5">
-    <Button cta={data.cta} source="recursos" variant="ink" size="lg" pill arrow />
+    <Button cta={data.cta} source="recursos" variant="volt" size="lg" pill arrow />
   </div>
 </section>
 

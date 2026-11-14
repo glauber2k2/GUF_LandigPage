@@ -5,7 +5,7 @@
   "hint": "Arraste para o lado",
   "prevLabel": "Recurso anterior",
   "nextLabel": "Próximo recurso",
-  "ariaLabel": "Recursos do guf",
+  "ariaLabel": "Recursos do guf (avançam sozinhos; passe o mouse ou toque para pausar)",
   "cards": [
     {
       "tone": "ink",

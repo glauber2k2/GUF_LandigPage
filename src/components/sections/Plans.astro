@@ -8,7 +8,7 @@ import Icon from "../ui/Icon.astro";
 import InlineText from "../ui/InlineText.astro";
 
 /**
- * Comparação Free × Pro na vitrine (Free em papel, Pro em grafite). Nomes, limites e preço vêm do
+ * Comparação Free × Pro na vitrine (Free em grafite, Pro em grafite com borda volt). Nomes, limites e preço vêm do
  * catálogo do app (plans, plan_features, plan_prices). Sem preço ativo, o Pro mostra "chega em breve",
  * exatamente como o app faz. Sem preço riscado, desconto ou contador: o app não tem nada disso.
  * Pré-lançamento (site.launch.showProPrice false): o valor aparece como "R$ ??,??".
@@ -24,7 +24,7 @@ const pro = upgradePlan(catalog);
 const price = activePrice(catalog, pro.code);
 ---
 
-<section id={data.anchor} aria-labelledby="plans-title" class="bg-volt px-5 py-[clamp(72px,10vw,120px)] text-ink">
+<section id={data.anchor} aria-labelledby="plans-title" class="px-5 py-[clamp(72px,10vw,120px)] text-snow">
   <div class="mx-auto max-w-page">
     <h2
       id="plans-title"
@@ -35,31 +35,34 @@ const price = activePrice(catalog, pro.code);
       <br />
       {data.title[1]}
     </h2>
-    <p data-reveal class="m-0 mt-5 max-w-[56ch] text-lg leading-7 text-on-volt-soft">
+    <p data-reveal class="m-0 mt-5 max-w-[56ch] text-lg leading-7 text-mist">
       {data.lead}
     </p>
 
     <div class="mt-12 grid gap-5 md:grid-cols-2">
-      <article data-reveal class="flex flex-col gap-5 rounded-[32px] bg-paper p-7 text-ink md:p-9">
+      <article data-reveal class="flex flex-col gap-5 rounded-[32px] border border-ink-4 bg-ink-2 p-7 text-snow md:p-9">
         <div class="flex flex-col gap-1.5">
-          <h3 class="m-0 text-xs font-bold tracking-[0.08em] text-on-paper-soft uppercase">{free.name}</h3>
+          <h3 class="m-0 text-xs font-bold tracking-[0.08em] text-mist uppercase">{free.name}</h3>
           <p class="m-0 font-display text-[80px] leading-[0.9] font-bold">R$ 0</p>
-          <span class="text-[15px] text-on-paper-soft">{data.free.tagline}</span>
+          <span class="text-[15px] text-mist">{data.free.tagline}</span>
         </div>
         <ul class="m-0 flex flex-1 list-none flex-col gap-3 p-0 text-[15px] leading-[1.45]">
           {data.free.features.map((feature) => (
             <li class="flex gap-2.5">
-              <Icon name="check" size={18} strokeWidth={2.6} class="mt-0.5 text-volt-deep" />
+              <Icon name="check" size={18} strokeWidth={2.6} class="mt-0.5 text-volt" />
               <span>
-                <InlineText text={feature} strongClass="font-semibold text-ink" />
+                <InlineText text={feature} strongClass="font-semibold text-snow" />
               </span>
             </li>
           ))}
         </ul>
-        <Button cta={data.free.cta} source="planos-free" variant="ink" size="lg" pill block />
+        <Button cta={data.free.cta} source="planos-free" variant="outlineSnow" size="lg" pill block />
       </article>
 
-      <article data-reveal class="flex flex-col gap-5 rounded-[32px] bg-ink p-7 text-snow md:p-9">
+      <article
+        data-reveal
+        class="flex flex-col gap-5 rounded-[32px] border border-volt-edge bg-linear-to-br from-ink-3 to-deep p-7 text-snow shadow-phone md:p-9"
+      >
         <div class="flex flex-col gap-1.5">
           <h3 class="m-0 flex items-center gap-2 text-xs font-bold tracking-[0.08em] text-volt uppercase">
             {pro.name}

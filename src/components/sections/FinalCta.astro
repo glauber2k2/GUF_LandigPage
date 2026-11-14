@@ -4,7 +4,7 @@ import type { SectionOf } from "../../content/schemas/sections";
 import Button from "../ui/Button.astro";
 import Icon from "../ui/Icon.astro";
 
-/** Fechamento em grafite: "Bora?" em volt, CTAs, redes (@guf.app) e um letreiro vazado em movimento. */
+/** Fechamento em grafite: "Bora?" em branco, CTAs, redes (@guf.app) e um letreiro vazado em movimento. */
 interface Props {
   data: SectionOf<"finalCta">;
 }
@@ -17,13 +17,13 @@ const words = [...data.marquee, ...data.marquee];
 
 <section
   aria-labelledby="final-title"
-  class="overflow-hidden bg-ink pt-[clamp(80px,11vw,120px)] pb-20 text-center text-snow"
+  class="final overflow-hidden border-t border-ink-4 bg-deep pt-[clamp(80px,11vw,120px)] pb-20 text-center text-snow"
 >
   <div class="mx-auto max-w-page px-5">
     <h2
       id="final-title"
       data-reveal
-      class="m-0 font-display text-[clamp(96px,16vw,260px)] leading-[0.8] font-bold text-volt uppercase"
+      class="m-0 font-display text-[clamp(96px,16vw,260px)] leading-[0.8] font-bold text-snow uppercase"
     >
       {data.title}
     </h2>
@@ -64,13 +64,16 @@ const words = [...data.marquee, ...data.marquee];
   <div class="mt-[72px] overflow-hidden whitespace-nowrap" aria-hidden="true" data-loop>
     <div class="marquee inline-flex gap-7 font-display text-[clamp(72px,9vw,120px)] leading-none font-bold uppercase">
       {words.map((word, i) => (
-        <span class:list={[i % 2 === 0 ? "text-outline-volt text-volt" : "text-volt"]}>{word}</span>
+        <span class:list={[i % 2 === 0 ? "text-outline-volt-soft text-volt" : "text-ink-3"]}>{word}</span>
       ))}
     </div>
   </div>
 </section>
 
 <style>
+  .final {
+    background-image: radial-gradient(50% 60% at 50% 30%, var(--vitrine-glow-volt), transparent 70%);
+  }
   .marquee {
     animation: marquee 26s linear infinite;
   }

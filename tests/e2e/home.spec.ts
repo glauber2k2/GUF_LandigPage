@@ -106,9 +106,24 @@ test.describe("home", () => {
     await page.goto("/");
     const track = page.locator("[data-carousel-track]");
     await track.scrollIntoViewIfNeeded();
-    await expect(track).toHaveJSProperty("scrollLeft", 0);
+    // Volta ao começo (a rolagem automática pode já ter andado) e confere que a seta avança um cartão.
+    await track.evaluate((el) => el.scrollTo({ left: 0 }));
     await page.locator('button[data-carousel-step="1"]').click();
     await expect.poll(() => track.evaluate((el) => el.scrollLeft)).toBeGreaterThan(100);
+  });
+
+  test("recursos: o carrossel avança sozinho e não roda com movimento reduzido", async ({ page }) => {
+    await page.goto("/");
+    const track = page.locator("[data-carousel-track]");
+    await track.scrollIntoViewIfNeeded();
+    await page.mouse.move(0, 0);
+    await expect.poll(() => track.evaluate((el) => el.scrollLeft), { timeout: 8000 }).toBeGreaterThan(100);
+
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await track.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(4000);
+    expect(await track.evaluate((el) => el.scrollLeft)).toBe(0);
   });
 
   test("lojas: em breve enquanto não houver link", async ({ page }) => {
