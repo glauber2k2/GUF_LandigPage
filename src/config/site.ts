@@ -53,17 +53,19 @@ export const site = {
   },
 
   /**
-   * PRÉ-LANÇAMENTO. No dia do lançamento, mudar as duas chaves para `true` e publicar de novo:
+   * LANÇAMENTO. O guf foi lançado: as duas chaves estão em `true`.
    *
-   *  - `appOpen: true`      → os botões voltam a ser links para o app (cadastro, planos), com UTM.
+   *  - `appOpen: true`      → os botões são links para o app (cadastro, planos, Guf Lite), com UTM.
+   *                           Com `false`, viram botões bloqueados com o tooltip `lockedLabel`.
    *  - `showProPrice: true` → o card do Pro, o JSON-LD e o llms.txt mostram o preço.
+   *                           Com `false`, o preço aparece como `priceMask`.
    *
    * PREÇO DO PRO (sincronizado do app em 2026-11-14): R$ 19,80/mês ou R$ 148,00/ano.
    * O valor NÃO é escrito aqui: vem de `plan_prices` do app a cada build (src/content/plans/catalog.json).
    * Para mudar o preço, mude no app; a página acompanha no próximo deploy.
    */
   launch: {
-    appOpen: false,
+    appOpen: true,
     showProPrice: true,
     /** Texto do tooltip nos botões bloqueados. */
     lockedLabel: "Lançamento em breve",
