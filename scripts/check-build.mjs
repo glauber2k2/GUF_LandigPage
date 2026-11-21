@@ -3,7 +3,7 @@
  *  - orçamento: JavaScript da home ≤ 30 KB gzip (sem analytics, que só carrega após aceite);
  *  - CSS da home (relatório);
  *  - nenhum texto provisório ou chave de template sobrando ({algo}) no HTML publicado;
- *  - aviso se o domínio ainda é o padrão (PUBLIC_SITE_URL não definido).
+ *  - nenhuma URL de localhost no HTML (canonical, OG, JSON-LD).
  * Falha o build (exit 1) se algo passar do limite.
  */
 import { readFileSync, readdirSync, statSync } from "node:fs";
@@ -53,10 +53,9 @@ if (/lorem ipsum|\[PRESTADOR/i.test(visible) || /\b(TODO|FIXME|XXX)\b/.test(visi
   failures.push("Texto provisório no HTML publicado.");
 }
 
-if (html.includes("http://localhost:4321")) {
-  console.warn("\n⚠️  [check-build] PUBLIC_SITE_URL não definido: canonical, OG e sitemap apontam para localhost.");
-  console.warn("    Defina o domínio final antes de publicar (ver .env.example).");
-}
+// Já aconteceu em produção (nov/2026): canonical e sitemap em localhost tiram a página do Google.
+if (html.includes("http://localhost"))
+  failures.push("canonical, OG ou JSON-LD apontando para localhost (PUBLIC_SITE_URL).");
 
 const size = statSync(join(DIST, "index.html")).size;
 if (size > 300 * 1024) failures.push(`index.html muito grande: ${kb(size)} KB`);

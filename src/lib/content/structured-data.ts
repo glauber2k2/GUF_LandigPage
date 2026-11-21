@@ -18,6 +18,7 @@ export function brandInfo(siteUrl: URL): BrandInfo {
     logoUrl: absoluteUrl(seo.logoPath, siteUrl),
     sameAs: site.sameAs,
     inLanguage: site.lang,
+    alternateNames: seo.alternateNames,
   };
 }
 
@@ -43,6 +44,7 @@ export function appInfo(siteUrl: URL, catalog: PlanCatalog): AppInfo {
     category: "HealthApplication",
     offers,
     image: absoluteUrl(seo.ogImage.path, siteUrl),
+    featureList: seo.featureList,
   };
 }
 

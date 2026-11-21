@@ -9,6 +9,8 @@ export interface BrandInfo {
   logoUrl: string;
   sameAs: readonly string[];
   inLanguage: string;
+  /** Outros nomes buscados (ex.: "guf app"). */
+  alternateNames?: readonly string[];
 }
 
 export interface OfferInfo {
@@ -27,6 +29,8 @@ export interface AppInfo {
   category: "HealthApplication" | "SportsApplication";
   offers: readonly OfferInfo[];
   image: string;
+  /** Funções principais, em frases curtas. */
+  featureList?: readonly string[];
 }
 
 export interface FaqEntry {
@@ -52,6 +56,7 @@ export function organizationSchema(brand: BrandInfo): JsonLd {
     "@type": "Organization",
     "@id": orgId(brand),
     name: brand.name,
+    ...(brand.alternateNames?.length ? { alternateName: [...brand.alternateNames] } : {}),
     url: brand.siteUrl,
     logo: brand.logoUrl,
     description: brand.description,
@@ -65,6 +70,7 @@ export function websiteSchema(brand: BrandInfo): JsonLd {
     "@type": "WebSite",
     "@id": siteId(brand),
     name: brand.name,
+    ...(brand.alternateNames?.length ? { alternateName: [...brand.alternateNames] } : {}),
     url: brand.siteUrl,
     description: brand.description,
     inLanguage: brand.inLanguage,
@@ -80,8 +86,13 @@ export function softwareApplicationSchema(app: AppInfo, brand: BrandInfo): JsonL
     description: app.description,
     url: app.url,
     image: app.image,
+    screenshot: app.image,
     applicationCategory: app.category,
+    applicationSubCategory: "Fitness",
     operatingSystem: app.operatingSystem,
+    // PWA: abre no navegador e instala pelo próprio navegador.
+    browserRequirements: "Requer um navegador atual com JavaScript (Safari, Chrome, Edge ou Firefox).",
+    ...(app.featureList?.length ? { featureList: [...app.featureList] } : {}),
     inLanguage: brand.inLanguage,
     publisher: { "@id": orgId(brand) },
     offers: app.offers.map((offer) => ({

@@ -162,14 +162,14 @@ Depois é só publicar de novo. O botão "Entrar" do cabeçalho foi removido do 
 
 Veja `.env.example`. Tudo é público (vai para o HTML ou é chave publicável).
 
-| Variável                                    | Para quê                                                                   | Padrão                                      |
-| ------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------- |
-| `PUBLIC_SITE_URL`                           | Domínio da landing (canonical, OG, sitemap, robots, JSON-LD)               | `http://localhost:4321`, com aviso no build |
-| `PUBLIC_APP_URL`                            | Endereço do app (todos os CTAs)                                            | `https://treino.gufapp.com.br`              |
-| `PUBLIC_META_PIXEL_ID`                      | Meta Pixel (após consentimento)                                            | desligado                                   |
-| `PUBLIC_GA_ID`                              | Google Analytics 4 (após consentimento)                                    | desligado                                   |
-| `PUBLIC_GSC_VERIFICATION`                   | Código da meta tag do Search Console                                       | sem tag                                     |
-| `SUPABASE_URL` · `SUPABASE_PUBLISHABLE_KEY` | Sincronizar planos e preço no build (chave **publicável**, a mesma do app) | usa o snapshot                              |
+| Variável                                    | Para quê                                                                   | Padrão                                    |
+| ------------------------------------------- | -------------------------------------------------------------------------- | ----------------------------------------- |
+| `PUBLIC_SITE_URL`                           | Domínio da landing (canonical, OG, sitemap, robots, JSON-LD)               | `https://gufapp.com.br` (domínio oficial) |
+| `PUBLIC_APP_URL`                            | Endereço do app (todos os CTAs)                                            | `https://treino.gufapp.com.br`            |
+| `PUBLIC_META_PIXEL_ID`                      | Meta Pixel (após consentimento)                                            | desligado                                 |
+| `PUBLIC_GA_ID`                              | Google Analytics 4 (após consentimento)                                    | desligado                                 |
+| `PUBLIC_GSC_VERIFICATION`                   | Código da meta tag do Search Console                                       | sem tag                                   |
+| `SUPABASE_URL` · `SUPABASE_PUBLISHABLE_KEY` | Sincronizar planos e preço no build (chave **publicável**, a mesma do app) | usa o snapshot                            |
 
 No CI, cadastre-as como **Variables** do repositório (Settings › Secrets and variables › Actions).
 
@@ -202,7 +202,7 @@ Para conferir sem publicar: `npx wrangler deploy --dry-run`.
 
 ### Checklist
 
-- [ ] **Domínio:** definir `PUBLIC_SITE_URL` com o domínio final e fazer um novo build. O build avisa enquanto estiver em localhost.
+- [ ] **Domínio:** definir `PUBLIC_SITE_URL` com o domínio final e fazer um novo build. Sem a variável, o build usa `https://gufapp.com.br`; URL de localhost no HTML falha o build.
 - [ ] **Domínio na Cloudflare:** adicionar como Custom domain do Worker `guf-site` (o DNS e o HTTPS são configurados pela própria Cloudflare se o domínio estiver na conta).
 - [ ] **Confirmar o HSTS** em `public/_headers` (`preload`) só depois que o domínio e todos os subdomínios estiverem em HTTPS.
 - [ ] **Search Console:** adicionar a propriedade, preencher `PUBLIC_GSC_VERIFICATION`, publicar, verificar e enviar `https://<domínio>/sitemap-index.xml`.
