@@ -118,19 +118,21 @@ Edite a lista em `src/content/pages/pages.json`. Os nomes são os arquivos de `s
 - **Google Play e App Store:** em `src/config/site.ts › stores`. Com `url: null` o selo mostra "Em breve"; ao colocar o link da loja e publicar de novo, o selo vira o botão de baixar. O Guf Lite (app no navegador) continua oferecido nos dois casos.
 - Domínio da landing: `PUBLIC_SITE_URL`.
 
-### Dia do lançamento (pré-lançamento → app aberto)
+### Lançamento (app aberto)
 
-Hoje a página está em **pré-lançamento**: não há botão "Entrar", os botões que levariam ao app ficam bloqueados com o tooltip "Lançamento em breve" e o preço do Pro aparece como "R$ ??,??" (também fora do JSON-LD e do llms.txt). No dia do lançamento, em `src/config/site.ts`:
+O guf já foi lançado: em `src/config/site.ts`, as duas chaves de `launch` estão ligadas.
 
 ```ts
 launch: {
-  appOpen: true,       // botões voltam a ser links para o app, com UTM
+  appOpen: true,       // botões são links para o app (treino.gufapp.com.br), com UTM
   showProPrice: true,  // mostra o preço do Pro (vem de plan_prices; em 2026-11-14: R$ 19,80/mês)
   …
 }
 ```
 
-Depois é só publicar de novo. O botão "Entrar" do cabeçalho foi removido do conteúdo. Se quiser de volta, acrescente `"login": { "label": "Entrar", "appRoute": "login" }` em `site/ui.json › header` (e no schema e no `Header.astro`).
+Para voltar ao modo pré-lançamento (botões do app bloqueados com o tooltip "Lançamento em breve" e preço do Pro como "R$ ??,??", também fora do JSON-LD e do llms.txt), mude as chaves para `false` e publique de novo.
+
+O cabeçalho não tem botão "Entrar". Se quiser, acrescente `"login": { "label": "Entrar", "appRoute": "login" }` em `site/ui.json › header` (e no schema e no `Header.astro`).
 
 ### Atualizar preço, limites ou pontuação
 
